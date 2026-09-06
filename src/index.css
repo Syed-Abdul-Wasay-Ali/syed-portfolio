@@ -1,0 +1,487 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-canvas text-paper font-body antialiased;
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background: rgba(255, 54, 200, 0.9);
+  color: #0B0A1E;
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-wideish text-muted;
+  }
+
+  .eyebrow-green {
+    @apply font-mono text-[11px] uppercase tracking-wideish text-violet;
+  }
+
+  .hairline {
+    @apply border-ink-600;
+  }
+
+  .panel {
+    @apply border border-ink-600 bg-ink-800;
+  }
+
+  /* black structural card with green frame — the "ink block" accent */
+  .panel-dark {
+    @apply border border-green/35 bg-ink-950 text-snow;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 border border-ink-500 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-paper transition-colors hover:border-neonBlue hover:text-neonBlue;
+  }
+
+  /* filled green primary CTA */
+  .btn-green {
+    @apply inline-flex items-center gap-2 bg-green px-4 py-2 font-mono text-xs uppercase tracking-wideish text-ink-950 transition-colors hover:bg-greenBright;
+  }
+
+  /* corporate company names — bold, brand-colored */
+  .co-ogilvy {
+    color: #ff3b4e;
+    font-weight: 700;
+  }
+  .co-cleandirty {
+    color: #a78bfa;
+    font-weight: 700;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* SPIDER-VERSE GLITCH SYSTEM                                          */
+/* every animation runs on steps() — frame jumps, RGB splits, slices   */
+/* ------------------------------------------------------------------ */
+
+/* subtle permanent chromatic aberration on headings */
+h2,
+h3 {
+  text-shadow:
+    1.5px 0 rgba(255, 54, 200, 0.22),
+    -1.5px 0 rgba(0, 229, 255, 0.18);
+}
+
+/* ---- glitch text: red/cyan ghost copies that tear in bursts ---- */
+.glitch-line {
+  position: relative;
+  display: inline-block;
+  text-shadow:
+    2px 0 rgba(255, 54, 200, 0.55),
+    -2px 0 rgba(0, 229, 255, 0.5);
+}
+.glitch-line::before,
+.glitch-line::after {
+  content: attr(data-text) / '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  pointer-events: none;
+  opacity: 0;
+}
+.glitch-line::before {
+  color: #ff36c8;
+  animation: glitch-a 2.4s infinite steps(1);
+}
+.glitch-line::after {
+  color: #00e5ff;
+  animation: glitch-b 2.1s infinite steps(1);
+}
+@keyframes glitch-a {
+  0%, 79% { opacity: 0; clip-path: inset(100% 0 0 0); transform: translate(0, 0); }
+  80% { opacity: 0.9; clip-path: inset(12% 0 60% 0); transform: translate(-5px, 1px); }
+  83% { opacity: 0.9; clip-path: inset(88% 0 4% 0); transform: translate(5px, -2px); }
+  86% { opacity: 0.9; clip-path: inset(42% 0 44% 0); transform: translate(-3px, 0); }
+  89% { opacity: 0; }
+  94% { opacity: 0.85; clip-path: inset(70% 0 10% 0); transform: translate(4px, 2px); }
+  97% { opacity: 0; clip-path: inset(100% 0 0 0); }
+  100% { opacity: 0; }
+}
+@keyframes glitch-b {
+  0%, 73% { opacity: 0; clip-path: inset(100% 0 0 0); transform: translate(0, 0); }
+  74% { opacity: 0.9; clip-path: inset(65% 0 12% 0); transform: translate(5px, -1px); }
+  77% { opacity: 0.9; clip-path: inset(8% 0 80% 0); transform: translate(-5px, 2px); }
+  80% { opacity: 0.9; clip-path: inset(35% 0 55% 0); transform: translate(4px, 0); }
+  84% { opacity: 0; }
+  91% { opacity: 0.8; clip-path: inset(20% 0 65% 0); transform: translate(-4px, -2px); }
+  95% { opacity: 0; clip-path: inset(100% 0 0 0); }
+  100% { opacity: 0; }
+}
+
+/* ---- entrance flicker: text stutters into place ---- */
+@keyframes glitch-flicker {
+  0% { opacity: 0.2; transform: translate(-3px, 2px) skewX(-3deg); }
+  20% { opacity: 1; transform: translate(2px, -1px); }
+  35% { opacity: 0.6; }
+  55% { opacity: 1; transform: translate(-2px, 0); }
+  70% { opacity: 0.9; transform: translate(1px, 1px) skewX(2deg); }
+  100% { opacity: 1; transform: none; }
+}
+.glitch-flicker {
+  animation: glitch-flicker 0.6s steps(4) both;
+}
+
+/* ---- nav link hover: quick RGB stutter ---- */
+.glitch-link {
+  position: relative;
+}
+.glitch-link:hover {
+  animation: link-flicker 0.3s steps(2) 1;
+  text-shadow:
+    2px 0 rgba(255, 54, 200, 0.85),
+    -2px 0 rgba(0, 229, 255, 0.85);
+}
+@keyframes link-flicker {
+  0% { transform: translate(-1px, 0); }
+  50% { transform: translate(2px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ---- buttons stutter on hover ---- */
+.btn-ghost:hover,
+.btn-green:hover {
+  animation: btn-glitch 0.3s steps(3) 1;
+}
+@keyframes btn-glitch {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(-2px, 1px) skewX(-4deg); }
+  100% { transform: translate(1px, -1px); }
+}
+
+/* ---- SCROLL REVEAL: blocky slice dissolve instead of fade ---- */
+.reveal {
+  opacity: 0;
+}
+.reveal.is-visible {
+  animation: glitch-reveal 0.5s steps(4) both;
+}
+@keyframes glitch-reveal {
+  0% { opacity: 0; clip-path: inset(0 0 100% 0); transform: translate(-8px, 0); }
+  30% { opacity: 1; clip-path: inset(15% 0 60% 0); transform: translate(7px, -3px); }
+  60% { opacity: 1; clip-path: inset(55% 0 15% 0); transform: translate(-5px, 2px); }
+  85% { opacity: 1; clip-path: inset(80% 0 2% 0); transform: translate(3px, -1px); }
+  100% { opacity: 1; clip-path: inset(0 0 0 0); transform: translate(0, 0); }
+}
+
+/* ---- card hover: glitch jump + red/cyan split shadows ---- */
+.card-lift {
+  transition: border-color 0.2s steps(3);
+}
+.card-lift:hover {
+  animation: card-glitch 0.3s steps(3) 1;
+  border-color: #00b2ff;
+  box-shadow:
+    -3px 0 0 rgba(255, 54, 200, 0.5),
+    3px 0 0 rgba(0, 178, 255, 0.5),
+    0 10px 30px rgba(0, 178, 255, 0.2);
+}
+@keyframes card-glitch {
+  0% { transform: translate(0, 0); }
+  33% { transform: translate(-2px, -2px); }
+  66% { transform: translate(2px, 1px); }
+  100% { transform: translate(0, -3px); }
+}
+
+/* ---- media hover: RGB channel split (Spider-Verse poster style) ---- */
+.group:hover .media-asset {
+  animation: rgb-split 0.34s steps(3) 1;
+}
+@keyframes rgb-split {
+  0% { filter: none; transform: translate(0, 0); }
+  33% {
+    filter: drop-shadow(3px 0 0 rgba(255, 54, 200, 0.8))
+      drop-shadow(-3px 0 0 rgba(0, 229, 255, 0.75));
+    transform: translate(-2px, 1px);
+  }
+  66% {
+    filter: drop-shadow(-3px 0 0 rgba(255, 54, 200, 0.8))
+      drop-shadow(3px 0 0 rgba(0, 229, 255, 0.75));
+    transform: translate(2px, -1px);
+  }
+  100% { filter: none; transform: translate(0, 0); }
+}
+
+/* ---- hero sweep: stepped scan band + cyan hot line ---- */
+.scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(255, 54, 200, 0.12),
+    transparent
+  );
+  animation: scan 6.5s steps(30) infinite;
+  pointer-events: none;
+}
+.scanline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 26px;
+  height: 3px;
+  background: rgba(255, 228, 92, 0.28);
+  box-shadow: 0 0 14px rgba(255, 228, 92, 0.4);
+}
+
+/* ---- ambient orbs jitter instead of drifting ---- */
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  pointer-events: none;
+  animation: float 3.4s steps(8) infinite;
+}
+
+/* ---- limbo objects: erratic hover-jitter float, halo flicker ---- */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-8px) rotate(1.2deg); }
+  50% { transform: translateY(-3px) rotate(-1.4deg); }
+  70% { transform: translateY(-11px) rotate(0.6deg); }
+  85% { transform: translateY(-5px) rotate(-0.8deg); }
+}
+.limbo-float {
+  animation: floatSlow 5s steps(8) infinite;
+  will-change: transform;
+}
+.limbo-halo {
+  filter: drop-shadow(0 22px 28px rgba(255, 54, 200, 0.18))
+    drop-shadow(0 6px 10px rgba(0, 0, 0, 0.55));
+  animation: halo-flicker 3.2s steps(6) infinite;
+}
+@keyframes halo-flicker {
+  0%, 100% { opacity: 1; }
+  40% { opacity: 0.82; }
+  60% { opacity: 0.96; }
+  80% { opacity: 0.74; }
+}
+
+/* ---- brand tiles take their own accent on hover ---- */
+.brand-tile {
+  --brand: #ff36c8;
+}
+.brand-tile:hover {
+  border-color: var(--brand) !important;
+  box-shadow:
+    0 0 0 1px var(--brand),
+    -3px 0 0 rgba(255, 54, 200, 0.4),
+    3px 0 0 rgba(0, 229, 255, 0.4),
+    0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+/* ---- global CRT overlay: scanlines, vignette, band sweep ---- */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.2) 0 1px,
+      transparent 1px 3px
+    ),
+    radial-gradient(120% 100% at 50% 0%, transparent 62%, rgba(0, 0, 0, 0.3) 100%);
+  animation: crt-flicker 7s steps(1) infinite;
+}
+.crt-overlay::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -15%;
+  height: 110px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(255, 54, 200, 0.06),
+    rgba(255, 228, 92, 0.05),
+    transparent
+  );
+  animation: crt-band 9s steps(24) infinite;
+}
+@keyframes crt-band {
+  0% { top: -15%; }
+  100% { top: 112%; }
+}
+@keyframes crt-flicker {
+  0%, 95%, 100% { opacity: 0.55; }
+  96% { opacity: 0.85; }
+  98% { opacity: 0.42; }
+}
+
+
+/* ---- neon blue glow + magenta→blue gradient text ---- */
+.header-progress {
+  background: linear-gradient(90deg, #ff36c8, #00b2ff);
+}
+.text-grad {
+  background: linear-gradient(90deg, #ff36c8, #00b2ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.neon-glow {
+  text-shadow: 0 0 12px rgba(0, 178, 255, 0.45);
+}
+
+/* ------------------------------------------------------------------ */
+/* 3D — phone-in-hand feel                                            */
+/* ------------------------------------------------------------------ */
+
+/* page leans back gently as you scroll */
+.perspective-3d {
+  perspective: 1400px;
+  perspective-origin: 50% 38%;
+}
+.page-tilt {
+  transform: rotateX(var(--page-rx, 0deg));
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease-out;
+  will-change: transform;
+}
+
+/* cards float toward the pointer — springy visionOS-style (driven by tilt.ts) */
+.tilt-3d {
+  transform: perspective(900px) translate3d(var(--tx, 0px), var(--ty, 0px), var(--tz, 0px))
+    scale(var(--sc, 1)) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* inner layers float at deeper Z — parallax with the card */
+.tilt-depth {
+  transform: translate3d(var(--px, 0px), var(--py, 0px), 26px);
+  transform-style: preserve-3d;
+}
+
+/* glass hover: soft lift + frosted glow (visionOS panel feel) */
+.tilt-3d:hover,
+.car-item:hover {
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.07),
+    0 0 34px rgba(0, 178, 255, 0.16);
+}
+
+/* moving light sheen that follows the pointer */
+.tilt-3d .glare,
+.car-item .glare {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: radial-gradient(
+    360px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.12),
+    transparent 55%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.tilt-3d:hover .glare,
+.car-item:hover .glare {
+  opacity: 1;
+}
+
+/* 3D coverflow carousel — swipe like a phone */
+.car-3d {
+  perspective: 1100px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+  scroll-snap-type: x proximity;
+}
+.car-3d::-webkit-scrollbar {
+  display: none;
+}
+.car-3d.dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+}
+.car-3d > div {
+  transform-style: preserve-3d;
+}
+.car-item {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  transform-style: preserve-3d;
+  /* coverflow (--ryc/--zc from the carousel) + Vision Pro tilt (--rx/--ry/--tx/--tz from tilt.ts) compose here */
+  transform: translate3d(var(--tx, 0px), var(--ty, 0px), var(--tz, 0px))
+    scale(var(--sc, 1)) rotateX(var(--rx, 0deg))
+    rotateY(calc(var(--ryc, 0deg) + var(--ry, 0deg))) translateZ(var(--zc, 0px));
+}
+
+/* Spec strip: mono metadata line that reads like a workflow header */
+.spec-strip {
+  @apply font-mono text-[11px] leading-relaxed text-muted;
+}
+.spec-strip .k {
+  @apply text-slateAccent;
+}
+.spec-strip .v {
+  @apply text-paper;
+}
+
+/* Node-grid backdrop — subtle green engineering grid */
+.node-grid {
+  background-image:
+    linear-gradient(rgba(255, 54, 200, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+/* Focus visibility */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #00b2ff;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .glitch-line::before,
+  .glitch-line::after {
+    display: none;
+  }
+  .glitch-line {
+    text-shadow: none;
+  }
+}
