@@ -51,7 +51,7 @@ const ogilvyH3: Project = {
   status: 'ongoing',
   excerpt:
     'Short-form ad films produced end-to-end on an open-source ComfyUI pipeline — no shoot days, consistent talent, batch-rendered and tuned per shot.',
-  cover: '/media/ogilvy-h3-ad-films/cover.jpg',
+  cover: 'media/ogilvy-h3-ad-films/cover.jpg',
   spec: [
     { label: 'base', value: 'minimax h3' },
     { label: 'route', value: 'ref2v · i2v' },
@@ -99,7 +99,7 @@ const cleanDirtyLora: Project = {
   year: '2024',
   excerpt:
     'Campaigns where the same face must appear in dozens of frames. I built the dataset-to-deploy LoRA pipeline that keeps identity consistent across an entire shoot.',
-  cover: '/media/cleandirty-character-loras/cover.jpg',
+  cover: 'media/cleandirty-character-loras/cover.jpg',
   spec: [
     { label: 'base', value: 'ideogram 4' },
     { label: 'lora', value: 'rank 32' },
@@ -146,7 +146,7 @@ const cleanDirtyMocap: Project = {
   year: '2024',
   excerpt:
     'Recorded action footage turned into clean motion data: computer-vision mocap, cleaned in Studio, pushed straight into Blender rigs.',
-  cover: '/media/cleandirty-video-motion/cover.jpg',
+  cover: 'media/cleandirty-video-motion/cover.jpg',
   spec: [
     { label: 'source', value: 'fight footage' },
     { label: 'tracking', value: 'rokoko vision (CV)' },
