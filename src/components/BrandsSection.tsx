@@ -17,7 +17,7 @@ export default function BrandsSection() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4">
           {BRANDS.map((b, i) => (
             <Reveal key={b.slug} delay={(i % 4) * 70}>
               <a
@@ -28,11 +28,11 @@ export default function BrandsSection() {
                 <div className="border-b border-ink-600">
                   <BrandTile logo={b.logo} name={b.name} className="aspect-[4/3] w-full" />
                 </div>
-                <div className="p-4">
-                  <h3 className="font-display text-base font-bold text-paper transition-colors group-hover:text-neonBlue">
+                <div className="p-3 sm:p-4">
+                  <h3 className="font-display text-sm font-bold text-paper transition-colors group-hover:text-neonBlue sm:text-base">
                     {b.name}
                   </h3>
-                  <p className="mt-1 font-mono text-[10px] uppercase tracking-wideish text-muted">
+                  <p className="mt-1 font-mono text-[9px] uppercase tracking-wideish text-muted sm:text-[10px]">
                     {b.note}
                   </p>
                 </div>
