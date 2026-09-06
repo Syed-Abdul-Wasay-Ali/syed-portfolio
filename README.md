@@ -20,6 +20,28 @@ npm run preview    # serve the production build
 Deploy `dist/` anywhere static: **Netlify**, **Vercel**, **GitHub Pages** (it uses
 hash routing, so no server rewrites are needed).
 
+## Live deployment (GitHub Pages)
+
+- **Repo:** https://github.com/Jackloid1/syed-portfolio (public)
+- **Live URL:** https://Jackloid1.github.io/syed-portfolio/
+- Pages serves the `gh-pages` branch (built `dist/` content only).
+
+Update the live site:
+
+```bash
+npm run build            # rebuild dist/
+npx gh-pages -d dist     # push dist/ to gh-pages branch -> live in ~1-2 min
+```
+
+Source (`main` branch) is pushed with:
+
+```bash
+git add -A && git commit -m "..." && git push
+```
+
+Note: `vite.config.ts` uses `base: './'` so built assets work on the Pages
+sub-path. `server.py` serves `dist/` for local preview at http://127.0.0.1:4173.
+
 ---
 
 ## How to add a project
