@@ -22,8 +22,8 @@ hash routing, so no server rewrites are needed).
 
 ## Live deployment (GitHub Pages)
 
-- **Repo:** https://github.com/Jackloid1/syed-portfolio (public)
-- **Live URL:** https://Jackloid1.github.io/syed-portfolio/
+- **Repo:** https://github.com/syed-abdul-wasay-ali/syed-portfolio (public)
+- **Live URL:** https://syed-abdul-wasay-ali.github.io/syed-portfolio/
 - Pages serves the `gh-pages` branch (built `dist/` content only).
 
 Update the live site:
