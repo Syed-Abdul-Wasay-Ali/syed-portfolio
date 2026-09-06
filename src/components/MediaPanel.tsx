@@ -55,7 +55,7 @@ export default function MediaPanel({
       src={item.src}
       alt={item.label ?? ''}
       loading="lazy"
-      className={`media-asset w-full object-contain ${className}`}
+      className={`media-asset w-full max-w-full object-contain ${className}`}
     />
   )
 }

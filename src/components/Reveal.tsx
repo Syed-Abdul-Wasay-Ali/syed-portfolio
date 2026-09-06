@@ -41,7 +41,7 @@ export default function Reveal({
   return (
     <Tag
       ref={ref as never}
-      className={`reveal ${visible ? 'is-visible' : ''} ${className}`}
+      className={`reveal min-w-0 ${visible ? 'is-visible' : ''} ${className}`}
       style={delay ? { animationDelay: `${delay}ms` } : undefined}
     >
       {children}

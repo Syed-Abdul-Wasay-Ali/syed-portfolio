@@ -12,6 +12,7 @@ const LINKS = [
 
 export default function Header() {
   const [progress, setProgress] = useState(0)
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => {
@@ -24,12 +25,19 @@ export default function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // close the mobile menu whenever the hash changes (link tapped)
+  useEffect(() => {
+    const close = () => setOpen(false)
+    window.addEventListener('hashchange', close)
+    return () => window.removeEventListener('hashchange', close)
+  }, [])
+
   return (
     <header className="site-header fixed inset-x-0 top-0 z-40 border-b border-green/25 bg-ink-950/85 backdrop-blur">
-      {/* green top strip */}
+      {/* magenta strip */}
       <div aria-hidden="true" className="header-strip absolute inset-x-0 top-0 h-[3px] bg-green" />
       <div className="container-site flex h-14 items-center justify-between">
-        <a href="#/" className="flex items-baseline gap-2">
+        <a href="#/" className="flex items-baseline gap-2" onClick={() => setOpen(false)}>
           <span className="font-display text-base font-extrabold tracking-tight text-paper">
             SYED ABDUL WASAY ALI
           </span>
@@ -37,7 +45,9 @@ export default function Header() {
             ai · creative · technologist
           </span>
         </a>
-        <nav className="flex items-center gap-5">
+
+        {/* desktop nav */}
+        <nav className="hidden items-center gap-5 md:flex">
           {LINKS.map((l) => (
             <a
               key={l.href}
@@ -58,7 +68,68 @@ export default function Header() {
             linkedin
           </a>
         </nav>
+
+        {/* mobile hamburger */}
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-controls="mobile-nav"
+          aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
+          className="flex h-10 w-10 items-center justify-center rounded-md border border-green/30 text-paper transition-colors hover:border-neonBlue hover:text-neonBlue md:hidden"
+        >
+          <span className="relative block h-3.5 w-5">
+            <span
+              className={`absolute left-0 top-0 h-[2px] w-full bg-current transition-transform duration-200 ${
+                open ? 'translate-y-[6px] rotate-45' : ''
+              }`}
+            />
+            <span
+              className={`absolute left-0 top-[6px] h-[2px] w-full bg-current transition-opacity duration-200 ${
+                open ? 'opacity-0' : ''
+              }`}
+            />
+            <span
+              className={`absolute left-0 top-[12px] h-[2px] w-full bg-current transition-transform duration-200 ${
+                open ? '-translate-y-[6px] -rotate-45' : ''
+              }`}
+            />
+          </span>
+        </button>
       </div>
+
+      {/* mobile dropdown panel */}
+      {open && (
+        <nav
+          id="mobile-nav"
+          className="border-t border-green/20 bg-ink-950/95 backdrop-blur md:hidden"
+        >
+          <div className="container-site flex flex-col py-3">
+            {LINKS.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                className="py-3 font-mono text-sm uppercase tracking-wideish text-paper transition-colors hover:text-neonBlue"
+              >
+                {l.label}
+              </a>
+            ))}
+            <a
+              href={LINKEDIN_URL}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setOpen(false)}
+              className="btn-ghost mt-2 justify-center !py-2.5"
+              aria-label="View LinkedIn profile"
+            >
+              <LinkedInIcon className="h-4 w-4" />
+              linkedin
+            </a>
+          </div>
+        </nav>
+      )}
+
       {/* scroll progress */}
       <div
         aria-hidden="true"
