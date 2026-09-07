@@ -42,11 +42,6 @@ Error generating stack: `+e.message+`
   .brand-page .bg-mist, .brand-page .bg-ink-950 { background-color: ${r}; }
   .brand-page .text-green { color: ${t}; }
   .brand-page .border-green { border-color: ${t}; }
-  .brand-page .node-grid {
-    background-image:
-      linear-gradient(${be(t,.05)} 1px, transparent 1px),
-      linear-gradient(90deg, ${be(t,.04)} 1px, transparent 1px);
-  }
   .brand-page svg path[fill="#FF36C8"] { fill: ${t}; }
   .brand-page .gallery-label { color: ${o}; }
   .brand-page .group:hover .gallery-label { color: ${t}; }
