@@ -1,5 +1,6 @@
 import Hero from '../components/Hero'
 import KineticMarquee from '../components/KineticMarquee'
+import WhatIBuild from '../components/WhatIBuild'
 import BrandsSection from '../components/BrandsSection'
 import WorkGrid from '../components/WorkGrid'
 import ShowcaseSection from '../components/ShowcaseSection'
@@ -8,8 +9,9 @@ import About from '../components/About'
 import { useRuntime } from '../data/runtime'
 import { displayBrands } from '../data/brands'
 
-// Home order (user-set): case studies first, then concepts, then what I
-// actually do, then the small brands strip, then about.
+// Home order (user-set): case studies first, then concepts, then the systems
+// I build, then the small brands strip, then about. The what-I-build band
+// sits right under the logo ticker as the five-second positioning pitch.
 export default function HomePage() {
   const { content } = useRuntime()
   const hidden = content?.pageSections ?? []
@@ -25,6 +27,7 @@ export default function HomePage() {
         speed={26}
         items={displayBrands.map((b) => ({ label: b.name, to: `#/brand/${b.slug}`, img: b.logo }))}
       />
+      <WhatIBuild />
       <WorkGrid />
       {!hidden.includes('showcase') && <ShowcaseSection />}
       {!hidden.includes('capabilities') && <Capabilities />}

@@ -1,6 +1,7 @@
 import Reveal from './Reveal'
 import LinkedInIcon from './LinkedInIcon'
-import { LINKEDIN_URL } from '../data/social'
+import GitHubIcon from './GitHubIcon'
+import { LINKEDIN_URL, GITHUB_URL } from '../data/social'
 
 const TIMELINE = [
   {
@@ -9,6 +10,12 @@ const TIMELINE = [
     location: 'Mumbai, India.',
     dates: 'Apr 2025 — Present',
     note: 'AI-native production for client campaigns: video pipelines, identity consistency, automation.',
+    bullets: [
+      'Generative AI visuals and video for brand campaigns (Cadbury, Lacta, IFB, NDPF).',
+      'Built ComfyUI pipelines for controlled generation, identity consistency and scale.',
+      'Took ideas from brief to production-ready AI content with the creative teams.',
+      'Experimented with emerging image and video models, open-source first.',
+    ],
   },
   {
     role: 'AI Head Artist',
@@ -16,30 +23,42 @@ const TIMELINE = [
     location: 'Delhi, India. (Remote)',
     dates: 'Sep 2023 — Feb 2025',
     note: 'Led AI art direction and production: custom LoRAs, image & video generation systems, mocap pipelines.',
+    bullets: [
+      'Led AI image production as head AI artist for client campaign work.',
+      'Ran hands-on experiments across every major model wave since 2023.',
+      'Built reusable generation workflows and trained early custom LoRAs.',
+    ],
   },
 ]
 
-const SKILLS = [
-  'ComfyUI',
-  'MiniMax H3',
-  'Seedance 2.5',
-  'Ideogram 4',
-  'Krea 2',
-  'Flux · Klein',
-  'Z-Image Turbo',
-  'Midjourney',
-  'LTX / Wan',
-  'LoRA training',
-  'DiffSynth',
-  'Python',
-  'Blender',
-  'Rokoko mocap',
-  'Topaz upscale',
-  'API automation',
-  'Hermes agent',
-  'Codex CLI',
-  'Claude Code',
-  'MCP / agent workflows',
+// Skills grouped the way recruiters scan them: generative AI first, then the
+// production and automation layers around it.
+const SKILL_GROUPS = [
+  {
+    label: 'generative ai',
+    items: [
+      'ComfyUI',
+      'Ideogram 4',
+      'Krea 2',
+      'Flux · Klein',
+      'Z-Image Turbo',
+      'Midjourney',
+      'LoRA training',
+      'DiffSynth',
+    ],
+  },
+  {
+    label: 'video',
+    items: ['MiniMax H3', 'Seedance 2.5', 'LTX / Wan', 'Wan Animate motion transfer'],
+  },
+  {
+    label: 'production',
+    items: ['Blender', 'Rokoko mocap', 'Topaz upscale'],
+  },
+  {
+    label: 'automation & agents',
+    items: ['Python', 'API automation', 'Hermes agent', 'Codex CLI', 'Claude Code', 'MCP / agent workflows'],
+  },
 ]
 
 export default function About() {
@@ -76,14 +95,21 @@ export default function About() {
             obstacles, and the ComfyUI graphs that got past them.
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-2">
-            {SKILLS.map((s) => (
-              <span
-                key={s}
-                className="border border-ink-600 px-3 py-1 font-mono text-[11px] text-paper/85"
-              >
-                {s}
-              </span>
+          <div className="mt-8 space-y-5">
+            {SKILL_GROUPS.map((g) => (
+              <div key={g.label}>
+                <p className="eyebrow">{g.label}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {g.items.map((s) => (
+                    <span
+                      key={s}
+                      className="border border-ink-600 px-3 py-1 font-mono text-[11px] text-paper/85"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -105,6 +131,14 @@ export default function About() {
                   {t.location ? <span className="text-muted">, {t.location}</span> : null}
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{t.note}</p>
+                <ul className="mt-3 space-y-1.5">
+                  {t.bullets.map((b) => (
+                    <li key={b} className="flex gap-2.5 text-sm leading-relaxed text-paper/80">
+                      <span className="shrink-0 text-green">→</span>
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ol>
@@ -115,15 +149,26 @@ export default function About() {
               Building AI-native production pipelines at <span className="co-ogilvy">Ogilvy</span>: open-source first, documented
               always. Open to talking workflow design, automation, and AI production systems.
             </p>
-            <a
-              href={LINKEDIN_URL}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-5 inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-greenBright hover:text-greenBright"
-            >
-              <LinkedInIcon className="h-4 w-4" />
-              connect on linkedin
-            </a>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <a
+                href={LINKEDIN_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-greenBright hover:text-greenBright"
+              >
+                <LinkedInIcon className="h-4 w-4" />
+                connect on linkedin
+              </a>
+              <a
+                href={GITHUB_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-greenBright hover:text-greenBright"
+              >
+                <GitHubIcon className="h-4 w-4" />
+                github
+              </a>
+            </div>
           </div>
         </div>
         </Reveal>

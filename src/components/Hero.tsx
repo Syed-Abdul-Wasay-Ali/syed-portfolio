@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import NodeGraph from './NodeGraph'
 import LinkedInIcon from './LinkedInIcon'
-import { LINKEDIN_URL, EMAIL } from '../data/social'
+import { LINKEDIN_URL, EMAIL, RESUME_URL } from '../data/social'
+import { projectsByDate } from '../data/projects'
 
 export default function Hero() {
   const titleRef = useRef<HTMLDivElement | null>(null)
@@ -75,11 +76,20 @@ export default function Hero() {
           </div>
 
           <p
+            className="k-fade mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-greenBright"
+            style={{ animationDelay: '320ms' }}
+          >
+            generative ai · comfyui · workflow automation · ai image &amp; video
+          </p>
+
+          <p
             className="k-fade mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
             style={{ animationDelay: '380ms' }}
           >
-            AI Creative Technologist at <span className="co-ogilvy">Ogilvy</span> · ex-AI Head
-            Artist at <span className="co-cleandirty">cleanDirty.ai</span>. I design image and video
+            I build production-ready generative AI workflows, visual systems and automation
+            pipelines for creative teams and brands. AI Creative Technologist at{' '}
+            <span className="co-ogilvy">Ogilvy</span> · ex-AI Head Artist at{' '}
+            <span className="co-cleandirty">cleanDirty.ai</span>. I design image and video
             generation pipelines in ComfyUI, train custom LoRAs for identity consistency, and
             automate the render queues so teams ship campaigns instead of babysitting them.
           </p>
@@ -100,11 +110,17 @@ export default function Hero() {
             className="k-fade mt-8 flex flex-wrap items-center gap-4"
             style={{ animationDelay: '560ms' }}
           >
+            <a href="#work" className="btn-green">
+              view work
+            </a>
+            <a href={RESUME_URL} target="_blank" rel="noreferrer" className="btn-ghost">
+              resume
+            </a>
             <a
               href={LINKEDIN_URL}
               target="_blank"
               rel="noreferrer"
-              className="btn-green"
+              className="btn-ghost"
               aria-label="View LinkedIn profile"
             >
               <LinkedInIcon className="h-4 w-4" />
@@ -123,7 +139,7 @@ export default function Hero() {
               ['2', 'companies shipped'],
               ['1y5m+', 'ai creative technologist · ogilvy'],
               ['1y5m+', 'ai head artist · cleandirty'],
-              ['3', 'case studies below'],
+              [String(projectsByDate.length), 'case studies below'],
               ['2y10m+', 'total ai experience'],
             ].map(([v, l]) => (
               <div key={l}>

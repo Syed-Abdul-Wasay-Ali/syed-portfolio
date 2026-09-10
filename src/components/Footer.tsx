@@ -1,6 +1,7 @@
 import LinkedInIcon from './LinkedInIcon'
+import GitHubIcon from './GitHubIcon'
 import KineticMarquee from './KineticMarquee'
-import { LINKEDIN_URL, EMAIL } from '../data/social'
+import { LINKEDIN_URL, GITHUB_URL, EMAIL, RESUME_URL } from '../data/social'
 
 export default function Footer() {
   return (
@@ -21,7 +22,7 @@ export default function Footer() {
               ai creative technologist · ogilvy · ex-cleandirty.ai
             </p>
           </div>
-          <div className="flex gap-5">
+          <div className="flex flex-wrap gap-5">
             <a
               href={LINKEDIN_URL}
               target="_blank"
@@ -30,6 +31,23 @@ export default function Footer() {
             >
               <LinkedInIcon className="h-3.5 w-3.5" />
               linkedin
+            </a>
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:text-green"
+            >
+              <GitHubIcon className="h-3.5 w-3.5" />
+              github
+            </a>
+            <a
+              href={RESUME_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:text-green"
+            >
+              resume
             </a>
             <a
               href={`mailto:${EMAIL}`}

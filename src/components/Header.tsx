@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import LinkedInIcon from './LinkedInIcon'
-import { LINKEDIN_URL } from '../data/social'
+import GitHubIcon from './GitHubIcon'
+import { LINKEDIN_URL, GITHUB_URL, RESUME_URL } from '../data/social'
 import { useRuntime } from '../data/runtime'
 
 // Nav order mirrors the home page section order (case studies first, brands last).
 const LINKS = [
   { href: '#work', label: 'Work' },
   { href: '#showcase', label: 'Showcase' },
-  { href: '#capabilities', label: 'Capabilities' },
+  { href: '#capabilities', label: 'Systems' },
   { href: '#brands', label: 'Brands' },
   { href: '#about', label: 'About' },
 ]
@@ -69,6 +70,9 @@ export default function Header() {
           >
             admin
           </a>
+          <a href={RESUME_URL} target="_blank" rel="noreferrer" className="btn-ghost !py-1.5">
+            resume
+          </a>
           <a
             href={LINKEDIN_URL}
             target="_blank"
@@ -78,6 +82,15 @@ export default function Header() {
           >
             <LinkedInIcon className="h-3.5 w-3.5" />
             linkedin
+          </a>
+          <a
+            href={GITHUB_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="text-muted transition-colors hover:text-green"
+            aria-label="GitHub profile"
+          >
+            <GitHubIcon className="h-4 w-4" />
           </a>
         </nav>
 
@@ -128,6 +141,15 @@ export default function Header() {
               </a>
             ))}
             <a
+              href={RESUME_URL}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setOpen(false)}
+              className="btn-ghost mt-2 justify-center !py-2.5"
+            >
+              resume
+            </a>
+            <a
               href={LINKEDIN_URL}
               target="_blank"
               rel="noreferrer"
@@ -137,6 +159,17 @@ export default function Header() {
             >
               <LinkedInIcon className="h-4 w-4" />
               linkedin
+            </a>
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setOpen(false)}
+              className="btn-ghost mt-2 justify-center !py-2.5"
+              aria-label="GitHub profile"
+            >
+              <GitHubIcon className="h-4 w-4" />
+              github
             </a>
             <a
               href="#/admin"
