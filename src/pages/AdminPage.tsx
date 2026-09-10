@@ -447,7 +447,7 @@ export default function AdminPage() {
                       off ? 'border-ink-600 text-muted line-through' : 'border-green/40 text-paper hover:border-green'
                     }`}
                   >
-                    <span>{s}</span>
+                    <span>{s === 'capabilities' ? 'ai systems' : s}</span>
                     <span className="text-[10px]">{off ? 'removed' : 'visible'}</span>
                   </button>
                 )
