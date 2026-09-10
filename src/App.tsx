@@ -4,6 +4,9 @@ import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
 import ProjectPage from './pages/ProjectPage'
 import BrandPage from './pages/BrandPage'
+import AdminPage from './pages/AdminPage'
+import { RuntimeProvider } from './data/runtime'
+import { HoverPreviewProvider } from './components/HoverPreview'
 import { initTilt } from './lib/tilt'
 
 function useHashRoute(): string {
@@ -20,6 +23,7 @@ export default function App() {
   const hash = useHashRoute()
   const projectMatch = hash.match(/^#\/project\/([a-z0-9-]+)/)
   const brandMatch = hash.match(/^#\/brand\/([a-z0-9-]+)/)
+  const isAdmin = hash.startsWith('#/admin')
 
   // 3D: pointer tilt on [data-tilt] cards
   useEffect(() => {
@@ -30,20 +34,27 @@ export default function App() {
   }, [hash])
 
   return (
-    <div className="min-h-screen bg-ink">
-      <div>
-        <Header />
-        {projectMatch ? (
-          <ProjectPage slug={projectMatch[1]} />
-        ) : brandMatch ? (
-          <BrandPage slug={brandMatch[1]} />
-        ) : (
-          <HomePage />
-        )}
-        <Footer />
-      </div>
-      {/* global CRT overlay — scanlines, vignette, glitch band sweep */}
-      <div className="crt-overlay" aria-hidden="true" />
-    </div>
+    <RuntimeProvider>
+      <HoverPreviewProvider>
+        <div className="min-h-screen bg-ink">
+          <div>
+            <Header />
+            {isAdmin ? (
+              <AdminPage />
+            ) : projectMatch ? (
+              <ProjectPage slug={projectMatch[1]} />
+            ) : brandMatch ? (
+              <BrandPage slug={brandMatch[1]} />
+            ) : (
+              <HomePage />
+            )}
+            <Footer />
+          </div>
+          {/* global film finish — grain + vignette (title-card look) */}
+          <div aria-hidden="true" className="film-grain" />
+          <div aria-hidden="true" className="vignette" />
+        </div>
+      </HoverPreviewProvider>
+    </RuntimeProvider>
   )
 }

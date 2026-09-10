@@ -19,14 +19,15 @@ export interface ShowcaseItem extends MediaItem {
 }
 
 export const SHOWCASE: ShowcaseItem[] = [
-  { id: 'sa1', title: 'concept ad 01', tag: 'concept-ad', kind: 'video' },
-  { id: 'sa2', title: 'concept ad 02', tag: 'concept-ad', kind: 'video' },
-  { id: 'sa3', title: 'concept ad 03', tag: 'concept-ad', kind: 'image' },
-  { id: 'img1', title: 'personal image 01', tag: 'image', kind: 'image' },
-  { id: 'img2', title: 'personal image 02', tag: 'image', kind: 'image' },
-  { id: 'img3', title: 'personal image 03', tag: 'image', kind: 'image' },
-  { id: 'sa4', title: 'concept ad 04', tag: 'concept-ad', kind: 'video' },
-  { id: 'img4', title: 'personal image 04', tag: 'image', kind: 'image' },
+  {
+    id: 'sa5',
+    title: 'futuristic neon chase · blender clay vs seedance 2.5',
+    tag: 'concept-ad',
+    kind: 'video',
+    poster: 'media/futuristic-neon-chase/video/side-by-side-comparison-poster.jpg',
+    label: 'futuristic neon chase · blender clay vs seedance 2.5',
+    src: 'media/futuristic-neon-chase/video/side-by-side-comparison.mp4',
+  },
 ]
 
 export const SHOWCASE_TAGS: { key: 'all' | ShowcaseTag; label: string }[] = [

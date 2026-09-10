@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { BRANDS } from '../data/brands'
+import { displayBrands } from '../data/brands'
 import BrandTile from './BrandTile'
 
 // Phone-style 3D coverflow: swipe/drag horizontally, tiles tilt in 3D
@@ -67,7 +67,7 @@ export default function BrandCarousel() {
   const scrollToIndex = (i: number) => {
     const track = trackRef.current
     if (!track) return
-    const idx = Math.max(0, Math.min(BRANDS.length - 1, i))
+    const idx = Math.max(0, Math.min(displayBrands.length - 1, i))
     const item = track.querySelectorAll<HTMLElement>('.car-item')[idx]
     if (item) {
       const tr = track.getBoundingClientRect()
@@ -113,7 +113,7 @@ export default function BrandCarousel() {
         aria-label="Brands carousel — swipe or drag to browse"
       >
         <div className="flex gap-5 px-[12vw] py-8">
-          {BRANDS.map((b) => (
+          {displayBrands.map((b) => (
             <a
               key={b.slug}
               href={`#/brand/${b.slug}`}
@@ -146,7 +146,7 @@ export default function BrandCarousel() {
           ← prev
         </button>
         <p className="font-mono text-[10px] uppercase tracking-wideish text-muted">
-          swipe · drag · hover a logo to float it · {BRANDS.length} brands
+          swipe · drag · hover a logo to float it · {displayBrands.length} brands
         </p>
         <button
           onClick={() => scrollToIndex(activeRef.current + 1)}

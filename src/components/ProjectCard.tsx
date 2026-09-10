@@ -8,7 +8,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       href={`#/project/${project.slug}`}
       data-tilt
       data-tilt-max="8"
-      className="tilt-3d panel group block border-ink-600 hover:border-neonBlue"
+      className="tilt-3d panel disc-hover group block border-ink-600 hover:border-green"
     >
       <div className="relative aspect-[16/10] overflow-hidden border-b border-ink-600">
         {project.cover ? (
@@ -39,7 +39,7 @@ export default function ProjectCard({ project }: { project: Project }) {
           </span>{' '}
           · {project.year} · {project.role}
         </p>
-        <h3 className="mt-2 font-display text-lg font-bold leading-snug text-paper group-hover:text-neonBlue">
+        <h3 className="mt-2 font-display text-lg leading-snug text-paper group-hover:text-green">
           {project.title}
         </h3>
         <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-muted">{project.excerpt}</p>

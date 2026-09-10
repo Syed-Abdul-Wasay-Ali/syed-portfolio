@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { projects, COMPANIES, type Company } from '../data/projects'
+import { projectsByDate, COMPANIES, type Company } from '../data/projects'
 import ProjectCard from './ProjectCard'
 import Reveal from './Reveal'
 
@@ -7,14 +7,14 @@ type Filter = 'All' | Company
 
 export default function WorkGrid() {
   const [filter, setFilter] = useState<Filter>('All')
-  const shown = filter === 'All' ? projects : projects.filter((p) => p.company === filter)
+  const shown = filter === 'All' ? projectsByDate : projectsByDate.filter((p) => p.company === filter)
 
   return (
     <section id="work" className="scroll-mt-16 py-14 sm:py-20">
       <div className="container-site">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="eyebrow-green">02 — selected work</p>
+            <p className="eyebrow-green">01 / selected work</p>
             <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
               Case studies
             </h2>

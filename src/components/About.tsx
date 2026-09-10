@@ -6,12 +6,14 @@ const TIMELINE = [
   {
     role: 'AI Creative Technologist — Group Account',
     org: 'Ogilvy',
+    location: 'Mumbai, India.',
     dates: 'Apr 2025 — Present',
     note: 'AI-native production for client campaigns: video pipelines, identity consistency, automation.',
   },
   {
     role: 'AI Head Artist',
     org: 'cleanDirty.ai',
+    location: 'Delhi, India. (Remote)',
     dates: 'Sep 2023 — Feb 2025',
     note: 'Led AI art direction and production: custom LoRAs, image & video generation systems, mocap pipelines.',
   },
@@ -43,7 +45,7 @@ export default function About() {
       <div className="container-site grid gap-12 lg:grid-cols-2">
         <Reveal>
           <div>
-          <p className="eyebrow-green">05 — about</p>
+          <p className="eyebrow-green">05 / about</p>
           <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
             The operator
             <br />
@@ -84,7 +86,10 @@ export default function About() {
                   {t.dates}
                 </p>
                 <h4 className="mt-1 font-display text-lg font-bold text-paper">{t.role}</h4>
-                <p className={`font-mono text-xs ${t.org === 'Ogilvy' ? 'co-ogilvy' : 'co-cleandirty'}`}>{t.org}</p>
+                <p className={`font-mono text-xs ${t.org === 'Ogilvy' ? 'co-ogilvy' : 'co-cleandirty'}`}>
+                  {t.org}
+                  {t.location ? <span className="text-muted">, {t.location}</span> : null}
+                </p>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{t.note}</p>
               </li>
             ))}

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
-import { getBrand, brandMedia, BRANDS, type Brand } from '../data/brands'
+import { getBrand, displayBrands, type Brand } from '../data/brands'
+import { getProject, type Project, type MediaItem } from '../data/projects'
+import { useRuntime, type SectionName } from '../data/runtime'
 import MediaGallery from '../components/MediaGallery'
 import Lightbox from '../components/Lightbox'
 import BrandTile from '../components/BrandTile'
@@ -31,11 +33,11 @@ function mix(hex: string, other: string, t: number) {
 // is derived from the brand's accent color so the page reads AS the brand.
 function BrandSkin({ brand }: { brand: Brand }) {
   const c = brand.accent
-  const bg = mix(c, '#0B0A1E', 0.3) // brand-drenched page background
-  const panel = mix(c, '#100F26', 0.42) // card / placeholder surface
+  const bg = mix(c, '#0A0A0A', 0.3) // brand-drenched page background
+  const panel = mix(c, '#101010', 0.42) // card / placeholder surface
   const head = mix(c, '#FFFFFF', 0.38) // bright brand heading
-  const text = mix(c, '#F5F4FF', 0.86) // near-white, brand-tinted
-  const muted = mix(c, '#9A98CF', 0.5) // secondary text
+  const text = mix(c, '#F2EFE8', 0.86) // near-white, brand-tinted
+  const muted = mix(c, '#96918A', 0.5) // secondary text
   const line = hexToRgba(c, 0.35)
   const soft = hexToRgba(c, 0.16)
   const faint = hexToRgba(c, 0.08)
@@ -48,7 +50,7 @@ function BrandSkin({ brand }: { brand: Brand }) {
     transition: background-color 0.5s ease, color 0.5s ease;
   }
   body.brand-mode .site-header {
-    background: ${mix(c, '#070614', 0.78)};
+    background: ${mix(c, '#070707', 0.78)};
     border-color: ${line};
   }
   body.brand-mode .site-header .header-strip { background: ${c}; }
@@ -76,17 +78,12 @@ function BrandSkin({ brand }: { brand: Brand }) {
   .brand-page .bg-mist, .brand-page .bg-ink-950 { background-color: ${panel}; }
   .brand-page .text-green { color: ${c}; }
   .brand-page .border-green { border-color: ${c}; }
-  .brand-page .node-grid {
-    background-image:
-      linear-gradient(${hexToRgba(c, 0.05)} 1px, transparent 1px),
-      linear-gradient(90deg, ${hexToRgba(c, 0.04)} 1px, transparent 1px);
-  }
-  .brand-page svg path[fill="#FF36C8"] { fill: ${c}; }
+  .brand-page svg path[fill="#1F3A93"], svg path[fill="#94A8EE"] { fill: ${c}; }
   .brand-page .gallery-label { color: ${muted}; }
   .brand-page .group:hover .gallery-label { color: ${c}; }
   .brand-page .hover\\:border-greenBright:hover { border-color: ${c}; }
   .brand-page .hover\\:text-greenBright:hover { color: ${c}; }
-  .brand-page .bg-ink-950\\/97 { background: ${mix(c, '#070614', 0.85)}; }
+  .brand-page .bg-ink-950\\/97 { background: ${mix(c, '#070707', 0.85)}; }
 
   /* ---- brand fixtures ---- */
   .brand-page .brand-wash {
@@ -100,7 +97,7 @@ function BrandSkin({ brand }: { brand: Brand }) {
     border-color: ${line};
     background:
       radial-gradient(80% 90% at 50% 10%, ${soft}, transparent 75%),
-      ${mix(c, '#100F26', 0.32)};
+      ${mix(c, '#101010', 0.32)};
     box-shadow: 0 0 0 1px ${faint}, 0 18px 60px rgba(0, 0, 0, 0.5);
   }
   .brand-page .brand-link {
@@ -135,9 +132,122 @@ function Section({
   )
 }
 
+const isVideoMedia = (m: MediaItem) =>
+  m.kind === 'video' || /\.(mp4|webm|mov|mkv)$/i.test(m.src ?? '')
+
+// A project case study pinned onto the brand page: cover, workflow chips and
+// a strip of the actual outputs (stills / films). Click -> full case study.
+function BrandProjectCard({
+  project,
+  index,
+  story,
+}: {
+  project: Project
+  index: number
+  story?: string
+}) {
+  const results = project.results.slice(0, 5)
+  return (
+    <div className="brand-link card-lift group relative block overflow-hidden rounded-md border p-5">
+      <a
+        href={`#/project/${project.slug}`}
+        aria-label={`open case study: ${project.title}`}
+        className="absolute inset-0 z-10"
+      />
+      <div className="flex flex-col gap-5 sm:flex-row">
+        <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-sm bg-ink-950 sm:w-60">
+          {project.cover ? (
+            <img
+              src={project.cover}
+              alt={project.title}
+              loading="lazy"
+              className="media-asset h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="node-grid flex h-full items-center justify-center p-6">
+              <NodeGraph className="max-w-[8rem] opacity-80" animated={false} />
+            </div>
+          )}
+          {project.status && (
+            <span className="absolute left-2 top-2 bg-ink-950/90 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish text-greenBright">
+              {project.status}
+            </span>
+          )}
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="brand-overline font-mono text-[11px] uppercase tracking-wideish">
+            project {String(index + 1).padStart(2, '0')}
+          </p>
+          <h3 className="mt-1.5 font-display text-xl font-bold leading-snug text-snow group-hover:text-greenBright">
+            {project.title}
+          </h3>
+          <p className="mt-1 font-mono text-[11px] uppercase tracking-wideish text-muted">
+            {project.role} · {project.year}
+          </p>
+          {story && (
+            <p className="mt-4 max-w-3xl border-l-2 border-green/50 pl-4 text-[13px] font-bold leading-relaxed text-[#94A8EE]">
+              {story}
+            </p>
+          )}
+          <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-muted">{project.excerpt}</p>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {project.workflow.map((w) => (
+              <span
+                key={w.label}
+                className="brand-chip border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish"
+              >
+                {w.label}
+              </span>
+            ))}
+          </div>
+          <div className="mt-4 flex items-center gap-2">
+            {results.map((m, j) =>
+              isVideoMedia(m) ? (
+                <a
+                  key={j}
+                  href={m.src}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={m.label ?? 'watch the full video'}
+                  className="relative z-20 block h-12 w-[4.5rem] shrink-0 overflow-hidden rounded-sm border border-ink-600 bg-ink-950 transition-transform duration-300 hover:scale-[1.06]"
+                >
+                  {m.poster && (
+                    <img
+                      src={m.poster}
+                      alt={m.label ?? ''}
+                      loading="lazy"
+                      className="h-full w-full object-cover"
+                    />
+                  )}
+                  <span className="absolute inset-0 flex items-center justify-center bg-ink-950/30 text-xs text-snow">
+                    ▶
+                  </span>
+                </a>
+              ) : (
+                <img
+                  key={j}
+                  src={m.src}
+                  alt={m.label ?? ''}
+                  loading="lazy"
+                  className="h-12 w-[4.5rem] shrink-0 rounded-sm object-cover"
+                />
+              )
+            )}
+            <span className="font-mono text-[10px] uppercase tracking-wideish text-muted">
+              {project.results.length} {project.results.length === 1 ? 'output' : 'outputs'}
+            </span>
+            <span className="brand-link-arrow ml-auto font-display text-xl">→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function BrandPage({ slug }: { slug: string }) {
   const brand = getBrand(slug)
   const [lightbox, setLightbox] = useState<number | null>(null)
+  const { content } = useRuntime()
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -152,7 +262,7 @@ export default function BrandPage({ slug }: { slug: string }) {
   if (!brand) {
     return (
       <div className="container-site py-32 text-center">
-        <p className="eyebrow-green">404 — brand not found</p>
+        <p className="eyebrow-green">404 / brand not found</p>
         <h1 className="mt-3 font-display text-3xl font-black uppercase">Brand missing</h1>
         <a href="#/" className="btn-ghost mt-6">
           ← back home
@@ -161,10 +271,41 @@ export default function BrandPage({ slug }: { slug: string }) {
     )
   }
 
-  const all = brandMedia(brand)
-  const imagesEnd = brand.images.length
-  const animaticsEnd = imagesEnd + brand.animatics.length
-  const next = BRANDS[(BRANDS.findIndex((b) => b.slug === slug) + 1) % BRANDS.length]
+  // runtime layer: admin uploads, removed items, hidden sections
+  const hidden = (s: SectionName) => (content?.hiddenSections?.[brand.slug] ?? []).includes(s)
+  const eff = (items: MediaItem[], s: SectionName): MediaItem[] => {
+    const removed = new Set(content?.removedItems?.[brand.slug]?.[s] ?? [])
+    const keep = items.filter((m) => !removed.has(m.src ?? m.label ?? ''))
+    return [...(content?.uploads?.[brand.slug]?.[s] ?? []), ...keep]
+  }
+  const stillsItems = eff(brand.images, 'stills')
+  const animaticsItems = eff(brand.animatics, 'animatics')
+  const filmsItems = eff(brand.films, 'films')
+  const all = [...stillsItems, ...animaticsItems, ...filmsItems]
+  const imagesEnd = stillsItems.length
+  const animaticsEnd = imagesEnd + animaticsItems.length
+  const next = displayBrands[(displayBrands.findIndex((b) => b.slug === slug) + 1) % displayBrands.length]
+
+  // case studies pinned to this brand (newest FIRST: last added shows on top,
+  // older projects go down). NUMBERING is by addition order: the slug list
+  // order is the project's fixed number (project 1, 2, ...) and never changes
+  // when the display order flips.
+  const rawBrandProjects = (brand.projects ?? [])
+    .map((s) => getProject(s))
+    .filter((p): p is Project => Boolean(p))
+  const brandProjects = [...rawBrandProjects].reverse()
+  const projectNumber = (slug: string) => brand.projects!.indexOf(slug) + 1
+  const hasProjects = brandProjects.length > 0
+
+  // the brand story belongs to ONE project only (the FIRST entry in the
+  // slug list — the original one, e.g. Cadbury Silk's story) — not every
+  // card on the page. New slugs are appended, so never take [length-1].
+  const storyOwner = brand.projects?.[0]
+
+  // section numbers are sequential per rendered section (story = 00)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  let sec = 0
+  const take = () => pad(++sec)
 
   return (
     <main className="brand-page pt-14">
@@ -202,39 +343,55 @@ export default function BrandPage({ slug }: { slug: string }) {
         </div>
       </div>
 
-      {/* Reel banner */}
-      <div className="container-site pb-4 pt-8">
-        <div className="brand-reel relative flex aspect-[21/9] items-center justify-center overflow-hidden rounded-md">
-          <NodeGraph className="max-w-lg opacity-80" />
-          <p className="absolute bottom-3 right-4 font-mono text-[10px] uppercase tracking-wideish text-muted">
-            brand reel — media being added
-          </p>
-        </div>
-      </div>
-
       {/* Galleries */}
       <div className="container-site pb-4 pt-8">
-        <Section tag="01 — stills" title="Campaign images">
-          <MediaGallery
-            items={brand.images}
-            onOpen={(i) => setLightbox(i)}
-            cols="sm:grid-cols-3"
-          />
-        </Section>
+        {hasProjects && !hidden('projects') && (
+          <Section tag={`${take()} / projects`} title="Projects on this brand" delay={0}>
+            <div className="space-y-5">
+              {brandProjects.map((p) => (
+                <BrandProjectCard
+                  key={p.slug}
+                  project={p}
+                  index={projectNumber(p.slug) - 1}
+                  story={p.slug === storyOwner ? brand.story : undefined}
+                />
+              ))}
+            </div>
+            <p className="mt-5 max-w-3xl text-sm text-muted">
+              Every project opens its full case study: the process, the
+              models and the frames that shipped. Click any project above, or
+              use the outputs strip to jump straight in.
+            </p>
+          </Section>
+        )}
 
-        <Section tag="02 — animatics" title="Animatics" delay={60}>
-          <MediaGallery
-            items={brand.animatics}
-            onOpen={(i) => setLightbox(imagesEnd + i)}
-          />
-        </Section>
+        {!hidden('stills') && stillsItems.length > 0 && (
+          <Section tag={`${take()} / stills`} title="Campaign images" delay={60}>
+            <MediaGallery
+              items={stillsItems}
+              onOpen={(i) => setLightbox(i)}
+              cols="sm:grid-cols-3"
+            />
+          </Section>
+        )}
 
-        <Section tag="03 — final film" title="Final films" delay={120}>
-          <MediaGallery
-            items={brand.films}
-            onOpen={(i) => setLightbox(animaticsEnd + i)}
-          />
-        </Section>
+        {!hidden('animatics') && animaticsItems.length > 0 && (
+          <Section tag={`${take()} / animatics`} title="Animatics" delay={60}>
+            <MediaGallery
+              items={animaticsItems}
+              onOpen={(i) => setLightbox(imagesEnd + i)}
+            />
+          </Section>
+        )}
+
+        {!hidden('films') && filmsItems.length > 0 && (
+          <Section tag={`${take()} / final film`} title="Final films" delay={120}>
+            <MediaGallery
+              items={filmsItems}
+              onOpen={(i) => setLightbox(animaticsEnd + i)}
+            />
+          </Section>
+        )}
 
         <Reveal delay={120} className="pb-8 pt-2">
           <a

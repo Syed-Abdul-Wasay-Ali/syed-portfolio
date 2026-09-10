@@ -50,7 +50,7 @@ export default function Capabilities() {
   return (
     <section id="capabilities" className="scroll-mt-16 border-y border-ink-950/10 bg-mist py-14 sm:py-20">
       <div className="container-site">
-        <p className="eyebrow-green">04 — capabilities</p>
+        <p className="eyebrow-green">03 / capabilities</p>
         <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
           What I actually do
         </h2>

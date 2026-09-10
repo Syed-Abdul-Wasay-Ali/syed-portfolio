@@ -40,7 +40,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
   if (!project) {
     return (
       <div className="container-site py-32 text-center">
-        <p className="eyebrow-green">404 — node not found</p>
+        <p className="eyebrow-green">404 / node not found</p>
         <h1 className="mt-3 font-display text-3xl font-black uppercase">Project missing</h1>
         <a href="#/" className="btn-ghost mt-6">
           ← back to work
@@ -49,7 +49,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
     )
   }
 
-  const allMedia = [...project.workflow, ...project.results]
+  const allMedia = project.results
   const hero: (typeof allMedia)[number] | undefined =
     project.results.find((m) => m.kind === 'video') ?? allMedia[0]
 
@@ -66,8 +66,8 @@ export default function ProjectPage({ slug }: { slug: string }) {
           <span
             className={`border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wideish ${
               project.company === 'Ogilvy'
-                ? 'co-ogilvy border-[#ff3b4e]'
-                : 'co-cleandirty border-[#a78bfa]'
+                ? 'co-ogilvy border-[#1F3A93]'
+                : 'co-cleandirty border-[#C9C2B6]'
             }`}
           >
             {project.company}
@@ -99,15 +99,30 @@ export default function ProjectPage({ slug }: { slug: string }) {
       {/* Story */}
       <div className="container-site grid gap-10 pb-4 pt-12 lg:grid-cols-[1fr_340px]">
         <div>
-          <Section tag="01 — overview" title="What shipped">
+          <Section tag="01 / overview" title="What shipped">
             <p className="max-w-3xl leading-relaxed text-paper/90">{project.overview}</p>
           </Section>
 
-          <Section tag="02 — the obstacle" title="The problem">
+          {project.contribution && project.contribution.length > 0 && (
+            <Section tag="02 / my contribution" title="What I contributed">
+              <p className="mb-5 max-w-3xl text-sm text-muted">
+                My part of the production, not the whole campaign — the client and agency own the work.
+              </p>
+              <div className="flex max-w-3xl flex-wrap gap-2">
+                {project.contribution.map((c) => (
+                  <span key={c} className="border border-ink-600 px-3 py-1.5 font-mono text-[11px] text-paper/85">
+                    {c}
+                  </span>
+                ))}
+              </div>
+            </Section>
+          )}
+
+          <Section tag="03 / the obstacle" title="The problem">
             <p className="max-w-3xl leading-relaxed text-paper/90">{project.challenge}</p>
           </Section>
 
-          <Section tag="03 — the approach" title="How I got past it">
+          <Section tag="04 / the approach" title="How I got past it">
             <ol className="max-w-3xl space-y-4">
               {project.approach.map((step, i) => (
                 <li key={i} className="flex gap-4">
@@ -120,7 +135,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
             </ol>
           </Section>
 
-          <Section tag="04 — stack" title="Tools & models">
+          <Section tag="05 / stack" title="Tools & models">
             <div className="flex flex-wrap gap-2">
               {project.stack.map((s) => (
                 <span key={s} className="border border-ink-600 px-3 py-1.5 font-mono text-[11px] text-paper/85">
@@ -130,17 +145,27 @@ export default function ProjectPage({ slug }: { slug: string }) {
             </div>
           </Section>
 
-          <Section tag="05 — receipts" title="The workflow">
+          <Section tag="06 / process" title="Brief → exploration → final">
             <p className="mb-5 max-w-3xl text-sm text-muted">
-              Actual ComfyUI graphs from the project. Click any frame to inspect.
+              The route the work took: brief, exploration, iteration, delivery. Workflow graphs and
+              internal iterations stay in the studio.
             </p>
-            <MediaGallery items={project.workflow} onOpen={(i) => setLightbox(i)} cols="sm:grid-cols-2" />
+            <ol className="max-w-3xl space-y-3">
+              {project.workflow.map((w, i) => (
+                <li key={i} className="flex gap-4">
+                  <span className="mt-0.5 font-mono text-xs text-green">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <p className="leading-relaxed text-paper/90">{w.label ?? 'step'}</p>
+                </li>
+              ))}
+            </ol>
           </Section>
 
-          <Section tag="06 — results" title="What came out">
+          <Section tag="07 / results" title="What came out">
             <MediaGallery
               items={project.results}
-              onOpen={(i) => setLightbox(project.workflow.length + i)}
+              onOpen={(i) => setLightbox(i)}
             />
           </Section>
         </div>
@@ -168,6 +193,18 @@ export default function ProjectPage({ slug }: { slug: string }) {
               · {project.year}
             </p>
           </div>
+
+          {project.campaign && (
+            <a
+              href={project.campaign.url}
+              target="_blank"
+              rel="noreferrer"
+              className="panel card-lift block p-5 hover:border-greenBright"
+            >
+              <p className="eyebrow">public release</p>
+              <p className="mt-2 text-sm font-bold text-paper/90">{project.campaign.label} ↗</p>
+            </a>
+          )}
 
           <a
             href={`#/project/${nextProject.slug}`}

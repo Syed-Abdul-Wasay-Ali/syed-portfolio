@@ -46,7 +46,7 @@ export default function NodeGraph({
           <path
             key={i}
             d={link(n, NODES[i + 1])}
-            stroke={n.accent ? '#FF36C8' : '#00B2FF'}
+            stroke={n.accent ? '#1F3A93' : '#8A8580'}
             strokeDasharray="4 5"
             className={animated ? 'animate-dash' : undefined}
             opacity="0.85"
@@ -61,17 +61,17 @@ export default function NodeGraph({
             height={26 + n.lines * 12}
             rx="4"
             fill="#171633"
-            stroke={n.accent ? '#FF36C8' : '#333168'}
+            stroke={n.accent ? '#1F3A93' : '#3A3A36'}
             strokeWidth="1.1"
           />
-          <rect width="118" height="14" rx="4" fill={n.accent ? '#7A0F5C' : '#282659'} />
-          <rect y="7" width="118" height="7" fill={n.accent ? '#7A0F5C' : '#282659'} />
+          <rect width="118" height="14" rx="4" fill={n.accent ? '#0B1846' : '#1E1E1C'} />
+          <rect y="7" width="118" height="7" fill={n.accent ? '#0B1846' : '#1E1E1C'} />
           <text
             x="6"
             y="10"
             fontSize="7.5"
             fontFamily="IBM Plex Mono, monospace"
-            fill={n.accent ? '#FF7DE0' : '#F5F4FF'}
+            fill={n.accent ? '#94A8EE' : '#F2EFE8'}
           >
             {n.title}
           </text>
@@ -93,8 +93,8 @@ export default function NodeGraph({
                 cx="118"
                 cy={16 + nn.lines * 6}
                 r="3.5"
-                fill="#0B0A1E"
-                stroke="#FF36C8"
+                fill="#0A0A0A"
+                stroke="#1F3A93"
                 strokeWidth="1.2"
                 className={animated ? 'animate-pulseSoft' : undefined}
               />
@@ -102,8 +102,8 @@ export default function NodeGraph({
                 cx="0"
                 cy={16 + nn.lines * 6}
                 r="3.5"
-                fill="#0B0A1E"
-                stroke="#00B2FF"
+                fill="#0A0A0A"
+                stroke="#8A8580"
                 strokeWidth="1.2"
                 className={animated ? 'animate-pulseSoft' : undefined}
               />

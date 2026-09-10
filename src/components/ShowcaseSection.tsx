@@ -14,12 +14,15 @@ export default function ShowcaseSection() {
   const shown: ShowcaseItem[] =
     filter === 'all' ? SHOWCASE : SHOWCASE.filter((s) => s.tag === filter)
 
+  // Showcase renders nothing until there is real media — no empty grids.
+  if (shown.length === 0) return null
+
   return (
     <section id="showcase" className="scroll-mt-16 py-14 sm:py-20">
       <div className="container-site">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <p className="eyebrow-green">03 — showcase</p>
+            <p className="eyebrow-green">02 / showcase</p>
             <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
               Concept ads &amp; personal work
             </h2>
@@ -53,7 +56,7 @@ export default function ShowcaseSection() {
             <Reveal key={item.id} delay={(i % 4) * 70}>
               <button
                 onClick={() => setLightbox(i)}
-                className="tilt-3d panel group block w-full text-left hover:border-neonBlue"
+                className="tilt-3d panel disc-hover group block w-full text-left hover:border-green"
                 data-tilt
                 data-tilt-max="8"
               >
@@ -64,7 +67,7 @@ export default function ShowcaseSection() {
                   </span>
                 </div>
                 <div className="p-4">
-                  <h3 className="font-display text-base font-bold text-paper transition-colors group-hover:text-neonBlue">
+                  <h3 className="font-display text-base text-paper transition-colors group-hover:text-green">
                     {item.title}
                   </h3>
                 </div>

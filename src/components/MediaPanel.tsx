@@ -1,8 +1,16 @@
 import type { MediaItem } from '../data/projects'
 import NodeGraph from './NodeGraph'
 
-// Renders a media item as video, image, or an intentional placeholder
-// when the real asset hasn't been dropped into /public/media yet.
+// YouTube URLs are embedded as iframes so the video plays straight from
+// YouTube on the site (local dev AND gh-pages — no files needed). Same for
+// Instagram reels/posts via the official /embed/ endpoint.
+const YT_RE = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/
+const ytId = (s: string) => s.match(YT_RE)?.[1]
+const IG_RE = /instagram\.com\/(reel|p|tv)\/([A-Za-z0-9_-]+)/
+const igMatch = (s: string) => s.match(IG_RE)
+
+// Renders a media item as video, image, YouTube embed, or an intentional
+// placeholder when the real asset hasn't been dropped into /public/media yet.
 export default function MediaPanel({
   item,
   className = '',
@@ -21,7 +29,7 @@ export default function MediaPanel({
           {isVideo && (
             <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-green bg-ink-950">
               <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-                <path d="M3 1.5 L10 6 L3 10.5 Z" fill="#FF36C8" />
+                <path d="M3 1.5 L10 6 L3 10.5 Z" fill="#1F3A93" />
               </svg>
             </span>
           )}
@@ -32,6 +40,45 @@ export default function MediaPanel({
         <p className="font-mono text-[10px] text-muted/70">
           drop file into public/media — src: pending
         </p>
+      </div>
+    )
+  }
+
+  const yt = ytId(item.src)
+  if (yt) {
+    return (
+      <div
+        className={`media-asset relative aspect-video w-full overflow-hidden bg-ink-950 ${className}`}
+      >
+        <iframe
+          src={`https://www.youtube.com/embed/${yt}?rel=0&modestbranding=1`}
+          title={item.label ?? 'YouTube video'}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="strict-origin-when-cross-origin"
+          className="absolute inset-0 h-full w-full"
+        />
+      </div>
+    )
+  }
+
+  const ig = item.src ? igMatch(item.src) : undefined
+  if (ig) {
+    return (
+      <div
+        className={`media-asset relative mx-auto w-full max-w-[420px] overflow-hidden bg-ink-950 ${className}`}
+        style={{ aspectRatio: '9 / 16' }}
+      >
+        <iframe
+          src={`https://www.instagram.com/${ig[1]}/${ig[2]}/embed/`}
+          title={item.label ?? 'Instagram reel'}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="strict-origin-when-cross-origin"
+          className="absolute inset-0 h-full w-full"
+        />
       </div>
     )
   }
