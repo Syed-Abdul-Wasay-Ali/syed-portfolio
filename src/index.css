@@ -55,9 +55,11 @@ body {
     @apply inline-flex items-center gap-2 bg-green px-4 py-2 font-mono text-xs uppercase tracking-wideish text-ink-950 transition-all duration-300 hover:bg-paper;
   }
 
-  /* corporate company names — bold, brand-colored */
+  /* corporate company names — bold, brand-colored.
+     Do NOT repaint with site accents: Ogilvy logo/wordmark stays brand red,
+     cleanDirty stays neutral. Exempt from accent swaps. */
   .co-ogilvy {
-    color: #1F3A93;
+    color: #ff3b4e;
     font-weight: 700;
   }
   .co-cleandirty {

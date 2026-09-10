@@ -66,7 +66,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
           <span
             className={`border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wideish ${
               project.company === 'Ogilvy'
-                ? 'co-ogilvy border-[#1F3A93]'
+                ? 'co-ogilvy border-[#ff3b4e]'
                 : 'co-cleandirty border-[#C9C2B6]'
             }`}
           >
