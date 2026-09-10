@@ -36,6 +36,9 @@ const SKILLS = [
   'Rokoko mocap',
   'Topaz upscale',
   'API automation',
+  'Hermes agent',
+  'Codex CLI',
+  'Claude Code',
   'MCP / agent workflows',
 ]
 
@@ -52,14 +55,25 @@ export default function About() {
             behind the graph
           </h2>
           <p className="mt-6 leading-relaxed text-muted">
-            I spend my days on the other side of the screen — building the workflows, training the
+            I'm from Hyderabad, India, and I come from an art background. In 2023 I started
+            learning generative AI, and I haven't stopped learning new models since.
+          </p>
+          <p className="mt-4 leading-relaxed text-muted">
+            I'm a fast learner, and I'm creative at capturing an idea and portraying it as a film
+            or a set of images. I religiously check the AI subreddits, X accounts, and Instagram
+            pages that cover every new AI tool and breakthrough, so I know what's new the moment
+            it lands. Most of my experiments happen in ComfyUI with image and video models, and I
+            automate the workflows around them with AI agents like Hermes, Codex, and Claude Code.
+          </p>
+          <p className="mt-4 leading-relaxed text-muted">
+            I spend my days on the other side of the screen: building the workflows, training the
             LoRAs, tuning the samplers, and then automating the whole thing so nobody has to sit
             through another render. My job is to know when the open-source stack does the job
             better than the paid one, and to make that choice invisible in the final frame.
           </p>
           <p className="mt-4 leading-relaxed text-muted">
             Everything below is documented the way I work: real models, real parameters, real
-            obstacles — and the ComfyUI graphs that got past them.
+            obstacles, and the ComfyUI graphs that got past them.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-2">
@@ -98,7 +112,7 @@ export default function About() {
           <div className="panel-dark mt-10 p-6">
             <p className="font-mono text-[11px] uppercase tracking-wideish text-snow/60">currently</p>
             <p className="mt-3 text-sm leading-relaxed text-snow/90">
-              Building AI-native production pipelines at <span className="co-ogilvy">Ogilvy</span> — open-source first, documented
+              Building AI-native production pipelines at <span className="co-ogilvy">Ogilvy</span>: open-source first, documented
               always. Open to talking workflow design, automation, and AI production systems.
             </p>
             <a
