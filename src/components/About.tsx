@@ -57,7 +57,7 @@ const SKILL_GROUPS = [
   },
   {
     label: 'automation & agents',
-    items: ['Python', 'API automation', 'Hermes agent', 'Codex CLI', 'Claude Code', 'MCP / agent workflows'],
+    items: ['API automation', 'Hermes agent', 'Codex CLI', 'Claude Code', 'MCP / agent workflows'],
   },
 ]
 
