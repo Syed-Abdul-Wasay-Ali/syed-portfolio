@@ -476,8 +476,132 @@ const conceptNeonChase: Project = {
   ],
 }
 
+// Happydent White gum concept ad: my own concept + ad idea, generated with
+// Seedance 2.5, directed and edited by me. Ends on the lights-out line and
+// the packshot.
+const conceptHappydentWhiteGum: Project = {
+  slug: 'concept-happydent-white-gum',
+  title: 'Happydent White gum · concept ad (Seedance 2.5)',
+  company: 'Concept',
+  role: 'AI Creative Technologist',
+  year: '2026',
+  date: '2026-08-16',
+  status: 'concept',
+  contribution: [
+    'original concept + ad idea',
+    'direction',
+    'seedance 2.5 generation',
+    'edit + 32s cut',
+    'packshots + taglines',
+  ],
+  excerpt:
+    'My own concept and ad idea for Happydent White: a school annual-day performance where the lights go out and the smiles stay on. The imagery is generated with Seedance 2.5, and the film is directed and edited by me, down to the final packshot and its line: bright white. bright moments.',
+  cover: 'media/concept-happydent-white-gum/cover.jpg',
+  spec: [
+    { label: 'brand', value: 'happydent white · mint flavour' },
+    { label: 'idea', value: 'own concept + ad idea' },
+    { label: 'engine', value: 'seedance 2.5' },
+    { label: 'craft', value: 'directed + edited by me' },
+    { label: 'output', value: '1920×1080 · 32s' },
+    { label: 'year', value: '2026' },
+  ],
+  overview:
+    'A concept ad for Happydent White built on the simplest promise of a white gum: brightness, made literal. The film runs through one evening at a school annual-day show: a forest-set stage play, the audience watching, a young man and his packet of Happydent White, and the moment the lights go out. The film does not go dark with them: a smile turns into a blinding white light and carries the show to its close, then the pack lands twice. "When the lights go out, keep your smile on." "Bright white. Bright moments."',
+  challenge:
+    'Two things make or break a 32 second film like this. Continuity: the stage, the audience and the hero all have to feel like one venue on one evening, even though every shot is generated separately. And the signature: a smile becoming an actual light source. That single frame is the whole ad, and it has to read instantly, in the dark, before the pack arrives to explain it.',
+  approach: [
+    'Wrote the concept and the ad idea: an annual-day show where the lights go out and the gum keeps the smiles bright.',
+    'Directed the film as one continuous evening: the stage play, the audience, the young man and his gum, and the dark passage where the lights drop.',
+    'Generated all the imagery with Seedance 2.5, steering the look somewhere between real venue footage and stage light.',
+    'Landed the signature shot: the smile that goes blinding white, turning the product promise into the light source of the film.',
+    'Edited the 32 second cut to finish on the two packshots: the lights-out line, then bright white. bright moments.',
+  ],
+  stack: [
+    'Own concept + ad idea',
+    'Seedance 2.5 (text-to-video, closed-source)',
+    'Edit + 32s cut (own work)',
+    '1920×1080 master',
+  ],
+  workflow: [
+    { label: 'own concept + ad idea' },
+    { label: 'seedance 2.5 generation' },
+    { label: 'direction · one venue, one evening' },
+    { label: 'edit + 32s cut' },
+    { label: 'packshots + taglines' },
+  ],
+  results: [
+    { kind: 'video', label: 'happydent white gum · concept film (32s)', src: 'media/showcase/ads/happydent-white-gum-concept.mp4', poster: 'media/showcase/ads/happydent-white-gum-concept-poster.jpg' },
+    { kind: 'image', label: 'the signature · a smile that lights the dark', src: 'media/concept-happydent-white-gum/stills/the-glow.jpg' },
+    { kind: 'image', label: 'the unwrap · happydent white packet', src: 'media/concept-happydent-white-gum/stills/the-gum-moment.jpg' },
+    { kind: 'image', label: 'the audience · one evening at the show', src: 'media/concept-happydent-white-gum/stills/audience-reaction.jpg' },
+    { kind: 'image', label: 'the dark passage · mid-film', src: 'media/concept-happydent-white-gum/stills/the-dark-beat.jpg' },
+    { kind: 'image', label: 'the stage · annual-day performance', src: 'media/concept-happydent-white-gum/stills/the-stage-show.jpg' },
+    { kind: 'image', label: 'end card · when the lights go out... keep your smile on', src: 'media/concept-happydent-white-gum/stills/end-card.jpg' },
+    { kind: 'image', label: 'final packshot · bright white. bright moments.', src: 'media/concept-happydent-white-gum/stills/final-packshot.jpg' },
+  ],
+}
+
+// 7up concept ad: my own original idea, generated with Seedance 2.5. A
+// colour-drained wasteland flips to a bright future city after one sip.
+const concept7up: Project = {
+  slug: 'concept-7up',
+  title: '7up · concept ad (Seedance 2.5)',
+  company: 'Concept',
+  role: 'AI Creative Technologist',
+  year: '2026',
+  date: '2026-09-13',
+  status: 'concept',
+  contribution: [
+    'original concept + ad idea',
+    'seedance 2.5 generation',
+    'dull-world → bright-city turn',
+  ],
+  excerpt:
+    'My own original idea for a 7up concept ad: a colour-drained wasteland under a weathered 7up billboard that promises no more dull moments, one bottle, one first sip, and the whole world snaps into colour. Generated with Seedance 2.5.',
+  cover: 'media/concept-7up/cover.jpg',
+  spec: [
+    { label: 'brand', value: '7up' },
+    { label: 'idea', value: 'own original concept' },
+    { label: 'engine', value: 'seedance 2.5' },
+    { label: 'output', value: '1280×720 · 30s' },
+    { label: 'year', value: '2026' },
+  ],
+  overview:
+    'A concept ad for 7up built on the brand promise of brightness. The film opens in a colour-drained wasteland: dust, ruins, a world of dull moments. A weathered 7up billboard stands over it, promising "no more dull moments", and the story is the simplest possible arc from there: a bottle of 7up, one first sip, and the world snapping into colour. By the close, the ruins have become a bright, optimistic future city, and the 7up mascot is waiting at the end of the street.',
+  challenge:
+    'The whole film hangs on one turn: sepia to colour. The wasteland has to feel genuinely dead, drained and lived-in, and the transformation has to land as pure refreshment in a single beat, or the ad does not work. Every frame was generated, so the wasteland, the billboard, the drink and the future city all had to read as one world on either side of that turn: same places, same faces, one sip apart.',
+  approach: [
+    'Wrote the concept around the billboard line: a world of dull moments that 7up turns bright.',
+    'Built the wasteland look first: desaturated sepia, dust, ruins, a figure walking through it, so the billboard reads as a promise.',
+    'Generated the film with Seedance 2.5: the discovery of the billboard, the bottle in the dust, the first sip, and the world switching to colour.',
+    'Staged the new world as an optimistic future city: glass towers, greenery, and the 7up mascot waiting at the end.',
+  ],
+  stack: [
+    'Own original concept + ad idea',
+    'Seedance 2.5 (text-to-video, closed-source)',
+    '1280×720 · 30s master',
+  ],
+  workflow: [
+    { label: 'own original idea' },
+    { label: 'seedance 2.5 generation' },
+    { label: 'wasteland → bright future city' },
+    { label: 'billboard + tagline · no more dull moments' },
+    { label: '30s concept film' },
+  ],
+  results: [
+    { kind: 'video', label: '7up · concept film (30s)', src: 'media/showcase/ads/7up-concept.mp4', poster: 'media/showcase/ads/7up-concept-poster.jpg' },
+    { kind: 'image', label: 'the dull world · opening', src: 'media/concept-7up/stills/the-dull-world.jpg' },
+    { kind: 'image', label: 'the discovery · under the billboard', src: 'media/concept-7up/stills/the-discovery.jpg' },
+    { kind: 'image', label: 'the bottle · in the dust', src: 'media/concept-7up/stills/the-bottle.jpg' },
+    { kind: 'image', label: 'the first sip', src: 'media/concept-7up/stills/the-first-sip.jpg' },
+    { kind: 'image', label: 'the turn · the world goes bright', src: 'media/concept-7up/stills/the-turn.jpg' },
+    { kind: 'image', label: 'the city · 7up-bright future', src: 'media/concept-7up/stills/the-city.jpg' },
+    { kind: 'image', label: 'sign-off · with the 7up mascot', src: 'media/concept-7up/stills/the-sign-off.jpg' },
+  ],
+}
+
 // Grid order = array order. Keep Ogilvy projects first.
-export const projects: Project[] = [ogilvyStoryOfUs, ogilvyCelebrations, lactaChristmasAi, ndpfHistoryOfDiamonds, ogilvyIfbChristmas, conceptNeonChase]
+export const projects: Project[] = [ogilvyStoryOfUs, ogilvyCelebrations, lactaChristmasAi, ndpfHistoryOfDiamonds, ogilvyIfbChristmas, conceptHappydentWhiteGum, concept7up, conceptNeonChase]
 
 // Case-study display order: NEWEST FIRST by `date` (exact when known, else
 // the year). Ties keep the original array order, so same-date entries slot

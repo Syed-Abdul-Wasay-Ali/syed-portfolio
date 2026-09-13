@@ -79,15 +79,16 @@ export default function Hero() {
             className="k-fade mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-greenBright"
             style={{ animationDelay: '320ms' }}
           >
-            generative ai · comfyui · workflow automation · ai image &amp; video
+            motion design · video editing · generative ai pipelines · comfyui · ai image &amp; video
           </p>
 
           <p
             className="k-fade mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
             style={{ animationDelay: '380ms' }}
           >
-            I build production-ready generative AI workflows, visual systems and automation
-            pipelines for creative teams and brands. AI Creative Technologist at{' '}
+            I'm a motion designer and video editor who builds production-ready generative AI
+            workflows, visual systems and automation pipelines for creative teams and brands. AI
+            Creative Technologist at{' '}
             <span className="co-ogilvy">Ogilvy</span> · ex-AI Head Artist at{' '}
             <span className="co-cleandirty">cleanDirty.ai</span>. I design image and video
             generation pipelines in ComfyUI, train custom LoRAs for identity consistency, and
@@ -139,6 +140,10 @@ export default function Hero() {
               ['2', 'companies shipped'],
               ['1y5m+', 'ai creative technologist · ogilvy'],
               ['1y5m+', 'ai head artist · cleandirty'],
+              [
+                String(projectsByDate.filter((p) => p.company !== 'Concept').length),
+                'shipped brand campaigns',
+              ],
               [String(projectsByDate.length), 'case studies below'],
               ['2y10m+', 'total ai experience'],
             ].map(([v, l]) => (

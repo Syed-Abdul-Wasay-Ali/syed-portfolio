@@ -74,8 +74,9 @@ export default function About() {
             behind the graph
           </h2>
           <p className="mt-6 leading-relaxed text-muted">
-            I'm from Hyderabad, India, and I come from an art background. In 2023 I started
-            learning generative AI, and I haven't stopped learning new models since.
+            I'm a motion designer and video editor from Hyderabad, India, with an art background.
+            In 2023 I started learning generative AI, and I haven't stopped learning new models
+            since.
           </p>
           <p className="mt-4 leading-relaxed text-muted">
             I'm a fast learner, and I'm creative at capturing an idea and portraying it as a film

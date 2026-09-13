@@ -70,6 +70,9 @@ export default function ShowcaseSection() {
                   <h3 className="font-display text-base text-paper transition-colors group-hover:text-green">
                     {item.title}
                   </h3>
+                  {item.note && (
+                    <p className="mt-2 text-xs leading-relaxed text-muted">{item.note}</p>
+                  )}
                 </div>
               </button>
             </Reveal>
