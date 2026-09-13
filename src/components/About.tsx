@@ -75,8 +75,9 @@ export default function About() {
           </h2>
           <p className="mt-6 leading-relaxed text-muted">
             I'm a motion designer and video editor from Hyderabad, India, with an art background.
-            In 2023 I started learning generative AI, and I haven't stopped learning new models
-            since.
+            Before this I worked in customer service at Amazon, and in 2023 I resigned to pursue
+            better opportunities and learn new things. I went all in on generative AI, and I
+            haven't stopped learning new models since.
           </p>
           <p className="mt-4 leading-relaxed text-muted">
             I'm a fast learner, and I'm creative at capturing an idea and portraying it as a film
