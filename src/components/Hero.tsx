@@ -79,14 +79,14 @@ export default function Hero() {
             className="k-fade mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-greenBright"
             style={{ animationDelay: '320ms' }}
           >
-            motion design · video editing · generative ai pipelines · comfyui · ai image &amp; video
+            motion design · generative ai pipelines · comfyui · ai image &amp; video
           </p>
 
           <p
             className="k-fade mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
             style={{ animationDelay: '380ms' }}
           >
-            I'm a motion designer and video editor who builds production-ready generative AI
+            I'm a motion designer who builds production-ready generative AI
             workflows, visual systems and automation pipelines for creative teams and brands. AI
             Creative Technologist at{' '}
             <span className="co-ogilvy">Ogilvy</span> · ex-AI Head Artist at{' '}

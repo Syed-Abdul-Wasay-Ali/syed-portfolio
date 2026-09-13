@@ -74,7 +74,7 @@ export default function About() {
             behind the graph
           </h2>
           <p className="mt-6 leading-relaxed text-muted">
-            I'm a motion designer and video editor from Hyderabad, India, with an art background.
+            I'm a motion designer from Hyderabad, India, with an art background.
             Before this I worked in customer service at Amazon, and in 2023 I resigned to pursue
             better opportunities and learn new things. I went all in on generative AI, and I
             haven't stopped learning new models since.
