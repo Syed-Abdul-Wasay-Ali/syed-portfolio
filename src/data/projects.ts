@@ -19,6 +19,8 @@ export interface MediaItem {
   poster?: string
   kind?: 'image' | 'video'
   label?: string // shown as caption / placeholder label
+  href?: string // optional external link for this item — the live post / campaign page
+  hrefLabel?: string // link text; defaults to 'open original ↗'
 }
 
 export interface Project {

@@ -345,6 +345,15 @@ export default function BrandPage({ slug }: { slug: string }) {
 
       {/* Galleries */}
       <div className="container-site pb-4 pt-8">
+        {/* Brands without pinned case studies show their story as section 00. */}
+        {!hasProjects && brand.story && !hidden('story') && (
+          <Section tag={`${pad(0)} / story`} title="The campaign" delay={0}>
+            <p className="max-w-3xl border-l-2 border-green/50 pl-4 text-[13px] font-bold leading-relaxed text-[#94A8EE]">
+              {brand.story}
+            </p>
+          </Section>
+        )}
+
         {hasProjects && !hidden('projects') && (
           <Section tag={`${take()} / projects`} title="Projects on this brand" delay={0}>
             <div className="space-y-5">

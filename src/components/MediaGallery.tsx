@@ -23,30 +23,42 @@ export default function MediaGallery({
     <div className={`grid gap-4 ${cols}`}>
       {items.map((m, i) => (
         <Reveal key={i} delay={(i % 3) * 80}>
-          <button
-            onClick={() => onOpen(i)}
-            onMouseEnter={(e) => {
-              if (!m.src) return
-              show(
-                {
-                  title: m.label ?? 'media',
-                  subtitle: m.kind === 'video' ? 'video · auto-playing' : 'image',
-                  media: m,
-                  badge: m.kind,
-                },
-                e.currentTarget.getBoundingClientRect()
-              )
-            }}
-            onMouseLeave={hide}
-            className="media-cell group w-full overflow-hidden rounded-md bg-mist/60 p-1.5 text-left"
-          >
-            <MediaPanel item={m} className={`aspect-video ${isVideoItem(m) ? '!object-contain' : '!object-cover'}`} />
-            {m.label && (
-              <p className="gallery-label mt-2 font-mono text-[11px] text-muted transition-colors group-hover:text-green">
-                {m.label}
-              </p>
+          <div className="group w-full">
+            <button
+              onClick={() => onOpen(i)}
+              onMouseEnter={(e) => {
+                if (!m.src) return
+                show(
+                  {
+                    title: m.label ?? 'media',
+                    subtitle: m.kind === 'video' ? 'video · auto-playing' : 'image',
+                    media: m,
+                    badge: m.kind,
+                  },
+                  e.currentTarget.getBoundingClientRect()
+                )
+              }}
+              onMouseLeave={hide}
+              className="media-cell group w-full overflow-hidden rounded-md bg-mist/60 p-1.5 text-left"
+            >
+              <MediaPanel item={m} className={`aspect-video ${isVideoItem(m) ? '!object-contain' : '!object-cover'}`} />
+              {m.label && (
+                <p className="gallery-label mt-2 font-mono text-[11px] text-muted transition-colors group-hover:text-green">
+                  {m.label}
+                </p>
+              )}
+            </button>
+            {m.href && (
+              <a
+                href={m.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 inline-block font-mono text-[11px] text-muted underline decoration-dotted underline-offset-4 transition-colors hover:text-greenBright"
+              >
+                {m.hrefLabel ?? 'open original ↗'}
+              </a>
             )}
-          </button>
+          </div>
         </Reveal>
       ))}
     </div>

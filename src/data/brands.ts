@@ -267,7 +267,17 @@ export const BRANDS: Brand[] = [
     note: 'stills · animatics · final film',
     accent: '#EE2737',
     logo: 'media/brands/vi/logo.jpg',
-    images: [],
+    story:
+      'Vi 5G FanFest turned the 2025 IPL season into a cricket quiz: questions on every match day, answers in the comments, vouchers worth ₹5,000 up for grabs. I trained the clay-style character on those cards as a character LoRA using Flux, and that training is what held the campaign together: same face, same clay finish, same world in every card, match after match, question after question. Once the look is trained in, it stops drifting.',
+    images: [
+      {
+        kind: 'image',
+        label: 'fanfest quiz q2 · clay-style character · blr vs raj',
+        src: 'media/brands/vi/stills/vi-fanfest-quiz-q2.jpg',
+        href: 'https://www.facebook.com/viofficialfanworld/posts/cricky-is-testing-your-cricket-iq-comment-vi5gfanfest-with-the-right-answers-to-/985824210433197/',
+        hrefLabel: 'view on facebook ↗',
+      },
+    ],
     animatics: [],
     films: [],
   },

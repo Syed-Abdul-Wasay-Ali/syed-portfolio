@@ -49,12 +49,25 @@ export default function Lightbox({
         <p className="truncate font-mono text-[11px] text-snow/60">
           {item.label ?? 'asset'} — {index + 1}/{items.length}
         </p>
-        <button
-          onClick={onClose}
-          className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenBright"
-        >
-          esc / close
-        </button>
+        <div className="flex items-center gap-3">
+          {item.href && (
+            <a
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenBright"
+            >
+              {item.hrefLabel ?? 'open original ↗'}
+            </a>
+          )}
+          <button
+            onClick={onClose}
+            className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenBright"
+          >
+            esc / close
+          </button>
+        </div>
       </div>
 
       <div
