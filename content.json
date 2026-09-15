@@ -17,6 +17,60 @@
   },
   "conceptImages": [
     {
+      "id": "c_mu344kinpvysc",
+      "kind": "image",
+      "src": "media/concept/mattress_wf_01_product.jpg",
+      "caption": "mattress workflow — 01 product"
+    },
+    {
+      "id": "c_mu344kjxtnl5f",
+      "kind": "image",
+      "src": "media/concept/mattress_wf_02_environment.jpg",
+      "caption": "mattress workflow — 02 environment"
+    },
+    {
+      "id": "c_mu344kl9ksfu0",
+      "kind": "image",
+      "src": "media/concept/mattress_wf_03_light.jpg",
+      "caption": "mattress workflow — 03 light"
+    },
+    {
+      "id": "c_mu344kmzzuj9d",
+      "kind": "image",
+      "src": "media/concept/mattress_wf_04_finalcomp.jpg",
+      "caption": "mattress workflow — 04 final comp"
+    },
+    {
+      "id": "c_mu344knhnudk9",
+      "kind": "image",
+      "src": "media/concept/mattress_hero.jpg",
+      "caption": "mattress workflow — hero"
+    },
+    {
+      "id": "c_mu344koqdv18w",
+      "kind": "image",
+      "src": "media/concept/mattress_view_front.jpg",
+      "caption": "mattress workflow — front view"
+    },
+    {
+      "id": "c_mu344kpk2lulc",
+      "kind": "image",
+      "src": "media/concept/mattress_view_left.jpg",
+      "caption": "mattress workflow — left view"
+    },
+    {
+      "id": "c_mu344kqv9gp79",
+      "kind": "image",
+      "src": "media/concept/mattress_view_right.jpg",
+      "caption": "mattress workflow — right view"
+    },
+    {
+      "id": "c_mu344krqt5ojo",
+      "kind": "image",
+      "src": "media/concept/mattress_view_topdiag.jpg",
+      "caption": "mattress workflow — top / diagonal"
+    },
+    {
       "id": "c_mu32kay9nnvbl",
       "kind": "image",
       "src": "media/concept/mattress_study_01_product_hd.jpg",
