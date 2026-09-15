@@ -15,5 +15,24 @@
   "hiddenSections": {
     "cadbury-dairy-milk": []
   },
-  "conceptImages": []
+  "conceptImages": [
+    {
+      "id": "c_mu32kay9nnvbl",
+      "kind": "image",
+      "src": "media/concept/mattress_study_01_product.png",
+      "caption": "mattress — 01 product shot"
+    },
+    {
+      "id": "c_mu32kaykx2flg",
+      "kind": "image",
+      "src": "media/concept/mattress_study_02_environment.png",
+      "caption": "mattress — 02 environment"
+    },
+    {
+      "id": "c_mu32kayt2cjz2",
+      "kind": "image",
+      "src": "media/concept/mattress_study_03_composite.png",
+      "caption": "mattress — 03 compositing"
+    }
+  ]
 }
