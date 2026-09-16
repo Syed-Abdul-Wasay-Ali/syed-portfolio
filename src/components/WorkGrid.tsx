@@ -1,6 +1,7 @@
 import { projectsByDate, type Project } from '../data/projects'
 import type { ReactNode } from 'react'
 import ProjectCard from './ProjectCard'
+import FeaturedCard from './FeaturedCard'
 import Reveal from './Reveal'
 import Showreel from './Showreel'
 import NodeGraph from './NodeGraph'
@@ -19,6 +20,11 @@ function Lane({
   // No empty lanes — a section with nothing to show should not render.
   if (projects.length === 0) return null
 
+  // Featured case studies render as large image-forward cards; the rest stay
+  // compact so the lanes remain scannable.
+  const featured = projects.filter((p) => p.featured)
+  const rest = projects.filter((p) => !p.featured)
+
   return (
     <section className="min-w-0">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-ink-600 pb-2.5">
@@ -30,8 +36,17 @@ function Lane({
         </span>
       </div>
       <p className="mt-2.5 min-h-[2.75rem] text-[13px] leading-relaxed text-muted">{blurb}</p>
-      <div className="mt-4 grid gap-3.5">
-        {projects.map((p, i) => (
+      {featured.length > 0 && (
+        <div className="mt-2 grid gap-4">
+          {featured.map((p, i) => (
+            <Reveal key={p.slug} delay={(i % 2) * 90}>
+              <FeaturedCard project={p} num={String(i + 1).padStart(2, '0')} />
+            </Reveal>
+          ))}
+        </div>
+      )}
+      <div className={featured.length > 0 ? 'mt-4 grid gap-3.5' : 'mt-4 grid gap-3.5'}>
+        {rest.map((p, i) => (
           <Reveal key={p.slug} delay={(i % 2) * 90}>
             <ProjectCard project={p} />
           </Reveal>
@@ -50,7 +65,7 @@ export default function WorkGrid() {
     <section id="work" className="scroll-mt-16 py-10 sm:py-12">
       <div className="container-site">
         <div className="max-w-2xl">
-          <p className="eyebrow-green">02 / selected work</p>
+          <p className="eyebrow-green">03 / case studies</p>
           <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
             Case studies
           </h2>
@@ -61,7 +76,7 @@ export default function WorkGrid() {
         <div className="mt-7 grid gap-x-8 gap-y-10 lg:grid-cols-2">
           <Lane
             title="Concept case studies"
-            blurb="Self-set briefs taken end-to-end — concept films and commercial product imagery — on the same pipelines as client work."
+            blurb="Self-set briefs taken end-to-end — five production studies on the commercial imaging system, plus concept films — all on the same pipelines as client work."
             projects={conceptLane}
             footer={
               <div className="space-y-3.5">

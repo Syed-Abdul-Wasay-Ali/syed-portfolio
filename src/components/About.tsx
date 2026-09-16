@@ -5,15 +5,15 @@ import { LINKEDIN_URL, GITHUB_URL } from '../data/social'
 
 const TIMELINE = [
   {
-    role: 'AI Creative Technologist — Group Account',
+    role: 'AI Creative Manager',
     org: 'Ogilvy',
     location: 'Mumbai, India.',
     dates: 'Apr 2025 — Present',
-    note: 'AI-native production for client campaigns: video pipelines, identity consistency, automation.',
+    note: 'AI-native production for client campaigns: image and video pipelines, product imagery systems, identity consistency, automation.',
     bullets: [
-      'Generative AI visuals and video for brand campaigns (Cadbury, Lacta, IFB, NDPF).',
-      'Built ComfyUI pipelines for controlled generation, identity consistency and scale.',
-      'Took ideas from brief to production-ready AI content with the creative teams.',
+      'Generative AI imagery and video for brand campaigns (Cadbury, Lacta, IFB, NDPF).',
+      'Built ComfyUI pipelines for controlled generation — consistency, product lock and scale.',
+      'Took ideas from brief to production-ready AI visuals with the creative teams.',
       'Experimented with emerging image and video models, open-source first.',
     ],
   },
@@ -67,35 +67,38 @@ export default function About() {
       <div className="container-site grid gap-10 lg:grid-cols-2">
         <Reveal>
           <div>
-          <p className="eyebrow-green">07 / about</p>
+          <p className="eyebrow-green">10 / about</p>
           <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
             The operator
             <br />
             behind the graph
           </h2>
           <p className="mt-5 leading-relaxed text-muted">
-            I'm an AI creative technologist and motion designer from Hyderabad, India, with an
-            art background.
-            Before this I worked in customer service at Amazon, and in 2023 I resigned to pursue
-            better opportunities and learn new things. I went all in on generative AI, and I
-            haven't stopped learning new models since.
+            I work at the intersection of creative direction, AI image generation and production
+            workflows. My work focuses on using generative AI to create controlled,
+            photorealistic visual assets for commercial applications — real products placed into
+            generated environments without losing fidelity, edited and composited to a
+            deliverable.
           </p>
           <p className="mt-3 leading-relaxed text-muted">
-            I'm a fast learner, and I'm creative at capturing an idea and portraying it as a film
-            or a set of images. I religiously check the AI subreddits, X accounts, and Instagram
-            pages that cover every new AI tool and breakthrough, so I know what's new the moment
-            it lands. Most of my experiments happen in ComfyUI with image and video models, and I
-            automate the workflows around them with AI agents like Hermes, Codex, and Claude Code.
+            I'm from Hyderabad, India, with an art background. Before this I worked in customer
+            service at Amazon, and in 2023 I resigned to pursue better opportunities and learn
+            new things. I went all in on generative AI, and I haven't stopped learning new models
+            since.
           </p>
           <p className="mt-3 leading-relaxed text-muted">
-            I spend my days on the other side of the screen: building the workflows, training the
-            LoRAs, tuning the samplers, and then automating the whole thing so nobody has to sit
-            through another render. My job is to know when the open-source stack does the job
-            better than the paid one, and to make that choice invisible in the final frame.
+            Most of my production happens in ComfyUI: image-generation workflows,
+            reference-controlled generation, image editing, retouching and compositing — with
+            LoRA training when a set needs consistency. I religiously check the AI subreddits, X
+            accounts and Instagram pages that cover every new tool and breakthrough, so I know
+            what's new the moment it lands, and I automate the workflows around it all with AI
+            agents like Hermes, Codex and Claude Code.
           </p>
           <p className="mt-3 leading-relaxed text-muted">
-            Everything below is documented the way I work: real models, real parameters, real
-            obstacles, and the ComfyUI graphs that got past them.
+            I spend my days on the production side: building the pipelines, tuning the samplers,
+            solving the problems that show up between an idea and a final file. Everything below
+            is documented the way I work: real models, real parameters, real obstacles, and the
+            ComfyUI graphs that got past them.
           </p>
 
           <div className="mt-6 space-y-4">

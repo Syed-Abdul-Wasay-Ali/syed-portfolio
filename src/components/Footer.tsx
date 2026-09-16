@@ -9,7 +9,7 @@ export default function Footer() {
       <KineticMarquee
         variant="ghost"
         speed={44}
-        items={['Syed Abdul Wasay Ali', 'AI Creative Technologist', 'Open Source First']}
+        items={['Syed Abdul Wasay Ali', 'AI Creative Manager · Image Specialist', 'Open Source First']}
       />
       {/* polarity flip — the white end card */}
       <div className="bg-paper text-ink-950">
@@ -19,7 +19,7 @@ export default function Footer() {
               Syed Abdul Wasay Ali
             </p>
             <p className="mt-1 font-mono text-[10px] uppercase tracking-wideish text-ink-950/60">
-              ai creative technologist · ogilvy · ex-cleandirty.ai
+              ai creative manager · image specialist · ogilvy · ex-cleandirty.ai
             </p>
           </div>
           <div className="flex flex-wrap gap-5">

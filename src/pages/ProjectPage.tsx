@@ -6,6 +6,10 @@ import Lightbox from '../components/Lightbox'
 import NodeGraph from '../components/NodeGraph'
 import Reveal from '../components/Reveal'
 import MediaGallery from '../components/MediaGallery'
+import StageStrip from '../components/StageStrip'
+import BeforeAfter from '../components/BeforeAfter'
+import FormatsSection from '../components/FormatsSection'
+import EcomConcept from '../components/EcomConcept'
 
 function Section({
   tag,
@@ -50,10 +54,23 @@ export default function ProjectPage({ slug }: { slug: string }) {
   }
 
   const allMedia = project.results
-  const hero: (typeof allMedia)[number] | undefined =
-    project.results.find((m) => m.kind === 'video') ?? allMedia[0]
+  const hero: (typeof allMedia)[number] | undefined = project.heroSrc
+    ? { kind: 'image', src: project.heroSrc, label: `${project.title} — final frame` }
+    : project.results.find((m) => m.kind === 'video') ?? allMedia[0]
 
   const nextProject = projects[(projects.findIndex((p) => p.slug === slug) + 1) % projects.length]
+
+  // Production-note sections for the case-study pages (objective → output).
+  const productionRows: [string, string, string | undefined][] = project.production
+    ? [
+        ['01 / objective', 'The objective', project.production.objective],
+        ['02 / input', 'What went in', project.production.input],
+        ['03 / process', 'How AI was used', project.production.process],
+        ['04 / control', 'How consistency was held', project.production.control],
+        ['05 / refinement', 'Lighting, perspective, texture', project.production.refinement],
+        ['06 / output', 'What shipped', project.production.output],
+      ]
+    : []
 
   return (
     <main className="pt-14">
@@ -80,6 +97,11 @@ export default function ProjectPage({ slug }: { slug: string }) {
         <h1 className="mt-4 max-w-4xl font-display text-3xl font-black uppercase leading-tight tracking-tight sm:text-5xl">
           {project.title}
         </h1>
+        {project.subtitle && (
+          <p className="mt-3 font-mono text-[12px] uppercase tracking-wideish text-green">
+            {project.subtitle}
+          </p>
+        )}
         <div className="panel mt-6 p-4">
           <SpecStrip spec={project.spec} className="flex flex-wrap gap-x-6 gap-y-1" />
         </div>
@@ -99,75 +121,146 @@ export default function ProjectPage({ slug }: { slug: string }) {
       {/* Story */}
       <div className="container-site grid gap-10 pb-4 pt-12 lg:grid-cols-[1fr_340px]">
         <div>
-          <Section tag="01 / overview" title="What shipped">
-            <p className="max-w-3xl leading-relaxed text-paper/90">{project.overview}</p>
-          </Section>
-
-          {project.contribution && project.contribution.length > 0 && (
-            <Section tag="02 / my contribution" title="What I contributed">
-              <p className="mb-5 max-w-3xl text-sm text-muted">
-                My part of the production, not the whole campaign — the client and agency own the work.
-              </p>
-              <div className="flex max-w-3xl flex-wrap gap-2">
-                {project.contribution.map((c) => (
-                  <span key={c} className="border border-ink-600 px-3 py-1.5 font-mono text-[11px] text-paper/85">
-                    {c}
-                  </span>
+          {project.production ? (
+            <>
+              {productionRows
+                .filter(([, , body]) => body)
+                .map(([tag, title, body]) => (
+                  <Section key={tag} tag={tag} title={title}>
+                    <p className="max-w-3xl leading-relaxed text-paper/90">{body}</p>
+                  </Section>
                 ))}
-              </div>
-            </Section>
+
+              {project.stages && project.stages.length > 0 && (
+                <Section tag="the pipeline" title="Stage by stage">
+                  <StageStrip stages={project.stages} chain={project.chain} />
+                </Section>
+              )}
+
+              {project.beforeAfter && (
+                <Section tag="before / after" title="Pre- and post-production">
+                  <BeforeAfter
+                    before={project.beforeAfter.before}
+                    after={project.beforeAfter.after}
+                    annotations={project.beforeAfter.annotations}
+                  />
+                </Section>
+              )}
+
+              {project.formats && project.formats.length > 0 && (
+                <Section tag="formats & placements" title="One master, every format">
+                  <FormatsSection formats={project.formats} placements={project.placements} />
+                </Section>
+              )}
+
+              {project.ecom && (
+                <Section tag="concept page" title="How it lands on a page">
+                  <EcomConcept />
+                </Section>
+              )}
+
+              <Section tag="07 / results" title="What came out">
+                <MediaGallery
+                  items={project.results}
+                  onOpen={(i) => setLightbox(i)}
+                />
+              </Section>
+
+              <Section tag="08 / stack" title="Tools & models">
+                <div className="flex flex-wrap gap-2">
+                  {project.stack.map((s) => (
+                    <span key={s} className="border border-ink-600 px-3 py-1.5 font-mono text-[11px] text-paper/85">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </Section>
+
+              {project.contribution && project.contribution.length > 0 && (
+                <Section tag="09 / my contribution" title="Built by hand">
+                  <div className="flex max-w-3xl flex-wrap gap-2">
+                    {project.contribution.map((c) => (
+                      <span key={c} className="border border-ink-600 px-3 py-1.5 font-mono text-[11px] text-paper/85">
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </Section>
+              )}
+            </>
+          ) : (
+            <>
+              <Section tag="01 / overview" title="What shipped">
+                <p className="max-w-3xl leading-relaxed text-paper/90">{project.overview}</p>
+              </Section>
+
+              {project.contribution && project.contribution.length > 0 && (
+                <Section tag="02 / my contribution" title="What I contributed">
+                  <p className="mb-5 max-w-3xl text-sm text-muted">
+                    My part of the production, not the whole campaign — the client and agency own the work.
+                  </p>
+                  <div className="flex max-w-3xl flex-wrap gap-2">
+                    {project.contribution.map((c) => (
+                      <span key={c} className="border border-ink-600 px-3 py-1.5 font-mono text-[11px] text-paper/85">
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </Section>
+              )}
+
+              <Section tag="03 / the obstacle" title="The problem">
+                <p className="max-w-3xl leading-relaxed text-paper/90">{project.challenge}</p>
+              </Section>
+
+              <Section tag="04 / the approach" title="How I got past it">
+                <ol className="max-w-3xl space-y-4">
+                  {project.approach.map((step, i) => (
+                    <li key={i} className="flex gap-4">
+                      <span className="mt-0.5 font-mono text-xs text-green">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <p className="leading-relaxed text-paper/90">{step}</p>
+                    </li>
+                  ))}
+                </ol>
+              </Section>
+
+              <Section tag="05 / stack" title="Tools & models">
+                <div className="flex flex-wrap gap-2">
+                  {project.stack.map((s) => (
+                    <span key={s} className="border border-ink-600 px-3 py-1.5 font-mono text-[11px] text-paper/85">
+                      {s}
+                    </span>
+                  ))}
+                </div>
+              </Section>
+
+              <Section tag="06 / process" title="Brief → exploration → final">
+                <p className="mb-5 max-w-3xl text-sm text-muted">
+                  The route the work took: brief, exploration, iteration, delivery. Workflow graphs and
+                  internal iterations stay in the studio.
+                </p>
+                <ol className="max-w-3xl space-y-3">
+                  {project.workflow.map((w, i) => (
+                    <li key={i} className="flex gap-4">
+                      <span className="mt-0.5 font-mono text-xs text-green">
+                        {String(i + 1).padStart(2, '0')}
+                      </span>
+                      <p className="leading-relaxed text-paper/90">{w.label ?? 'step'}</p>
+                    </li>
+                  ))}
+                </ol>
+              </Section>
+
+              <Section tag="07 / results" title="What came out">
+                <MediaGallery
+                  items={project.results}
+                  onOpen={(i) => setLightbox(i)}
+                />
+              </Section>
+            </>
           )}
-
-          <Section tag="03 / the obstacle" title="The problem">
-            <p className="max-w-3xl leading-relaxed text-paper/90">{project.challenge}</p>
-          </Section>
-
-          <Section tag="04 / the approach" title="How I got past it">
-            <ol className="max-w-3xl space-y-4">
-              {project.approach.map((step, i) => (
-                <li key={i} className="flex gap-4">
-                  <span className="mt-0.5 font-mono text-xs text-green">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <p className="leading-relaxed text-paper/90">{step}</p>
-                </li>
-              ))}
-            </ol>
-          </Section>
-
-          <Section tag="05 / stack" title="Tools & models">
-            <div className="flex flex-wrap gap-2">
-              {project.stack.map((s) => (
-                <span key={s} className="border border-ink-600 px-3 py-1.5 font-mono text-[11px] text-paper/85">
-                  {s}
-                </span>
-              ))}
-            </div>
-          </Section>
-
-          <Section tag="06 / process" title="Brief → exploration → final">
-            <p className="mb-5 max-w-3xl text-sm text-muted">
-              The route the work took: brief, exploration, iteration, delivery. Workflow graphs and
-              internal iterations stay in the studio.
-            </p>
-            <ol className="max-w-3xl space-y-3">
-              {project.workflow.map((w, i) => (
-                <li key={i} className="flex gap-4">
-                  <span className="mt-0.5 font-mono text-xs text-green">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <p className="leading-relaxed text-paper/90">{w.label ?? 'step'}</p>
-                </li>
-              ))}
-            </ol>
-          </Section>
-
-          <Section tag="07 / results" title="What came out">
-            <MediaGallery
-              items={project.results}
-              onOpen={(i) => setLightbox(i)}
-            />
-          </Section>
         </div>
 
         <aside className="space-y-6 lg:pt-2">

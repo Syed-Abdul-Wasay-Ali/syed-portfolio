@@ -4,11 +4,13 @@ import GitHubIcon from './GitHubIcon'
 import { LINKEDIN_URL, GITHUB_URL, RESUME_URL } from '../data/social'
 import { useRuntime } from '../data/runtime'
 
-// Nav order mirrors the home page section order (case studies first, brands last).
+// Nav order mirrors the home page section order (concept images first, brands last).
 const LINKS = [
+  { href: '#concept-images', label: 'Concepts' },
   { href: '#work', label: 'Work' },
   { href: '#showcase', label: 'Showcase' },
   { href: '#capabilities', label: 'Systems' },
+  { href: '#workflows', label: 'Workflows' },
   { href: '#brands', label: 'Brands' },
   { href: '#about', label: 'About' },
 ]
@@ -18,7 +20,12 @@ export default function Header() {
   const [open, setOpen] = useState(false)
   const { content } = useRuntime()
   const hidden = content?.pageSections ?? []
-  const links = LINKS.filter((l) => !hidden.includes(l.href.slice(1)))
+  const conceptCount = content?.conceptImages?.length ?? 0
+  const links = LINKS.filter(
+    (l) =>
+      !hidden.includes(l.href.slice(1)) &&
+      (l.href !== '#concept-images' || conceptCount > 0),
+  )
 
   useEffect(() => {
     const onScroll = () => {
@@ -49,7 +56,7 @@ export default function Header() {
             SYED ABDUL WASAY ALI
           </span>
           <span className="hidden font-mono text-[10px] uppercase tracking-wideish text-violet md:inline">
-            ai · creative · technologist
+            ai creative · image specialist
           </span>
         </a>
 

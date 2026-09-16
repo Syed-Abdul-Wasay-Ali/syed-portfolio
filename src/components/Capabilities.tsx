@@ -61,32 +61,32 @@ const SYSTEMS: {
 
 export default function Capabilities() {
   return (
-    <section id="capabilities" className="scroll-mt-16 border-y border-ink-950/10 bg-mist py-14 sm:py-20">
+    <section id="capabilities" className="scroll-mt-16 border-y border-ink-950/10 bg-mist py-10 sm:py-12">
       <div className="container-site">
-        <p className="eyebrow-green">03 / ai systems</p>
+        <p className="eyebrow-green">06 / ai systems</p>
         <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
           AI systems I build
         </h2>
-        <p className="mt-4 max-w-2xl text-muted">
+        <p className="mt-3 max-w-2xl text-muted">
           Not one-off renders: reusable, documented systems that solve a production problem. Brief
           goes in, finished frames and films come out, on repeat.
         </p>
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2">
+        <div className="mt-7 grid gap-5 sm:grid-cols-2">
           {SYSTEMS.map((c, i) => (
             <Reveal key={c.num} delay={i * 110} className="h-full">
-              <div className="panel h-full p-6">
+              <div className="panel h-full p-5">
                 <p className="font-mono text-[11px] uppercase tracking-wideish text-green">
                   {c.num} / system
                 </p>
-                <h3 className="mt-3 font-display text-xl font-bold text-paper">{c.title}</h3>
+                <h3 className="mt-2 font-display text-lg font-bold text-paper">{c.title}</h3>
                 <p className="mt-2 text-sm text-muted">
                   <span className="text-paper/90">solves: </span>
                   {c.solves}
                 </p>
-                <ul className="mt-5 space-y-2.5 border-t border-ink-600 pt-5">
+                <ul className="mt-4 space-y-2 border-t border-ink-600 pt-4">
                   {c.items.map((item) => (
-                    <li key={item} className="flex gap-2.5 text-sm leading-relaxed text-paper/90">
+                    <li key={item} className="flex gap-2 text-[13px] leading-snug text-paper/90">
                       <span className="shrink-0 text-green">→</span>
                       <span>{item}</span>
                     </li>
@@ -98,18 +98,38 @@ export default function Capabilities() {
         </div>
 
         {/* Model stack */}
-        <Reveal delay={140} className="mt-10">
-          <div className="panel p-6">
+        <Reveal delay={140} className="mt-7">
+          <div className="panel p-5">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <p className="font-mono text-[11px] uppercase tracking-wideish text-green">[models]</p>
               <p className="font-mono text-[10px] uppercase tracking-wideish text-muted">
                 open-source first · closed-source when the brief demands it
               </p>
             </div>
-            <div className="mt-5 grid gap-8 sm:grid-cols-2">
+            <div className="mt-4 grid gap-6 sm:grid-cols-2">
               <div>
                 <p className="eyebrow">image generation</p>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <p className="mt-3 font-mono text-[10px] uppercase tracking-wideish text-green">
+                  most used
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {[
+                    'GPT Image 2.5 (closed)',
+                    'Nano Banana Pro (closed)',
+                    'Seedream 5 Pro (closed)',
+                  ].map((m) => (
+                    <span
+                      key={m}
+                      className="border border-green bg-green px-2.5 py-0.5 font-mono text-[11px] text-snow"
+                    >
+                      {m}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-4 font-mono text-[10px] uppercase tracking-wideish text-muted">
+                  also in the stack
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
                   {[
                     'Krea 2',
                     'Flux · Klein',
@@ -117,13 +137,10 @@ export default function Capabilities() {
                     'Ideogram 4',
                     'Midjourney — aesthetic styles',
                     'SDXL / Illustrious family',
-                    'Seedream 5 Pro (closed)',
-                    'Nano Banana Pro (closed)',
-                    'GPT-2 (closed)',
                   ].map((m) => (
                     <span
                       key={m}
-                      className="border border-ink-600 px-3 py-1 font-mono text-[11px] text-paper/85"
+                      className="border border-ink-600 px-2.5 py-0.5 font-mono text-[11px] text-paper/85"
                     >
                       {m}
                     </span>
@@ -142,7 +159,7 @@ export default function Capabilities() {
                   ].map((m) => (
                     <span
                       key={m}
-                      className="border border-ink-600 px-3 py-1 font-mono text-[11px] text-paper/85"
+                      className="border border-ink-600 px-2.5 py-0.5 font-mono text-[11px] text-paper/85"
                     >
                       {m}
                     </span>

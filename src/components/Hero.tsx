@@ -55,7 +55,7 @@ export default function Hero() {
         <div>
           <p className="k-fade flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.24em] text-green">
             <span className="disc inline-block h-1.5 w-1.5" />
-            AI Creative Technologist
+            AI Creative Manager · AI Image Specialist
           </p>
 
           <div
@@ -79,21 +79,20 @@ export default function Hero() {
             className="k-fade mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-greenBright"
             style={{ animationDelay: '320ms' }}
           >
-            ai product &amp; lifestyle imagery · compositing · comfyui pipelines · image &amp; film
+            comfyui · flux · stable diffusion · ai image generation · image editing ·
+            product compositing · creative automation
           </p>
 
           <p
             className="k-fade mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
             style={{ animationDelay: '380ms' }}
           >
-            I build production-ready AI image systems for commercial product and
-            lifestyle advertising — real products placed into generated environments without
-            losing product fidelity, composited with matched perspective, light and shadow. AI
-            Creative Technologist at{' '}
+            Building photorealistic product imagery, commercial visuals and
+            production-ready AI workflows — real products placed into generated environments
+            without losing product fidelity, composited with matched perspective, light and
+            shadow. AI Creative Manager at{' '}
             <span className="co-ogilvy">Ogilvy</span> · ex-AI Head Artist at{' '}
-            <span className="co-cleandirty">cleanDirty.ai</span>. I design repeatable ComfyUI
-            pipelines, train LoRAs for consistency, and run the render queue so teams ship
-            campaigns instead of babysitting them.
+            <span className="co-cleandirty">cleanDirty.ai</span>.
           </p>
 
           {/* log line — the site's signature flourish */}
@@ -139,7 +138,7 @@ export default function Hero() {
           >
             {[
               ['2', 'companies shipped'],
-              ['1y5m+', 'ai creative technologist · ogilvy'],
+              ['1y5m+', 'ai creative manager · ogilvy'],
               ['1y5m+', 'ai head artist · cleandirty'],
               [
                 String(projectsByDate.filter((p) => p.company !== 'Concept').length),

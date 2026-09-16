@@ -1,27 +1,37 @@
 import Reveal from './Reveal'
 
-// The five-second pitch band: what a recruiter or client should understand
+// The five-second pitch band: what an AI-image client should understand
 // the profile to be. Sits right under the logo ticker, above the work.
 const ITEMS = [
   {
     num: '01',
-    title: 'Product Accuracy',
-    desc: 'Products stay identical frame to frame — commercial fidelity, not one-off luck.',
+    title: 'Product Fidelity',
+    desc: 'Maintaining recognizable product shape, proportions, materials and details.',
   },
   {
     num: '02',
-    title: 'Product → Environment',
-    desc: 'Studio product, generated environment, composited final — scale, perspective and light matched.',
+    title: 'Photorealistic Environments',
+    desc: 'Creating believable commercial environments around existing products.',
   },
   {
     num: '03',
-    title: 'Repeatable Workflows',
-    desc: 'ComfyUI pipelines, reference workflows and trained LoRAs — a production route, not trial-and-error prompting.',
+    title: 'Lighting Matching',
+    desc: 'Matching key light direction, softness, intensity and color temperature.',
   },
   {
     num: '04',
-    title: 'Advertising & E-commerce',
-    desc: 'Hero, lifestyle, macro and e-commerce frames — the whole campaign surface from one system.',
+    title: 'Perspective Matching',
+    desc: 'Aligning camera angle, scale and product placement with the environment.',
+  },
+  {
+    num: '05',
+    title: 'Controlled AI Generation',
+    desc: 'Using references, prompting and workflow controls to produce consistent results.',
+  },
+  {
+    num: '06',
+    title: 'Production Variations',
+    desc: 'Creating multiple useful assets from one visual system and adapting them across formats.',
   },
 ]
 
@@ -30,9 +40,9 @@ export default function WhatIBuild() {
     <section className="border-b border-ink-600 py-8 sm:py-11">
       <div className="container-site">
         <div className="max-w-2xl">
-          <p className="eyebrow-green">what i build</p>
+          <p className="eyebrow-green">01 / what i solve</p>
           <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-            Systems, not one-off renders
+            What I Solve
           </h2>
           <p className="mt-3 text-muted">
             I build production-ready AI image systems for commercial product and lifestyle
@@ -40,9 +50,9 @@ export default function WhatIBuild() {
           </p>
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {ITEMS.map((it, i) => (
-            <Reveal key={it.num} delay={i * 90} className="h-full">
+            <Reveal key={it.num} delay={i * 70} className="h-full">
               <div className="panel h-full p-4">
                 <p className="font-mono text-[11px] uppercase tracking-wideish text-green">
                   {it.num}
