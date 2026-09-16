@@ -26,7 +26,7 @@ export default function Hero() {
   const year = new Date().getFullYear()
 
   return (
-    <section className="relative overflow-hidden border-b border-ink-600 pb-10 pt-28 sm:pb-14 sm:pt-36">
+    <section className="relative overflow-hidden border-b border-ink-600 pb-8 pt-20 sm:pb-10 sm:pt-28">
       {/* ambient orbs */}
       <div aria-hidden="true" className="orb left-[-12%] top-[-25%] h-80 w-80 bg-green/10" />
       <div
@@ -51,7 +51,7 @@ export default function Hero() {
       <div aria-hidden="true" className="corner corner-bl" />
       <div aria-hidden="true" className="corner corner-br" />
 
-      <div className="container-site relative grid items-end gap-10 lg:grid-cols-[1.25fr_1fr]">
+      <div className="container-site relative grid items-end gap-8 lg:grid-cols-[1.25fr_1fr]">
         <div>
           <p className="k-fade flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.24em] text-green">
             <span className="disc inline-block h-1.5 w-1.5" />
@@ -67,7 +67,7 @@ export default function Hero() {
               willChange: 'transform',
             }}
           >
-            <h1 className="font-display uppercase leading-[0.9] tracking-tight text-paper text-[clamp(2.9rem,9.5vw,8rem)]">
+            <h1 className="font-display uppercase leading-[0.9] tracking-tight text-paper text-[clamp(2.7rem,8.5vw,7rem)]">
               <span className="k-wipe">SYED ABDUL</span>
               <span className="k-wipe" style={{ animationDelay: '160ms' }}>
                 WASAY ALI
@@ -79,25 +79,26 @@ export default function Hero() {
             className="k-fade mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-greenBright"
             style={{ animationDelay: '320ms' }}
           >
-            motion design · generative ai pipelines · comfyui · ai image &amp; video
+            ai product &amp; lifestyle imagery · compositing · comfyui pipelines · image &amp; film
           </p>
 
           <p
-            className="k-fade mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
+            className="k-fade mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
             style={{ animationDelay: '380ms' }}
           >
-            I'm a motion designer who builds production-ready generative AI
-            workflows, visual systems and automation pipelines for creative teams and brands. AI
+            I build production-ready AI image systems for commercial product and
+            lifestyle advertising — real products placed into generated environments without
+            losing product fidelity, composited with matched perspective, light and shadow. AI
             Creative Technologist at{' '}
             <span className="co-ogilvy">Ogilvy</span> · ex-AI Head Artist at{' '}
-            <span className="co-cleandirty">cleanDirty.ai</span>. I design image and video
-            generation pipelines in ComfyUI, train custom LoRAs for identity consistency, and
-            automate the render queues so teams ship campaigns instead of babysitting them.
+            <span className="co-cleandirty">cleanDirty.ai</span>. I design repeatable ComfyUI
+            pipelines, train LoRAs for consistency, and run the render queue so teams ship
+            campaigns instead of babysitting them.
           </p>
 
           {/* log line — the site's signature flourish */}
           <p
-            className="k-fade mt-8 font-mono text-xs text-muted"
+            className="k-fade mt-5 font-mono text-xs text-muted"
             style={{ animationDelay: '480ms' }}
             aria-hidden="true"
           >
@@ -108,7 +109,7 @@ export default function Hero() {
 
           {/* CTA row */}
           <div
-            className="k-fade mt-8 flex flex-wrap items-center gap-4"
+            className="k-fade mt-6 flex flex-wrap items-center gap-4"
             style={{ animationDelay: '560ms' }}
           >
             <a href="#work" className="btn-green">
@@ -133,7 +134,7 @@ export default function Hero() {
           </div>
 
           <div
-            className="k-fade mt-10 flex flex-wrap gap-x-8 gap-y-4 border-t border-ink-600 pt-6"
+            className="k-fade mt-8 flex flex-wrap gap-x-8 gap-y-4 border-t border-ink-600 pt-5"
             style={{ animationDelay: '640ms' }}
           >
             {[
@@ -158,7 +159,7 @@ export default function Hero() {
 
           {/* HUD micro row */}
           <div
-            className="k-fade mt-12 flex items-center justify-between border-t border-ink-600 pt-4 font-mono text-[10px] uppercase tracking-wideish text-muted"
+            className="k-fade mt-8 flex items-center justify-between border-t border-ink-600 pt-4 font-mono text-[10px] uppercase tracking-wideish text-muted"
             style={{ animationDelay: '720ms' }}
           >
             <span>Portfolio / {year}</span>

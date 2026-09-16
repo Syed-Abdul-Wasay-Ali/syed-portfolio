@@ -418,6 +418,69 @@ const ogilvyIfbChristmas: Project = {
   ],
 }
 
+// Vi 5G FanFest "Cricky": the IPL 2025 match-day quiz campaign. One
+// clay-style character, trained as a character LoRA on Flux so every card
+// of the season carried the same face and the same clay finish.
+const ogilvyViCrickyFanfest: Project = {
+  slug: 'ogilvy-vi-5g-fanfest',
+  title: 'Vi 5G FanFest "Cricky" · clay character LoRA (IPL 2025)',
+  company: 'Ogilvy',
+  role: 'AI Creative Technologist, Ogilvy',
+  year: '2025',
+  date: '2025-04-22',
+  status: 'shipped',
+  contribution: [
+    'clay-style character lora training · flux',
+    'character consistency across the season',
+    'match-day quiz card generation',
+    'one look held across instagram · x · facebook',
+  ],
+  campaign: { label: 'the cricky challenge launch reel (instagram)', url: 'https://www.instagram.com/reel/DHgVXZniMaH/' },
+  excerpt:
+    'Vi 5G FanFest turned IPL 2025 into a match-day cricket quiz across Instagram, X and Facebook, with vouchers worth ₹5,000 up for grabs. The face of the campaign was one clay-style character, and every card had to show that same character. I trained that character as a LoRA on Flux, and the look held for the whole season.',
+  cover: 'media/ogilvy-vi-5g-fanfest/cover.jpg',
+  spec: [
+    { label: 'client', value: 'vi (vodafone idea)' },
+    { label: 'campaign', value: 'vi 5g fanfest · cricky quiz' },
+    { label: 'base', value: 'flux' },
+    { label: 'lora', value: 'clay-style character · own training' },
+    { label: 'channels', value: 'instagram · x · facebook' },
+    { label: 'year', value: '2025' },
+    { label: 'engagement', value: 'ogilvy' },
+  ],
+  overview:
+    'Vi 5G FanFest ran the length of the 2025 IPL season: a quiz on every match day, answers in the comments, vouchers worth ₹5,000 up for grabs. The face of the campaign was a single clay-style character, and that character had to look identical on every card: same face, same clay finish, same world, whatever the fixture. I trained the character as a LoRA on Flux, and every match-day card came out of that training.',
+  challenge:
+    'This is the consistency problem in its purest form: dozens of cards across two months of cricket, each one a fresh generation, all of them having to read as the same character. Untrained, a character drifts a little with every generation: the face shifts, the clay finish changes, the proportions wander, and the campaign slowly stops looking like one campaign. The character had to survive fixture changes, scene changes and question changes, and still land as the same clay figure on every single match day.',
+  approach: [
+    'Trained the clay-style character as a character LoRA on Flux, so the look became a property of the model instead of a line in the prompt.',
+    'Generated the match-day quiz cards through that LoRA, holding one face and one clay finish across the season.',
+    'Retrained whenever the character started drifting: over a campaign this long, consistency is maintained, not applied once.',
+    'Kept every card inside one world: the same character, the same clay treatment, the same campaign, match after match.',
+  ],
+  stack: [
+    'Vi 5G FanFest · match-day quiz campaign',
+    'Character LoRA training (Flux base)',
+    'Clay-style character consistency',
+    'Match-day quiz card generation',
+    'Delivered on instagram · x · facebook',
+  ],
+  workflow: [
+    { label: 'vi 5g fanfest quiz · the season-long brief' },
+    { label: 'clay-style character · lora training on flux' },
+    { label: 'match-day quiz cards · one character, whole season' },
+    { label: 'delivered on instagram · x · facebook' },
+  ],
+  results: [
+    { kind: 'image', label: 'fanfest quiz q4 · del vs hydr · 30 mar', src: 'media/brands/vi/stills/vi-fanfest-quiz-x-30mar.jpg', href: 'https://x.com/ViCustomerCare/status/1906319255290929392', hrefLabel: 'view on x ↗' },
+    { kind: 'image', label: 'fanfest quiz q4 · lkn vs guj · 12 apr', src: 'media/brands/vi/stills/vi-fanfest-quiz-x-12apr.jpg', href: 'https://x.com/ViCustomerCare/status/1911030303126172097', hrefLabel: 'view on x ↗' },
+    { kind: 'image', label: 'fanfest quiz q1 · del vs mum · 13 apr', src: 'media/brands/vi/stills/vi-fanfest-quiz-x-13apr.jpg', href: 'https://x.com/ViCustomerCare/status/1911419108232515820', hrefLabel: 'view on x ↗' },
+    { kind: 'image', label: 'fanfest quiz q4 · mum vs hyd · 17 apr', src: 'media/brands/vi/stills/vi-fanfest-quiz-x-17apr.jpg', href: 'https://x.com/ViCustomerCare/status/1912902632227922291', hrefLabel: 'view on x ↗' },
+    { kind: 'image', label: 'fanfest quiz q2 · blr vs raj · 24 apr', src: 'media/brands/vi/stills/vi-fanfest-quiz-q2.jpg', href: 'https://www.facebook.com/viofficialfanworld/posts/cricky-is-testing-your-cricket-iq-comment-vi5gfanfest-with-the-right-answers-to-/985824210433197/', hrefLabel: 'view on facebook ↗' },
+    { kind: 'image', label: 'fanfest quiz q5 · blr vs che · 03 may', src: 'media/brands/vi/stills/vi-fanfest-quiz-x-03may.jpg', href: 'https://x.com/ViCustomerCare/status/1918712163373597153', hrefLabel: 'view on x ↗' },
+  ],
+}
+
 // "Futuristic Neon Chase" — self-directed concept: environment and camera
 // built in Blender with the agent driving it over MCP, clay render pass as
 // the motion guide, then a Seedance 2.5 motion-to-video render on top.
@@ -602,8 +665,147 @@ const concept7up: Project = {
   ],
 }
 
+// The product-photography system: one product locked in a studio render, one
+// generated environment, one composited final. The route (not the lucky frame)
+// is the point — product accuracy first, then placement, perspective, light
+// and shadow, then the finish. Built on a mattress concept: the category where
+// commercial briefs for this work keep landing.
+const conceptProductPhotography: Project = {
+  slug: 'ai-product-photography-system',
+  title: 'AI Product Photography System · product → environment → composite',
+  company: 'Concept',
+  role: 'AI Creative Technologist',
+  year: '2026',
+  date: '2026-09-16',
+  status: 'concept',
+  contribution: [
+    'product concept + studio lock',
+    'environment generation — framed for the final',
+    'placement + perspective match',
+    'light direction + shadow integration',
+    'composite + final frame',
+  ],
+  excerpt:
+    'A production route for commercial product imagery: lock the product in a studio render first, generate the environment around it, and composite the two into one frame that holds perspective, scale, light and shadow. One product, any room — fidelity never left to chance.',
+  cover: 'media/ai-product-photography-system/cover.jpg',
+  spec: [
+    { label: 'discipline', value: 'commercial product imagery' },
+    { label: 'product', value: 'mattress (concept)' },
+    { label: 'route', value: 'studio → environment → composite' },
+    { label: 'finish', value: 'perspective · light · shadow' },
+    { label: 'year', value: '2026' },
+  ],
+  overview:
+    'Commercial product work is not judged on the best frame — it is judged on the hundredth one. This system was built that way. The product is locked in a clean studio render first and becomes the source of truth: design, proportions and surface stay fixed no matter what happens later. The environment is generated separately around the frame the image will live in — an empty room, composed so nothing competes with the product. Then the two are composited into one photograph: placement first, then scale and perspective, then the light — window direction, colour temperature, falloff — and finally the contact shadows that make the object sit on the floor instead of floating above it. Because the product never regenerates inside the scene pass, nothing drifts, and the route reruns for any room, any camera, any crop. Built on a mattress concept — the category where commercial briefs for this work keep landing.',
+  challenge:
+    'The failure mode of AI product imagery is drift. Generate the product inside the scene and it quietly redesigns itself — different proportions, different quilting, different side detailing — and the frame is useless to a brand that needs its actual product. The second failure is physics. A product dropped into a room with the wrong scale, the wrong vanishing point, or a light direction that disagrees with the window reads as fake instantly, no matter how clean the render is. Product fidelity and physical grounding are the two hard bars here, and both had to be solved in the route, not patched per image.',
+  approach: [
+    'Locked the product first: a studio render where the design — proportions, quilting, side detailing — is approved once and becomes the source of truth for every frame that follows.',
+    'Generated the environment separately: the room built around the final framing, empty, so the product pass keeps full control of the object.',
+    'Composited in passes: placement first, then scale and vanishing point pulled until the product footprint sits correctly on the floor plane.',
+    'Matched the light: direction, colour temperature and falloff tuned until product shading agreed with the room, then contact shadows cut in to ground it.',
+    'Finished the frame: edge cleanup, reflection check and a final grade so the image holds at advertising quality.',
+  ],
+  stack: [
+    'Own product concept + art direction',
+    'Studio product render — GPT Image (identity lock)',
+    'Environment generation — GPT Image',
+    'Compositing — placement, perspective, scale',
+    'Light direction + contact shadow integration',
+    'Final finish + upscale',
+  ],
+  workflow: [
+    { label: 'brief — real product into a generated environment' },
+    { label: 'product lock — studio render, design approved once' },
+    { label: 'environment generation — empty room, lens matched' },
+    { label: 'placement + perspective — scale, vanishing point' },
+    { label: 'lighting match — direction, temperature, falloff' },
+    { label: 'shadows — contact grounding' },
+    { label: 'cleanup + reflection pass' },
+    { label: 'final frame — advertising finish' },
+  ],
+  results: [
+    { kind: 'image', label: 'final — product composited in environment', src: 'media/ai-product-photography-system/stills/final-composite.jpg' },
+    { kind: 'image', label: 'product accuracy — studio render, design locked', src: 'media/ai-product-photography-system/stills/product-accuracy.jpg' },
+    { kind: 'image', label: 'environment — generated room, before placement', src: 'media/ai-product-photography-system/stills/generated-environment.jpg' },
+  ],
+}
+
+// One product, the whole ad surface: hero, bedroom lifestyle, night, macro
+// comfort detail, unboxing, flatlay and a dark-studio banner with copy space.
+// Twelve frames, one mattress, one pipeline — versatility without drift.
+const conceptSleepBrandSystem: Project = {
+  slug: 'sleep-brand-image-system',
+  title: 'Sleep brand image system · hero → lifestyle → macro → e-commerce',
+  company: 'Concept',
+  role: 'AI Creative Technologist',
+  year: '2026',
+  date: '2026-09-15',
+  status: 'concept',
+  contribution: [
+    'system design — one product, twelve frames',
+    'photoreal lifestyle set — morning, night, couple',
+    'studio + macro detail set',
+    'e-commerce frames — unboxing, flatlay, banner',
+    'edit passes + grade — one shoot, one look',
+  ],
+  excerpt:
+    'A complete advertising surface for a sleep brand, built as one system: hero, bedroom lifestyle, night scene, macro comfort detail, unboxing, flatlay and a dark-studio banner with copy space. Twelve frames, one mattress — the same product in every image, extended from a repeatable core pipeline.',
+  cover: 'media/sleep-brand-image-system/cover.jpg',
+  spec: [
+    { label: 'brand', value: 'sleep brand (concept)' },
+    { label: 'product', value: 'mattress + bedding' },
+    { label: 'deliverable', value: '12-frame image system' },
+    { label: 'formats', value: '16:9 · 4:5 · 1:1' },
+    { label: 'engine', value: 'krea 2 turbo (fp8) · comfyui' },
+  ],
+  overview:
+    'A sleep brand does not need one beautiful mattress picture — it needs the whole surface. The hero, the lifestyle moment, the night shot, the macro that sells comfort, the unboxing, the flatlay, the banner a headline can sit on. This brief was run as a system, not a one-off: one mattress concept, one bedroom language, one warm photographic grade, twelve frames across the full ad surface. Every frame came out of the same ComfyUI pipeline on a local GPU, with edit passes where the model shows its seams — hands, packaging — and a single grade holding the set together as if it was one shoot. Consistency here is a pipeline property: the same product, the same light vocabulary, the same route — rerun for the next collection, variant or season.',
+  challenge:
+    'Twelve frames is where inconsistency gets caught. Skin and hands fail first in generated imagery; fabric and bedding need believable folds at every scale; and packaging has to survive close inspection without a brand mark to hide behind. On top of that the set had to read as one shoot — same mattress, same room language, same grade — while spanning everything from a sunlit morning hero to a dark-studio banner. Every frame had to hold up as a standalone ad and still belong to the set.',
+  approach: [
+    'Designed the surface first: the frames a sleep brand actually runs — hero, lifestyle, night, macro, unboxing, flatlay, banner — and the formats each ships in.',
+    'Locked the product and the grade so all twelve frames belong to one shoot: same mattress design, same warm photographic look, same bedding language.',
+    'Ran the set through one ComfyUI pipeline on the local GPU — photographic prompts, batch queue, no per-frame hand tuning.',
+    'Generated the scene sets — morning, night, couple — around the room language the hero established.',
+    'Added the commerce frames: comfort press, macro knit / layers / airflow, unboxing, flatlay, and a dark-studio banner with copy space for headline type.',
+    'Ran targeted edit passes where the model shows its seams — hands, packaging — then graded the full set as one delivery.',
+  ],
+  stack: [
+    'Krea 2 turbo (fp8) · ComfyUI graph',
+    'Reference-image workflows — scene + product lock',
+    'Own GPU batch queue — full set from one pipeline',
+    'Edit passes — hands / packaging cleanup',
+    'Final grade + 16:9 / 4:5 / 1:1 crops',
+  ],
+  workflow: [
+    { label: 'brief — one product across the whole ad surface' },
+    { label: 'system design — formats, scenes, grade' },
+    { label: 'product lock — studio + macro set' },
+    { label: 'scene set — bedroom morning / night / couple' },
+    { label: 'e-commerce set — unboxing, flatlay, banner' },
+    { label: 'edit passes — hands, packaging, cleanup' },
+    { label: 'grade — one photographic look across the set' },
+    { label: 'delivery — hero, lifestyle, macro, e-comm crops' },
+  ],
+  results: [
+    { kind: 'image', label: 'hero — morning bedroom', src: 'media/sleep-brand-image-system/stills/hero-wakeup.jpg' },
+    { kind: 'image', label: 'studio — product profile', src: 'media/sleep-brand-image-system/stills/studio-profile.jpg' },
+    { kind: 'image', label: 'lifestyle — morning light', src: 'media/sleep-brand-image-system/stills/morning-light.jpg' },
+    { kind: 'image', label: 'lifestyle — night', src: 'media/sleep-brand-image-system/stills/night-rest.jpg' },
+    { kind: 'image', label: 'lifestyle — two sleepers', src: 'media/sleep-brand-image-system/stills/couple-sleep.jpg' },
+    { kind: 'image', label: 'e-commerce — unboxing moment', src: 'media/sleep-brand-image-system/stills/unboxing.jpg' },
+    { kind: 'image', label: 'detail — comfort press test', src: 'media/sleep-brand-image-system/stills/comfort-press.jpg' },
+    { kind: 'image', label: 'macro — knit weave', src: 'media/sleep-brand-image-system/stills/macro-knit.jpg' },
+    { kind: 'image', label: 'macro — comfort layers', src: 'media/sleep-brand-image-system/stills/macro-layers.jpg' },
+    { kind: 'image', label: 'macro — airflow structure', src: 'media/sleep-brand-image-system/stills/macro-airflow.jpg' },
+    { kind: 'image', label: 'e-commerce — styled flatlay', src: 'media/sleep-brand-image-system/stills/flatlay.jpg' },
+    { kind: 'image', label: 'e-commerce banner — dark studio, copy space', src: 'media/sleep-brand-image-system/stills/ecommerce-callout.jpg' },
+  ],
+}
+
 // Grid order = array order. Keep Ogilvy projects first.
-export const projects: Project[] = [ogilvyStoryOfUs, ogilvyCelebrations, lactaChristmasAi, ndpfHistoryOfDiamonds, ogilvyIfbChristmas, conceptHappydentWhiteGum, concept7up, conceptNeonChase]
+export const projects: Project[] = [ogilvyStoryOfUs, ogilvyCelebrations, lactaChristmasAi, ndpfHistoryOfDiamonds, ogilvyIfbChristmas, ogilvyViCrickyFanfest, conceptProductPhotography, conceptSleepBrandSystem, conceptHappydentWhiteGum, concept7up, conceptNeonChase]
 
 // Case-study display order: NEWEST FIRST by `date` (exact when known, else
 // the year). Ties keep the original array order, so same-date entries slot

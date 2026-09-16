@@ -63,41 +63,42 @@ const SKILL_GROUPS = [
 
 export default function About() {
   return (
-    <section id="about" className="scroll-mt-16 py-14 sm:py-20">
-      <div className="container-site grid gap-12 lg:grid-cols-2">
+    <section id="about" className="scroll-mt-16 py-10 sm:py-12">
+      <div className="container-site grid gap-10 lg:grid-cols-2">
         <Reveal>
           <div>
-          <p className="eyebrow-green">05 / about</p>
+          <p className="eyebrow-green">07 / about</p>
           <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
             The operator
             <br />
             behind the graph
           </h2>
-          <p className="mt-6 leading-relaxed text-muted">
-            I'm a motion designer from Hyderabad, India, with an art background.
+          <p className="mt-5 leading-relaxed text-muted">
+            I'm an AI creative technologist and motion designer from Hyderabad, India, with an
+            art background.
             Before this I worked in customer service at Amazon, and in 2023 I resigned to pursue
             better opportunities and learn new things. I went all in on generative AI, and I
             haven't stopped learning new models since.
           </p>
-          <p className="mt-4 leading-relaxed text-muted">
+          <p className="mt-3 leading-relaxed text-muted">
             I'm a fast learner, and I'm creative at capturing an idea and portraying it as a film
             or a set of images. I religiously check the AI subreddits, X accounts, and Instagram
             pages that cover every new AI tool and breakthrough, so I know what's new the moment
             it lands. Most of my experiments happen in ComfyUI with image and video models, and I
             automate the workflows around them with AI agents like Hermes, Codex, and Claude Code.
           </p>
-          <p className="mt-4 leading-relaxed text-muted">
+          <p className="mt-3 leading-relaxed text-muted">
             I spend my days on the other side of the screen: building the workflows, training the
             LoRAs, tuning the samplers, and then automating the whole thing so nobody has to sit
             through another render. My job is to know when the open-source stack does the job
             better than the paid one, and to make that choice invisible in the final frame.
           </p>
-          <p className="mt-4 leading-relaxed text-muted">
+          <p className="mt-3 leading-relaxed text-muted">
             Everything below is documented the way I work: real models, real parameters, real
             obstacles, and the ComfyUI graphs that got past them.
           </p>
 
-          <div className="mt-8 space-y-5">
+          <div className="mt-6 space-y-4">
             {SKILL_GROUPS.map((g) => (
               <div key={g.label}>
                 <p className="eyebrow">{g.label}</p>
@@ -122,7 +123,7 @@ export default function About() {
           <h3 className="eyebrow">Experience</h3>
           <ol className="mt-5 space-y-0">
             {TIMELINE.map((t) => (
-              <li key={t.role} className="relative border-l border-ink-600 pb-8 pl-6 last:pb-0">
+              <li key={t.role} className="relative border-l border-ink-600 pb-6 pl-6 last:pb-0">
                 <span className="absolute -left-[5px] top-1.5 h-2.5 w-2.5 rounded-full bg-green" />
                 <p className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">
                   {t.dates}
@@ -133,9 +134,9 @@ export default function About() {
                   {t.location ? <span className="text-muted">, {t.location}</span> : null}
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-muted">{t.note}</p>
-                <ul className="mt-3 space-y-1.5">
+                <ul className="mt-2.5 space-y-1">
                   {t.bullets.map((b) => (
-                    <li key={b} className="flex gap-2.5 text-sm leading-relaxed text-paper/80">
+                    <li key={b} className="flex gap-2.5 text-[13px] leading-snug text-paper/80">
                       <span className="shrink-0 text-green">→</span>
                       <span>{b}</span>
                     </li>
@@ -145,7 +146,7 @@ export default function About() {
             ))}
           </ol>
 
-          <div className="panel-dark mt-10 p-6">
+          <div className="panel-dark mt-8 p-5">
             <p className="font-mono text-[11px] uppercase tracking-wideish text-snow/60">currently</p>
             <p className="mt-3 text-sm leading-relaxed text-snow/90">
               Building AI-native production pipelines at <span className="co-ogilvy">Ogilvy</span>: open-source first, documented
