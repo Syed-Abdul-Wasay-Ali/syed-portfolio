@@ -703,7 +703,7 @@ function PicturesTab() {
             Replace any home-page image or video file. Same file name, new bytes — everything else
             stays. (Handles large files: give it a second.)
           </p>
-          {HOME_EXTRAS.map((g) => (
+          {HOME_EXTRAS.filter((g) => g.items.some(([src]) => !removedSet.has(src))).map((g) => (
             <div key={g.group}>
               <p className="eyebrow-green">{g.group}</p>
               <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -777,6 +777,7 @@ function PicturesTab() {
 
           {project && (
             <>
+              {((project.cover && !removedSet.has(project.cover)) || (project.heroSrc && !removedSet.has(project.heroSrc))) && (
               <div>
                 <p className="eyebrow-green">cover & hero</p>
                 <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -806,6 +807,7 @@ function PicturesTab() {
                   )}
                 </div>
               </div>
+              )}
 
               <div>
                 <p className="eyebrow-green">results gallery ({project.results.filter((m) => !(m.src && removedSet.has(m.src))).length} + {projAdded.length} added)</p>
@@ -842,7 +844,7 @@ function PicturesTab() {
                 <AddFilesRow label="add pictures to this case study" onFiles={addFiles(projColl, '')} />
               </div>
 
-              {(project.stages?.length ?? 0) > 0 && (
+              {(project.stages ?? []).filter((m) => !removedSet.has(m.src ?? '')).length > 0 && (
                 <div>
                   <p className="eyebrow-green">stages</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -867,7 +869,8 @@ function PicturesTab() {
                 </div>
               )}
 
-              {project.beforeAfter && (
+              {project.beforeAfter &&
+                [project.beforeAfter.before, project.beforeAfter.after].filter((m) => !(m.src && removedSet.has(m.src))).length > 0 && (
                 <div>
                   <p className="eyebrow-green">before / after</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -892,7 +895,7 @@ function PicturesTab() {
                 </div>
               )}
 
-              {(project.formats?.length ?? 0) > 0 && (
+              {(project.formats ?? []).filter((m) => !removedSet.has(m.src ?? '')).length > 0 && (
                 <div>
                   <p className="eyebrow-green">format frames</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -916,7 +919,7 @@ function PicturesTab() {
                 </div>
               )}
 
-              {(project.placements?.length ?? 0) > 0 && (
+              {(project.placements ?? []).filter((m) => !removedSet.has(m.src ?? '')).length > 0 && (
                 <div>
                   <p className="eyebrow-green">placements</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -967,7 +970,7 @@ function PicturesTab() {
             </label>
           </div>
 
-          {brand && brand.logo && (
+          {brand && brand.logo && !removedSet.has(brand.logo) && (
             <>
               <p className="eyebrow-green">logo</p>
               <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
