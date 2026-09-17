@@ -1701,6 +1701,108 @@ function ConceptTab() {
 // ---------------------------------------------------------------------------
 // page shell
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// save & publish — one button: build the site, push it to GitHub Pages
+// ---------------------------------------------------------------------------
+type PublishStatus = {
+  missing?: boolean
+  running: boolean
+  phase: string
+  ok: boolean | null
+  error: string | null
+  last: { at: number } | null
+  dirty: boolean
+  logTail: string[]
+}
+
+function PublishBar() {
+  const [st, setSt] = useState<PublishStatus | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [flash, setFlash] = useState('')
+
+  useEffect(() => {
+    let live = true
+    const load = async () => {
+      try {
+        const r = await fetch('/api/publish/status', { cache: 'no-store' })
+        if (r.status === 404) {
+          if (live)
+            setSt({ missing: true, running: false, phase: 'idle', ok: null, error: null, last: null, dirty: true, logTail: [] })
+          return
+        }
+        if (!r.ok) return
+        const j = (await r.json()) as PublishStatus
+        if (live) setSt(j)
+      } catch {
+        /* server offline — the banner above already explains */
+      }
+    }
+    load()
+    const t = window.setInterval(load, 2500)
+    return () => {
+      live = false
+      window.clearInterval(t)
+    }
+  }, [])
+
+  const publish = async () => {
+    if (busy || st?.running || st?.missing) return
+    setBusy(true)
+    setFlash('')
+    try {
+      await api('/api/publish', {})
+    } catch (e) {
+      setFlash('could not start publish: ' + (e as Error).message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const running = !!st?.running
+  const phase = st?.phase || 'idle'
+  const lastAt = st?.last?.at ? new Date(st.last.at).toLocaleString() : null
+  const upToDate = !!(st && !st.missing && !running && st.last && !st.dirty && !st.error)
+
+  return (
+    <div className="panel mt-6 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">save &amp; publish</p>
+          <p className="mt-1 text-[13px] leading-relaxed text-paper/85">
+            {st?.missing ? (
+              <>
+                This server is outdated — restart it (<span className="font-mono text-[12px] text-paper">node admin-server.mjs</span>) to get the publish button.
+              </>
+            ) : running ? (
+              phase === 'publishing' ? 'Uploading to GitHub…' : 'Building the site…'
+            ) : upToDate ? (
+              <>
+                Live on GitHub since <span className="text-paper">{lastAt}</span> — you are up to date.
+              </>
+            ) : (
+              'You have changes that are not on the GitHub site yet.'
+            )}
+          </p>
+          {(flash || st?.error) && <p className="mt-1 font-mono text-[11px] text-red-400">{flash || st?.error}</p>}
+        </div>
+        <button
+          type="button"
+          onClick={publish}
+          disabled={busy || running || !!st?.missing}
+          className={`${btnCls} ${busy || running || st?.missing ? 'cursor-not-allowed opacity-50' : ''}`}
+        >
+          {running ? (phase === 'publishing' ? 'publishing…' : 'building…') : busy ? 'starting…' : 'save & publish'}
+        </button>
+      </div>
+      {running && (
+        <p className="mt-3 border-t border-ink-600 pt-3 font-mono text-[11px] leading-relaxed text-muted">
+          takes about a minute — keep the server window open. {(st?.logTail || []).slice(-1)[0] || ''}
+        </p>
+      )}
+    </div>
+  )
+}
+
 export default function AdminPage() {
   const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem(SESSION_KEY) === '1')
   const [pass, setPass] = useState('')
@@ -1791,8 +1893,11 @@ export default function AdminPage() {
       <p className="mt-2 max-w-3xl text-sm text-muted">
         Words · pictures · sections — everything on the portfolio edits from here and saves into{' '}
         <span className="font-mono text-[12px] text-paper">content.json</span> (plus media files).
-        To publish: <span className="font-mono text-[12px] text-paper">npm run build &amp;&amp; npx gh-pages -d dist</span>
+        When you are done, hit <span className="font-mono text-[12px] text-paper">save &amp; publish</span> to push it
+        to the live GitHub site.
       </p>
+
+      {serverOk === true && <PublishBar />}
 
       <div className="mt-6 flex flex-wrap gap-2">
         {tabs.map((tb) => (

@@ -72,7 +72,9 @@ Four tabs:
 - **concept images** — the concept gallery (upload, caption, reorder, replace).
 
 All edits save into `public/content.json` plus files under `public/media/`,
-so the built site picks them up with no code changes. Publish with:
+so the built site picks them up with no code changes. To publish, hit
+**save & publish** at the top of the panel — it builds the site and pushes it
+to GitHub Pages (~15 s), and the bar tells you when you're live. Or by hand:
 
 ```bash
 npm run build && npx gh-pages -d dist

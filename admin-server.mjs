@@ -12,14 +12,17 @@
 //   POST /api/page                 { hidden: [siteSection] }
 //   GET  /api/trash                deleted-media trash (restorable files)
 //   POST /api/trash/restore|purge  { id } | purge { all: true }
+//   GET  /api/publish/status       save & publish progress (for the UI)
+//   POST /api/publish              build the site and push it to GitHub Pages
 //
 // Uploads land in public/media/brands/<slug>/<stills|animatic|film>/ AND in
 // dist/media/... (so they show instantly). content.json is written to both
 // public/ (survives npm run build) and dist/ (served immediately).
-// Publishing your admin changes: npm run build && npx gh-pages -d dist
+// Publishing: hit "save & publish" in #/admin (build + gh-pages) — or manually: npm run build && npx gh-pages -d dist
 // ---------------------------------------------------------------------------
 import http from 'node:http'
-import { readFile, writeFile, mkdir, unlink } from 'node:fs/promises'
+import { readFile, writeFile, mkdir, unlink, readdir, stat } from 'node:fs/promises'
+import { spawn } from 'node:child_process'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -230,6 +233,82 @@ const trashRestore = async (id) => {
   return content
 }
 
+// ---------------------------------------------------------------------------
+// save & publish — build the site and push it to GitHub Pages
+// ---------------------------------------------------------------------------
+const PUBLISH_STATE = path.join(ROOT, '.admin-backups', 'publish.json')
+
+let publishRun = null // { running, phase, startedAt, endedAt, ok, error, log: string[] }
+
+const readPublishState = async () => {
+  try {
+    return JSON.parse(await readFile(PUBLISH_STATE, 'utf8'))
+  } catch {
+    return null
+  }
+}
+
+// newest mtime across everything the admin panel edits (content + media)
+const latestContentMtime = async () => {
+  let newest = 0
+  const touch = async (p) => {
+    try {
+      const stt = await stat(p)
+      if (stt.isDirectory()) {
+        for (const e of await readdir(p)) await touch(path.join(p, e))
+      } else if (stt.mtimeMs > newest) newest = stt.mtimeMs
+    } catch {}
+  }
+  await touch(path.join(PUBLIC, 'content.json'))
+  await touch(path.join(PUBLIC, 'media'))
+  return newest
+}
+
+const runShell = (cmd, onLine) =>
+  new Promise((resolve) => {
+    const child = spawn(cmd, { cwd: ROOT, shell: true })
+    child.stdout.on('data', (d) => onLine(String(d)))
+    child.stderr.on('data', (d) => onLine(String(d)))
+    child.on('error', () => resolve(1))
+    child.on('close', (code) => resolve(code ?? 1))
+  })
+
+const startPublish = () => {
+  if (publishRun && publishRun.running) return false
+  const run = { running: true, phase: 'building', startedAt: Date.now(), endedAt: null, ok: null, error: null, log: [] }
+  publishRun = run
+  const log = (s) => {
+    for (const line of s.replace(/\x1b\[[0-9;]*m/g, '').split('\n')) {
+      if (!line.trim()) continue
+      run.log.push(line.trimEnd())
+    }
+    if (run.log.length > 160) run.log.splice(0, run.log.length - 160)
+  }
+  ;(async () => {
+    try {
+      log('> npm run build')
+      let code = await runShell('npm run build', log)
+      if (code !== 0) throw new Error('build failed (exit ' + code + ') — nothing was published')
+      run.phase = 'publishing'
+      const msg = 'Admin publish ' + new Date().toISOString().slice(0, 16).replace('T', ' ')
+      code = await runShell('npx gh-pages -d dist -m "' + msg + '"', log)
+      if (code !== 0) throw new Error('push to GitHub failed (exit ' + code + ')')
+      run.phase = 'done'
+      run.ok = true
+      await mkdir(path.dirname(PUBLISH_STATE), { recursive: true })
+      await writeFile(PUBLISH_STATE, JSON.stringify({ at: Date.now(), mtime: await latestContentMtime() }))
+    } catch (e) {
+      run.ok = false
+      run.error = String((e && e.message) || e)
+      run.phase = 'error'
+    } finally {
+      run.running = false
+      run.endedAt = Date.now()
+    }
+  })()
+  return true
+}
+
 const cache = {} // don't re-read body twice on dry-run flows
 
 const onApi = async (req, res) => {
@@ -241,6 +320,22 @@ const onApi = async (req, res) => {
 
   if (req.method === 'GET' && url.pathname === '/api/trash') {
     return json(res, 200, { items: await readTrash() })
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/publish/status') {
+    const last = await readPublishState()
+    const dirty = last ? (await latestContentMtime()) > Number(last.mtime) + 500 : true
+    return json(res, 200, {
+      running: !!(publishRun && publishRun.running),
+      phase: (publishRun && publishRun.phase) || 'idle',
+      ok: publishRun ? publishRun.ok : null,
+      error: (publishRun && publishRun.error) || null,
+      startedAt: (publishRun && publishRun.startedAt) || null,
+      endedAt: (publishRun && publishRun.endedAt) || null,
+      logTail: publishRun ? publishRun.log.slice(-40) : [],
+      last,
+      dirty,
+    })
   }
 
   if (req.method !== 'POST') return json(res, 405, { error: 'method not allowed' })
@@ -255,6 +350,11 @@ const onApi = async (req, res) => {
   const slug = safeSlug(body.brand)
 
   try {
+    if (url.pathname === '/api/publish') {
+      if (!startPublish()) return json(res, 200, { ok: true, alreadyRunning: true })
+      return json(res, 200, { ok: true, started: true })
+    }
+
     if (url.pathname === '/api/upload') {
       const section = body.section in SECTION_DIRS ? body.section : 'stills'
       const dir = SECTION_DIRS[section]
