@@ -111,11 +111,11 @@ export default function ProjectPage({ slug }: { slug: string }) {
       ])
     }
 
-    if (project.formats && project.formats.length > 0) {
+    if ((project.formats?.length ?? 0) > 0 || (project.placements?.length ?? 0) > 0) {
       secs.push([
         'formats',
         <Section key="formats" tag={t('pui.formats.tag')} title={t('pui.formats.title')}>
-          <FormatsSection formats={project.formats} placements={project.placements} />
+          <FormatsSection formats={project.formats ?? []} placements={project.placements} />
         </Section>,
       ])
     }

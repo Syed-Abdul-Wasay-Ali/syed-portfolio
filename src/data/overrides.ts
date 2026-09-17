@@ -62,6 +62,7 @@ export function ovProject(content: RunContent | null, p: Project): Project {
   const T = (f: string, fb = '') => tx(texts, pk(p.slug, f), fb)
   const s = p.slug
   const ov = (f: string) => texts?.[pk(s, f)]
+  const removedSet = new Set(content?.removedMedia ?? [])
 
   const production = p.production
     ? {
@@ -97,6 +98,8 @@ export function ovProject(content: RunContent | null, p: Project): Project {
     overview: T('overview', p.overview),
     challenge: T('challenge', p.challenge),
     chain: typeof chOv === 'string' ? chOv : p.chain,
+    cover: removedSet.has(p.cover ?? '') ? undefined : p.cover,
+    heroSrc: removedSet.has(p.heroSrc ?? '') ? undefined : p.heroSrc,
     contribution: listOpt(texts, pk(s, 'contribution'), p.contribution),
     campaign: p.campaign
       ? {
@@ -117,38 +120,51 @@ export function ovProject(content: RunContent | null, p: Project): Project {
     results,
     production,
     stages: p.stages
-      ? p.stages.map((st, i) => ({
-          ...st,
-          label: opt(texts, pk(s, `stage.${i}.label`), st.label),
-        }))
+      ? p.stages
+          .map((st, i) => ({
+            ...st,
+            label: opt(texts, pk(s, `stage.${i}.label`), st.label),
+          }))
+          .filter((st) => !removedSet.has(st.src ?? ''))
       : p.stages,
-    beforeAfter: p.beforeAfter
-      ? {
-          ...p.beforeAfter,
-          annotations: listOpt(texts, pk(s, 'ba.annotations'), p.beforeAfter.annotations),
-          before: {
-            ...p.beforeAfter.before,
-            label: opt(texts, pk(s, 'ba.before.label'), p.beforeAfter.before.label),
-          },
-          after: {
-            ...p.beforeAfter.after,
-            label: opt(texts, pk(s, 'ba.after.label'), p.beforeAfter.after.label),
-          },
-        }
-      : p.beforeAfter,
+    beforeAfter: (() => {
+      const ba = p.beforeAfter
+      if (!ba) return undefined
+      const beforeRemoved = removedSet.has(ba.before.src ?? '')
+      const afterRemoved = removedSet.has(ba.after.src ?? '')
+      if (beforeRemoved && afterRemoved) return undefined
+      return {
+        ...ba,
+        annotations: listOpt(texts, pk(s, 'ba.annotations'), ba.annotations),
+        before: {
+          ...ba.before,
+          label: opt(texts, pk(s, 'ba.before.label'), ba.before.label),
+          src: beforeRemoved ? undefined : ba.before.src,
+        },
+        after: {
+          ...ba.after,
+          label: opt(texts, pk(s, 'ba.after.label'), ba.after.label),
+          src: afterRemoved ? undefined : ba.after.src,
+        },
+      }
+    })(),
     formats: p.formats
-      ? p.formats.map((f, i) => ({
-          ...f,
-          label: T(`fmt.${i}.label`, f.label),
-          note: opt(texts, pk(s, `fmt.${i}.note`), f.note),
-        }))
+      ? p.formats
+          .map((f, i) => ({
+            ...f,
+            label: T(`fmt.${i}.label`, f.label),
+            note: opt(texts, pk(s, `fmt.${i}.note`), f.note),
+          }))
+          .filter((f) => !removedSet.has(f.src ?? ''))
       : p.formats,
     placements: p.placements
-      ? p.placements.map((pl, i) => ({
-          ...pl,
-          label: T(`pl.${i}.label`, pl.label),
-          note: opt(texts, pk(s, `pl.${i}.note`), pl.note),
-        }))
+      ? p.placements
+          .map((pl, i) => ({
+            ...pl,
+            label: T(`pl.${i}.label`, pl.label),
+            note: opt(texts, pk(s, `pl.${i}.note`), pl.note),
+          }))
+          .filter((pl) => !removedSet.has(pl.src ?? ''))
       : p.placements,
   }
 }
@@ -158,11 +174,13 @@ export function ovProject(content: RunContent | null, p: Project): Project {
 // ---------------------------------------------------------------------------
 export function ovBrand(content: RunContent | null, b: Brand): Brand {
   const texts = content?.texts as T
+  const removedSet = new Set(content?.removedMedia ?? [])
   return {
     ...b,
     name: tx(texts, bk(b.slug, 'name'), b.name),
     note: tx(texts, bk(b.slug, 'note'), b.note),
     story: opt(texts, bk(b.slug, 'story'), b.story),
+    logo: removedSet.has(b.logo ?? '') ? undefined : b.logo,
   }
 }
 

@@ -685,9 +685,23 @@ function PicturesTab() {
             <div key={g.group}>
               <p className="eyebrow-green">{g.group}</p>
               <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-                {g.items.map(([src, label]) => (
-                  <SlotCard key={src} label={label} src={src} sub={src} busy={busy} onReplace={replace(src)} />
-                ))}
+                {g.items.map(([src, label]) =>
+                  g.group === 'Site files' ? (
+                    <SlotCard key={src} label={label} src={src} sub={src} busy={busy} onReplace={replace(src)} />
+                  ) : (
+                    <SlotCard
+                      key={src}
+                      label={label}
+                      src={src}
+                      sub={src}
+                      busy={busy}
+                      removed={removedSet.has(src)}
+                      onReplace={replace(src)}
+                      onHide={() => hide(src)}
+                      onRestore={() => restore(src)}
+                    />
+                  ),
+                )}
               </div>
             </div>
           ))}
@@ -712,10 +726,28 @@ function PicturesTab() {
                 <p className="eyebrow-green">cover & hero</p>
                 <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
                   {project.cover && (
-                    <SlotCard label="cover (cards)" src={project.cover} sub={project.cover} busy={busy} onReplace={replace(project.cover)} />
+                    <SlotCard
+                      label="cover (cards)"
+                      src={project.cover}
+                      sub={project.cover}
+                      busy={busy}
+                      removed={removedSet.has(project.cover)}
+                      onReplace={replace(project.cover)}
+                      onHide={() => hide(project.cover!)}
+                      onRestore={() => restore(project.cover!)}
+                    />
                   )}
                   {project.heroSrc && (
-                    <SlotCard label="hero frame" src={project.heroSrc} sub={project.heroSrc} busy={busy} onReplace={replace(project.heroSrc)} />
+                    <SlotCard
+                      label="hero frame"
+                      src={project.heroSrc}
+                      sub={project.heroSrc}
+                      busy={busy}
+                      removed={removedSet.has(project.heroSrc)}
+                      onReplace={replace(project.heroSrc)}
+                      onHide={() => hide(project.heroSrc!)}
+                      onRestore={() => restore(project.heroSrc!)}
+                    />
                   )}
                 </div>
               </div>
@@ -759,11 +791,23 @@ function PicturesTab() {
                 <div>
                   <p className="eyebrow-green">stages</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-                    {(project.stages ?? []).map((m, i) =>
-                      m.src ? (
-                        <SlotCard key={m.src + i} label={m.label ?? `stage ${i + 1}`} src={m.src} sub={m.src} media={m} busy={busy} onReplace={replace(m.src)} />
-                      ) : null,
-                    )}
+                    {(project.stages ?? []).map((m, i) => {
+                      const src = m.src ?? ''
+                      return src ? (
+                        <SlotCard
+                          key={src + i}
+                          label={m.label ?? `stage ${i + 1}`}
+                          src={src}
+                          sub={src}
+                          media={m}
+                          busy={busy}
+                          removed={removedSet.has(src)}
+                          onReplace={replace(src)}
+                          onHide={() => hide(src)}
+                          onRestore={() => restore(src)}
+                        />
+                      ) : null
+                    })}
                   </div>
                 </div>
               )}
@@ -772,11 +816,23 @@ function PicturesTab() {
                 <div>
                   <p className="eyebrow-green">before / after</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-                    {[project.beforeAfter.before, project.beforeAfter.after].map((m, i) =>
-                      m.src ? (
-                        <SlotCard key={m.src + i} label={i === 0 ? 'before' : 'after'} src={m.src} sub={m.src} media={m} busy={busy} onReplace={replace(m.src)} />
-                      ) : null,
-                    )}
+                    {[project.beforeAfter.before, project.beforeAfter.after].map((m, i) => {
+                      const src = m.src ?? ''
+                      return src ? (
+                        <SlotCard
+                          key={src + i}
+                          label={i === 0 ? 'before' : 'after'}
+                          src={src}
+                          sub={src}
+                          media={m}
+                          busy={busy}
+                          removed={removedSet.has(src)}
+                          onReplace={replace(src)}
+                          onHide={() => hide(src)}
+                          onRestore={() => restore(src)}
+                        />
+                      ) : null
+                    })}
                   </div>
                 </div>
               )}
@@ -785,9 +841,22 @@ function PicturesTab() {
                 <div>
                   <p className="eyebrow-green">format frames</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-                    {(project.formats ?? []).map((m, i) => (
-                      <SlotCard key={m.src + i} label={`${m.label} (${m.ratio})`} src={m.src} sub={m.src} busy={busy} onReplace={replace(m.src)} />
-                    ))}
+                    {(project.formats ?? []).map((m, i) => {
+                      const src = m.src ?? ''
+                      return src ? (
+                        <SlotCard
+                          key={src + i}
+                          label={`${m.label} (${m.ratio})`}
+                          src={src}
+                          sub={src}
+                          busy={busy}
+                          removed={removedSet.has(src)}
+                          onReplace={replace(src)}
+                          onHide={() => hide(src)}
+                          onRestore={() => restore(src)}
+                        />
+                      ) : null
+                    })}
                   </div>
                 </div>
               )}
@@ -796,9 +865,22 @@ function PicturesTab() {
                 <div>
                   <p className="eyebrow-green">placements</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-                    {(project.placements ?? []).map((m, i) => (
-                      <SlotCard key={m.src + i} label={m.label} src={m.src} sub={m.src} busy={busy} onReplace={replace(m.src)} />
-                    ))}
+                    {(project.placements ?? []).map((m, i) => {
+                      const src = m.src ?? ''
+                      return src ? (
+                        <SlotCard
+                          key={src + i}
+                          label={m.label}
+                          src={src}
+                          sub={src}
+                          busy={busy}
+                          removed={removedSet.has(src)}
+                          onReplace={replace(src)}
+                          onHide={() => hide(src)}
+                          onRestore={() => restore(src)}
+                        />
+                      ) : null
+                    })}
                   </div>
                 </div>
               )}
@@ -834,7 +916,16 @@ function PicturesTab() {
             <>
               <p className="eyebrow-green">logo</p>
               <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-                <SlotCard label={`${brand.name} — logo`} src={brand.logo} sub={brand.logo} busy={busy} onReplace={replace(brand.logo)} />
+                <SlotCard
+                  label={`${brand.name} — logo`}
+                  src={brand.logo}
+                  sub={brand.logo}
+                  busy={busy}
+                  removed={removedSet.has(brand.logo)}
+                  onReplace={replace(brand.logo)}
+                  onHide={() => hide(brand.logo!)}
+                  onRestore={() => restore(brand.logo!)}
+                />
               </div>
             </>
           )}

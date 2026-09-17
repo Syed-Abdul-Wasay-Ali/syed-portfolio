@@ -1,5 +1,5 @@
 import Reveal from './Reveal'
-import { useT } from '../data/runtime'
+import { useRuntime, useT } from '../data/runtime'
 
 // "From product to production-ready image" — the compact pipeline band that
 // sits directly under the hero. Six stages, each with a small visual from a
@@ -16,6 +16,9 @@ const STAGES = [
 
 export default function PipelineStrip() {
   const t = useT()
+  const { content } = useRuntime()
+  const removed = new Set(content?.removedMedia ?? [])
+  const stages = STAGES.map((s, i) => ({ s, i })).filter(({ s }) => !removed.has(s.src))
   return (
     <section className="border-b border-ink-600 py-7 sm:py-9">
       <div className="container-site">
@@ -36,7 +39,7 @@ export default function PipelineStrip() {
         </p>
 
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          {STAGES.map((s, i) => (
+          {stages.map(({ s, i }) => (
             <Reveal key={s.num} delay={i * 60} className="h-full">
               <figure className="panel group h-full overflow-hidden">
                 <div className="relative aspect-[4/3] overflow-hidden">

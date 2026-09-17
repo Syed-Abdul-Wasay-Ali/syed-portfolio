@@ -2,7 +2,7 @@
 // Clearly labelled as a design study: the layout idea is the point — how the
 // generated imagery behaves in a product page and on a phone. Imagery comes
 // from the same pipeline as the rest of the study.
-import { useT } from '../data/runtime'
+import { useRuntime, useT } from '../data/runtime'
 
 const DESKTOP_HERO = 'media/ecommerce-image-system/desktop-hero.jpg'
 const DESKTOP_LIFESTYLE = 'media/ecommerce-image-system/desktop-lifestyle.jpg'
@@ -28,6 +28,9 @@ function Bar({ w }: { w: string }) {
 
 export default function EcomConcept() {
   const t = useT()
+  const { content } = useRuntime()
+  const removed = new Set(content?.removedMedia ?? [])
+  const show = (src: string) => !removed.has(src)
   return (
     <div>
       <div className="mb-5 flex flex-wrap items-center gap-3">
@@ -62,7 +65,9 @@ export default function EcomConcept() {
             </div>
             {/* hero */}
             <div className="relative aspect-[16/9] overflow-hidden border-b border-ink-600">
-              <img src={DESKTOP_HERO} alt="concept product page hero" loading="lazy" className="media-asset absolute inset-0 h-full w-full object-cover" />
+              {show(DESKTOP_HERO) && (
+                <img src={DESKTOP_HERO} alt="concept product page hero" loading="lazy" className="media-asset absolute inset-0 h-full w-full object-cover" />
+              )}
               <div className="absolute left-[6%] top-1/2 hidden w-[30%] -translate-y-1/2 space-y-2 sm:block">
                 <Bar w="w-4/5" />
                 <Bar w="w-3/5" />
@@ -81,7 +86,7 @@ export default function EcomConcept() {
                 </div>
               </div>
               <div className="grid grid-cols-4 gap-2">
-                {[THUMB_1, THUMB_2, THUMB_3, THUMB_4].map((th, i) => (
+                {[THUMB_1, THUMB_2, THUMB_3, THUMB_4].filter(show).map((th, i) => (
                   <span key={th} className={`relative block aspect-square overflow-hidden rounded-sm border ${i === 0 ? 'border-greenBright' : 'border-ink-600'}`}>
                     <img src={th} alt={`thumbnail ${i + 1}`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
                   </span>
@@ -91,10 +96,14 @@ export default function EcomConcept() {
             {/* lifestyle + detail band */}
             <div className="grid gap-4 p-4 sm:grid-cols-2">
               <span className="relative block aspect-[16/10] overflow-hidden rounded-sm border border-ink-600">
-                <img src={DESKTOP_LIFESTYLE} alt="lifestyle section" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                {show(DESKTOP_LIFESTYLE) && (
+                  <img src={DESKTOP_LIFESTYLE} alt="lifestyle section" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                )}
               </span>
               <span className="relative block aspect-[16/10] overflow-hidden rounded-sm border border-ink-600">
-                <img src={DESKTOP_DETAIL} alt="detail section" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                {show(DESKTOP_DETAIL) && (
+                  <img src={DESKTOP_DETAIL} alt="detail section" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                )}
               </span>
             </div>
           </div>
@@ -112,7 +121,9 @@ export default function EcomConcept() {
                 <span className="h-1.5 w-3 rounded-full bg-ink-700" />
               </div>
               <div className="relative aspect-[4/5] overflow-hidden border-y border-ink-700">
-                <img src={MOBILE_HERO} alt="concept mobile product image" loading="lazy" className="media-asset absolute inset-0 h-full w-full object-cover" />
+                {show(MOBILE_HERO) && (
+                  <img src={MOBILE_HERO} alt="concept mobile product image" loading="lazy" className="media-asset absolute inset-0 h-full w-full object-cover" />
+                )}
               </div>
               <div className="space-y-2 p-3">
                 <Bar w="w-3/4" />
@@ -120,7 +131,7 @@ export default function EcomConcept() {
                 <span className="block h-4 w-16 rounded-sm bg-ink-700" />
                 <span className="block h-7 w-full rounded-sm bg-paper/80" />
                 <div className="flex gap-1.5 pt-1">
-                  {[THUMB_1, THUMB_2, THUMB_3].map((th) => (
+                  {[THUMB_1, THUMB_2, THUMB_3].filter(show).map((th) => (
                     <span key={th} className="relative block h-9 w-9 overflow-hidden rounded-sm border border-ink-700">
                       <img src={th} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
                     </span>

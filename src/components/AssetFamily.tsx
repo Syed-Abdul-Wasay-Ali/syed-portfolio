@@ -1,5 +1,5 @@
 import Reveal from './Reveal'
-import { useT } from '../data/runtime'
+import { useRuntime, useT } from '../data/runtime'
 
 // "One product, multiple production-ready assets" — one system, seven
 // deliverables, shown at their real aspect ratios so the format thinking is
@@ -16,6 +16,9 @@ const ASSETS = [
 
 export default function AssetFamily() {
   const t = useT()
+  const { content } = useRuntime()
+  const removed = new Set(content?.removedMedia ?? [])
+  const assets = ASSETS.map((a, i) => ({ a, i })).filter(({ a }) => !removed.has(a.src))
   return (
     <section className="border-b border-ink-600 py-9 sm:py-12">
       <div className="container-site">
@@ -36,7 +39,7 @@ export default function AssetFamily() {
         <p className="mt-3 max-w-2xl text-muted">{t('assets.sub')}</p>
 
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-6">
-          {ASSETS.map((a, i) => (
+          {assets.map(({ a, i }) => (
             <Reveal key={a.label} delay={i * 60} className={`${a.cls} !h-auto`}>
               <figure className="group h-full">
                 <div className={`relative w-full overflow-hidden rounded-sm border border-ink-600 ${a.cls.split(' ')[0]}`}>

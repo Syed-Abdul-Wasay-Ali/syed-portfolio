@@ -14,13 +14,16 @@ export default function BeforeAfter({
   after: MediaItem
   annotations?: string[]
 }) {
+  const rows = [
+    { tag: 'before', item: before, accent: 'text-muted' },
+    { tag: 'after', item: after, accent: 'text-greenBright' },
+  ].filter((r) => r.item.src)
+  if (rows.length === 0) return null
+
   return (
     <div>
       <div className="grid gap-4 sm:grid-cols-2">
-        {[
-          { tag: 'before', item: before, accent: 'text-muted' },
-          { tag: 'after', item: after, accent: 'text-greenBright' },
-        ].map(({ tag, item, accent }, i) => (
+        {rows.map(({ tag, item, accent }, i) => (
           <Reveal key={tag} delay={i * 100}>
             <figure className="panel overflow-hidden">
               <div className="relative aspect-[4/3] overflow-hidden border-b border-ink-600">

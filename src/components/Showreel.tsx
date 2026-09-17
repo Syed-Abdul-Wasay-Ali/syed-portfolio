@@ -1,11 +1,16 @@
 import { useEffect, useRef } from 'react'
-import { useT } from '../data/runtime'
+import { useRuntime, useT } from '../data/runtime'
 
 // Sound-off showreel cut (2026): concept films + selected client work.
 // Plays only while in view so it does not burn cycles off-screen.
+const VIDEO_SRC = 'media/reel/showreel-2026.mp4'
+const POSTER_SRC = 'media/reel/showreel-2026-poster.jpg'
+
 export default function Showreel() {
   const ref = useRef<HTMLVideoElement | null>(null)
   const t = useT()
+  const { content } = useRuntime()
+  const removed = new Set(content?.removedMedia ?? [])
 
   useEffect(() => {
     const el = ref.current
@@ -25,14 +30,16 @@ export default function Showreel() {
     return () => io.disconnect()
   }, [])
 
+  if (removed.has(VIDEO_SRC)) return null
+
   return (
     <figure className="mt-7">
       <div className="panel overflow-hidden">
         <video
           ref={ref}
           className="aspect-video w-full bg-black"
-          src="media/reel/showreel-2026.mp4"
-          poster="media/reel/showreel-2026-poster.jpg"
+          src={VIDEO_SRC}
+          poster={removed.has(POSTER_SRC) ? undefined : POSTER_SRC}
           muted
           loop
           playsInline
