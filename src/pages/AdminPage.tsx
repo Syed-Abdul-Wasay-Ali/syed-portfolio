@@ -4,7 +4,9 @@
 //   words     : every editable string on the site (registry groups + each case
 //               study + each brand + showcase/workflow items)
 //   pictures  : every picture/video slot — replace, delete/restore, add;
-//               the deleted area lists removed items + a restorable trash
+//               deleted area lists removed items + a restorable trash; every
+//               slot previews exactly like the portfolio (video plays in
+//               place, youtube/instagram posts embed, images show uncropped)
 //   sections  : show/hide + reorder sections on home / brand / case-study pages
 //   concept   : the concept-images gallery manager (upload, caption, reorder)
 //
@@ -16,6 +18,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { BRANDS, type Brand } from '../data/brands'
 import { projects, type MediaItem, type Project } from '../data/projects'
+import MediaPanel from '../components/MediaPanel'
 import { SHOWCASE } from '../data/showcase'
 import { WORKFLOWS } from '../data/workflows'
 import {
@@ -86,6 +89,38 @@ function Notice({ msg, err }: { msg: string; err: string }) {
 
 const isVideoSrc = (src: string) => /\.(mp4|webm|mov|mkv|m4v)$/i.test(src)
 
+// preview — renders a slot exactly the way the portfolio does: full image,
+// playable video, or an embedded youtube / instagram post. Used everywhere an
+// item can be edited or deleted, so you see the real thing before you touch it.
+function MediaPreview({ item }: { item: MediaItem }) {
+  const src = item.src
+  if (!src) {
+    return (
+      <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 font-mono text-[10px] text-muted">
+        no file
+      </div>
+    )
+  }
+  if (/\.pdf$/i.test(src)) {
+    return (
+      <a
+        href={src}
+        target="_blank"
+        rel="noreferrer"
+        className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 font-mono text-[10px] text-muted hover:text-paper"
+      >
+        📄 open pdf
+      </a>
+    )
+  }
+  const withKind: MediaItem = item.kind ? item : { ...item, kind: isVideoSrc(src) ? 'video' : 'image' }
+  return (
+    <div className="overflow-hidden rounded-sm bg-ink-950">
+      <MediaPanel item={withKind} />
+    </div>
+  )
+}
+
 // ---------------------------------------------------------------------------
 // pictures: one slot card (replace / hide-restore handler)
 // ---------------------------------------------------------------------------
@@ -100,6 +135,7 @@ function SlotCard({
   onRestore,
   hideLabel = 'delete',
   extra,
+  media,
 }: {
   label: string
   src?: string
@@ -111,22 +147,11 @@ function SlotCard({
   onRestore?: () => void
   hideLabel?: string
   extra?: React.ReactNode
+  media?: MediaItem
 }) {
   return (
     <div className="rounded-md border border-ink-600 bg-ink-900 p-2">
-      {src && !isVideoSrc(src) && (
-        <img src={src} alt={label} loading="lazy" className="aspect-video w-full rounded-sm bg-ink-950 object-cover" />
-      )}
-      {src && isVideoSrc(src) && (
-        <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 text-lg text-muted">
-          ▶ video
-        </div>
-      )}
-      {!src && (
-        <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 font-mono text-[10px] text-muted">
-          no file
-        </div>
-      )}
+      <MediaPreview item={media ?? { src, label, kind: isVideoSrc(src ?? '') ? 'video' : 'image' }} />
       <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{label}</p>
       {sub && <p className="line-clamp-1 font-mono text-[9px] text-muted">{sub}</p>}
       <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
@@ -707,6 +732,7 @@ function PicturesTab() {
                         label={m.label ?? `result ${i + 1}`}
                         src={src}
                         sub={src}
+                        media={m.src ? m : undefined}
                         removed={rem}
                         busy={busy}
                         onReplace={src ? replace(src) : undefined}
@@ -735,7 +761,7 @@ function PicturesTab() {
                   <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
                     {(project.stages ?? []).map((m, i) =>
                       m.src ? (
-                        <SlotCard key={m.src + i} label={m.label ?? `stage ${i + 1}`} src={m.src} sub={m.src} busy={busy} onReplace={replace(m.src)} />
+                        <SlotCard key={m.src + i} label={m.label ?? `stage ${i + 1}`} src={m.src} sub={m.src} media={m} busy={busy} onReplace={replace(m.src)} />
                       ) : null,
                     )}
                   </div>
@@ -748,7 +774,7 @@ function PicturesTab() {
                   <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
                     {[project.beforeAfter.before, project.beforeAfter.after].map((m, i) =>
                       m.src ? (
-                        <SlotCard key={m.src + i} label={i === 0 ? 'before' : 'after'} src={m.src} sub={m.src} busy={busy} onReplace={replace(m.src)} />
+                        <SlotCard key={m.src + i} label={i === 0 ? 'before' : 'after'} src={m.src} sub={m.src} media={m} busy={busy} onReplace={replace(m.src)} />
                       ) : null,
                     )}
                   </div>
@@ -824,6 +850,7 @@ function PicturesTab() {
                   label={m.label ?? m.src ?? ''}
                   src={m.src}
                   sub={m.src}
+                  media={m.src ? m : undefined}
                   busy={busy}
                   onReplace={m.src ? replace(m.src) : undefined}
                   onHide={() =>
@@ -844,6 +871,7 @@ function PicturesTab() {
                     label={m.label ?? src}
                     src={src}
                     sub={src}
+                    media={m.src ? m : undefined}
                     removed={rem}
                     busy={busy}
                     onReplace={src ? replace(src) : undefined}
@@ -891,6 +919,7 @@ function PicturesTab() {
                     label={`${s.id} — ${s.title}`}
                     src={s.poster ?? s.src}
                     sub={s.src}
+                    media={s.src ? s : undefined}
                     removed={rem}
                     busy={busy}
                     onReplace={s.src ? replace(s.src) : undefined}
@@ -945,6 +974,7 @@ function PicturesTab() {
                     label={`${w.id} — ${w.title}`}
                     src={w.poster ?? w.src}
                     sub={w.src}
+                    media={w.src ? w : undefined}
                     removed={rem}
                     busy={busy}
                     onReplace={w.src ? replace(w.src) : undefined}
@@ -1016,12 +1046,7 @@ function AddedCard({
   useEffect(() => setLabel(item.label ?? ''), [item.label])
   return (
     <div className="rounded-md border border-green/30 bg-ink-900 p-2">
-      {item.src && !isVideoSrc(item.src) && (
-        <img src={item.src} alt={label} loading="lazy" className="aspect-video w-full rounded-sm bg-ink-950 object-cover" />
-      )}
-      {item.src && isVideoSrc(item.src) && (
-        <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 text-lg text-muted">▶ video</div>
-      )}
+      <MediaPreview item={item} />
       <input className={`${inputCls} mt-1.5 !py-1 !text-[11px]`} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="caption" />
       <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
         <button className={smallBtn} disabled={busy} onClick={() => onRename(label)}>
@@ -1190,21 +1215,9 @@ function DeletedArea() {
         <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
           {(items ?? []).map((it) => (
             <div key={it.id} className="rounded-md border border-ink-600 bg-ink-900 p-2">
-              {it.kind === 'video' ? (
-                <video
-                  src={`/__trash/${it.id}`}
-                  controls
-                  preload="metadata"
-                  className="aspect-video w-full rounded-sm bg-ink-950 object-cover"
-                />
-              ) : (
-                <img
-                  src={`/__trash/${it.id}`}
-                  alt={it.name}
-                  loading="lazy"
-                  className="aspect-video w-full rounded-sm bg-ink-950 object-cover"
-                />
-              )}
+              <MediaPreview
+                item={{ src: `/__trash/${it.id}`, kind: it.kind === 'video' ? 'video' : undefined, label: it.name }}
+              />
               <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{it.name}</p>
               <p className="line-clamp-1 font-mono text-[9px] text-muted">
                 {metaText(it)} · {fmtSize(it.size)} · {fmtDate(it.at)}
@@ -1241,18 +1254,7 @@ function DeletedArea() {
         <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
           {hiddenMedia.map((src) => (
             <div key={src} className="rounded-md border border-ink-600 bg-ink-900 p-2">
-              {isVideoSrc(src) ? (
-                <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 text-lg text-muted">
-                  ▶ video
-                </div>
-              ) : (
-                <img
-                  src={src}
-                  alt={src}
-                  loading="lazy"
-                  className="aspect-video w-full rounded-sm bg-ink-950 object-cover"
-                />
-              )}
+              <MediaPreview item={{ src, label: src }} />
               <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{src}</p>
               <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
                 <button type="button" disabled={busy} className={smallBtn} onClick={() => showAgainMedia(src)}>
@@ -1263,17 +1265,8 @@ function DeletedArea() {
           ))}
           {hiddenBrand.map((h) => (
             <div key={`${h.brand}-${h.section}-${h.id}`} className="rounded-md border border-ink-600 bg-ink-900 p-2">
-              {isVideoSrc(h.id) ? (
-                <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 text-lg text-muted">
-                  ▶ video
-                </div>
-              ) : h.id.startsWith('media/') ? (
-                <img
-                  src={h.id}
-                  alt={h.id}
-                  loading="lazy"
-                  className="aspect-video w-full rounded-sm bg-ink-950 object-cover"
-                />
+              {isVideoSrc(h.id) || h.id.startsWith('media/') || /youtu\.be|youtube\.com|instagram\.com/.test(h.id) ? (
+                <MediaPreview item={{ src: h.id, label: h.id }} />
               ) : (
                 <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 px-2 text-center font-mono text-[10px] text-muted">
                   {h.id}
@@ -1628,7 +1621,7 @@ function ConceptTab() {
         <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {cItems.map((m, idx) => (
             <div key={m.id} className="rounded-sm border border-ink-600 p-2">
-              <img src={m.src} alt={m.caption || ''} loading="lazy" className="aspect-video w-full rounded-sm object-cover" />
+              <MediaPreview item={{ src: m.src, label: m.caption || '', kind: m.kind }} />
               <input
                 value={cDrafts[m.id] ?? m.caption ?? ''}
                 onChange={(e) => setCDrafts({ ...cDrafts, [m.id]: e.target.value })}
