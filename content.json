@@ -80,8 +80,9 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789659300162,
+  "stamp": 1789660798771,
   "removedProjects": [
-    "commercial-creative-system"
+    "commercial-creative-system",
+    "mattress-hero-studio"
   ]
 }
