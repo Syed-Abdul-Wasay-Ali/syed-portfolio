@@ -2,12 +2,13 @@ import { useEffect, useRef } from 'react'
 import NodeGraph from './NodeGraph'
 import LinkedInIcon from './LinkedInIcon'
 import { LINKEDIN_URL, EMAIL, RESUME_URL } from '../data/social'
-import { projectsByDate } from '../data/projects'
+import { useProjectsKept } from '../data/overrides'
 import { useT } from '../data/runtime'
 
 export default function Hero() {
   const titleRef = useRef<HTMLDivElement | null>(null)
   const t = useT()
+  const kept = useProjectsKept()
 
   // scroll push-in: the name scales toward the camera as you scroll (title-card move)
   useEffect(() => {
@@ -35,10 +36,10 @@ export default function Hero() {
     [t('hero.stat2.v'), t('hero.stat2.l')],
     [t('hero.stat3.v'), t('hero.stat3.l')],
     [
-      t('hero.stat4.v') || String(projectsByDate.filter((p) => p.company !== 'Concept').length),
+      t('hero.stat4.v') || String(kept.filter((p) => p.company !== 'Concept').length),
       t('hero.stat4.l'),
     ],
-    [t('hero.stat5.v') || String(projectsByDate.length), t('hero.stat5.l')],
+    [t('hero.stat5.v') || String(kept.length), t('hero.stat5.l')],
     [t('hero.stat6.v'), t('hero.stat6.l')],
   ]
 

@@ -10,6 +10,8 @@
 //   POST /api/remove               { brand, section, src | label }
 //   POST /api/sections             { brand, hidden: [sectionName] }
 //   POST /api/page                 { hidden: [siteSection] }
+//   POST /api/project/remove       { slug, restore? } — take a whole case study
+//                                  off the site / put it back (data kept)
 //   GET  /api/trash                deleted-media trash (restorable files)
 //   POST /api/trash/restore|purge  { id } | purge { all: true }
 //   GET  /api/publish/status       save & publish progress (for the UI)
@@ -529,6 +531,20 @@ const onApi = async (req, res) => {
       if (body.restore) set.delete(src)
       else set.add(src)
       content.removedMedia = [...set]
+      await writeContent(content)
+      return json(res, 200, { ok: true, content })
+    }
+
+    // project/remove — take a WHOLE case study off the site (its home card,
+    // its page, brand listings). { restore: true } puts it back. Data is kept:
+    // this only writes an overlay list, projects.ts is never touched.
+    if (url.pathname === '/api/project/remove') {
+      const ps = safeSlug(body.slug)
+      if (!ps) return json(res, 400, { error: 'slug is required' })
+      const set = new Set(Array.isArray(content.removedProjects) ? content.removedProjects : [])
+      if (body.restore) set.delete(ps)
+      else set.add(ps)
+      content.removedProjects = [...set]
       await writeContent(content)
       return json(res, 200, { ok: true, content })
     }

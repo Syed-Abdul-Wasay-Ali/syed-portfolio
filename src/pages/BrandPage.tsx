@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
-import { useBrandOV, ovBrand, ovBrandItems, ovProject } from '../data/overrides'
+import { useBrandOV, ovBrand, ovBrandItems, ovProject, projectsKept } from '../data/overrides'
 import { getProject, type Project, type MediaItem } from '../data/projects'
 import { contentBrands, type Brand } from '../data/brands'
 import { useRuntime, useT, type SectionName } from '../data/runtime'
@@ -293,9 +293,10 @@ export default function BrandPage({ slug }: { slug: string }) {
   // older projects go down). NUMBERING is by addition order: the slug list
   // order is the project's fixed number (project 1, 2, ...) and never changes
   // when the display order flips.
+  const keptSlugs = new Set(projectsKept(content).map((p) => p.slug))
   const rawBrandProjects = (brand.projects ?? [])
     .map((s) => getProject(s))
-    .filter((p): p is Project => Boolean(p))
+    .filter((p): p is Project => Boolean(p) && keptSlugs.has(p!.slug))
   const brandProjects = [...rawBrandProjects].reverse().map((p) => ovProject(content, p))
   const projectNumber = (slug: string) => brand.projects!.indexOf(slug) + 1
   const hasProjects = brandProjects.length > 0

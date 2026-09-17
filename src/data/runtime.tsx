@@ -13,6 +13,8 @@
 //                     arrays for list fields). t()/tx() resolve override → fallback
 //                     → registry default (src/data/text.ts)
 //   removedMedia    : media srcs hidden everywhere they render (any page)
+//   removedProjects : whole case studies hidden everywhere (home grid, their
+//                     page, brand listings) — overlay only, projects.ts intact
 //   additions       : media added through the admin, per collection key
 //                     ("project:<slug>:results", "showcase", "workflows")
 //   sectionOrder    : visible sections + their order per page ("home" | "brand" | "project")
@@ -44,6 +46,7 @@ export interface RunContent {
   // ---- full content layer (admin v2) ----
   texts?: Record<string, TextVal>
   removedMedia?: string[]
+  removedProjects?: string[]
   additions?: Record<string, MediaItem[]>
   sectionOrder?: SectionOrder
   stamp?: number

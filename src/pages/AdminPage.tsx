@@ -4,9 +4,10 @@
 //   words     : every editable string on the site (registry groups + each case
 //               study + each brand + showcase/workflow items)
 //   pictures  : every picture/video slot — replace, delete/restore, add;
-//               deleted area lists removed items + a restorable trash; every
-//               slot previews exactly like the portfolio (video plays in
-//               place, youtube/instagram posts embed, images show uncropped)
+//               whole case studies can be removed/restored too; deleted area
+//               lists removed items + a restorable trash; every slot previews
+//               exactly like the portfolio (video plays in place,
+//               youtube/instagram posts embed, images show uncropped)
 //   sections  : show/hide + reorder sections on home / brand / case-study pages
 //   concept   : the concept-images gallery manager (upload, caption, reorder)
 //
@@ -33,7 +34,13 @@ import {
   collKey,
   type TextField,
 } from '../data/text'
-import { useRuntime, type ConceptImage, type SectionName, type TextVal } from '../data/runtime'
+import {
+  useRuntime,
+  type ConceptImage,
+  type RunContent,
+  type SectionName,
+  type TextVal,
+} from '../data/runtime'
 
 const ADMIN_PASS = 'Wasay710#' // change me
 const SESSION_KEY = 'portfolio-admin-unlocked'
@@ -53,6 +60,25 @@ async function api(path: string, body: unknown) {
   if (!r.ok) throw new Error((j as { error?: string }).error || `HTTP ${r.status}`)
   return j as { ok?: boolean; saved?: MediaItem[]; added?: MediaItem[]; content?: unknown }
 }
+
+// whole-case-study removal — canonical route, with a fallback for server
+// builds started before /api/project/remove existed (same effect via the
+// media store, id prefixed "project:").
+async function apiProjectRemove(slug: string, restore: boolean) {
+  try {
+    return await api('/api/project/remove', { slug, restore })
+  } catch {
+    return await api('/api/media/remove', { src: `project:${slug}`, restore })
+  }
+}
+
+// case studies removed from the site — canonical list + fallback store
+const projRemovedFrom = (content: RunContent | null): string[] => [
+  ...(content?.removedProjects ?? []),
+  ...(content?.removedMedia ?? [])
+    .filter((s) => s.startsWith('project:'))
+    .map((s) => s.slice(8)),
+]
 
 const fileToBase64 = (f: File) =>
   new Promise<string>((resolve, reject) => {
@@ -614,6 +640,7 @@ function PicturesTab() {
     })
 
   const removedSet = new Set(content?.removedMedia ?? [])
+  const removedProjects = new Set(projRemovedFrom(content))
   const hide = (src: string) => void notice(async () => {
     await api('/api/media/remove', { src })
     return 'removed from site — restore it any time from the deleted area'
@@ -621,6 +648,14 @@ function PicturesTab() {
   const restore = (src: string) => void notice(async () => {
     await api('/api/media/remove', { src, restore: true })
     return 'restored'
+  })
+  const removeProject = (slug: string) => void notice(async () => {
+    await apiProjectRemove(slug, false)
+    return 'case study removed from the site — restore it any time from the deleted tab'
+  })
+  const restoreProject = (slug: string) => void notice(async () => {
+    await apiProjectRemove(slug, true)
+    return 'case study restored'
   })
 
   const addFiles = (collection: string, label: string) => (files: File[]) =>
@@ -715,13 +750,67 @@ function PicturesTab() {
             <select className={`${selectCls} mt-1.5`} value={projSlug} onChange={(e) => setProjSlug(e.target.value)}>
               {projects.map((p) => (
                 <option key={p.slug} value={p.slug}>
-                  {p.title.slice(0, 70)}
+                  {p.title.slice(0, 70)}{removedProjects.has(p.slug) ? ' — removed' : ''}
                 </option>
               ))}
             </select>
           </label>
+
+          <div className="rounded-md border border-ink-600 bg-ink-900 p-3">
+            <p className="eyebrow-green">delete a full case study — {removedProjects.size} removed</p>
+            <p className="mt-1 text-[12px] text-muted">
+              Takes the whole study off the site — its card, its page and every section. Nothing is
+              lost: “↺ restore” puts it back, and removed studies are also listed in the deleted tab.
+            </p>
+            <div className="mt-2 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
+              {projects.map((p) => {
+                const rem = removedProjects.has(p.slug)
+                return (
+                  <div
+                    key={p.slug}
+                    className={`flex items-center justify-between gap-2 rounded-sm border px-2 py-1 ${
+                      rem ? 'border-red-400/50' : 'border-ink-600'
+                    }`}
+                  >
+                    <span
+                      title={p.title}
+                      className={`min-w-0 truncate font-mono text-[10px] ${
+                        rem ? 'text-red-400' : 'text-paper/80'
+                      }`}
+                    >
+                      {p.title}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={busy}
+                      className={`flex-none ${rem ? smallBtn : `${smallBtn} !text-red-400 hover:!border-red-400`}`}
+                      onClick={() => (rem ? restoreProject(p.slug) : removeProject(p.slug))}
+                    >
+                      {rem ? '↺ restore' : '✕ delete'}
+                    </button>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
           {project && (
             <>
+              {removedProjects.has(project.slug) && (
+                <div className="flex flex-wrap items-center gap-2 rounded-md border border-red-400/40 bg-red-400/5 p-3">
+                  <p className="font-mono text-[11px] uppercase tracking-wideish text-red-400">
+                    this case study is removed from the site
+                  </p>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    className={smallBtn}
+                    onClick={() => restoreProject(project.slug)}
+                  >
+                    ↺ restore to site
+                  </button>
+                </div>
+              )}
               <div>
                 <p className="eyebrow-green">cover & hero</p>
                 <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -1263,6 +1352,10 @@ function DeletedArea() {
       await api('/api/remove', { brand, section, src: id, restore: true })
       await api('/api/media/remove', { src: id, restore: true })
     }, 'back on the site')
+  const showAgainProject = (slug: string) =>
+    void act(async () => {
+      await apiProjectRemove(slug, true)
+    }, 'case study restored — it is back on the site')
 
   const fmtSize = (n: number) =>
     n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : n > 1024 ? Math.round(n / 1024) + ' KB' : n + ' B'
@@ -1275,10 +1368,11 @@ function DeletedArea() {
     return 'media file'
   }
 
-  const hiddenMedia = content?.removedMedia ?? []
+  const hiddenMedia = (content?.removedMedia ?? []).filter((s) => !s.startsWith('project:'))
   const hiddenBrand = Object.entries(content?.removedItems ?? {}).flatMap(([brand, secs]) =>
     Object.entries(secs ?? {}).flatMap(([section, ids]) => (ids ?? []).map((id) => ({ brand, section, id }))),
   )
+  const hiddenProjects = projRemovedFrom(content)
   const hiddenCount = hiddenMedia.length + hiddenBrand.length
 
   return (
@@ -1332,6 +1426,36 @@ function DeletedArea() {
           ))}
           {items !== null && items.length === 0 && (
             <p className="col-span-full font-mono text-[11px] text-muted">trash is empty.</p>
+          )}
+        </div>
+      </div>
+
+      <div>
+        <p className="eyebrow-green">removed case studies — {hiddenProjects.length}</p>
+        <p className="mt-2 text-[12px] text-muted">
+          Whole case studies taken off the site — their card, page and every section. “show again”
+          puts them back.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+          {hiddenProjects.map((slug) => {
+            const p = projects.find((x) => x.slug === slug)
+            return (
+              <div key={slug} className="rounded-md border border-ink-600 bg-ink-900 p-2">
+                <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 px-2 text-center font-mono text-[10px] uppercase tracking-wideish text-muted">
+                  case study · removed
+                </div>
+                <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{p?.title ?? slug}</p>
+                <p className="line-clamp-1 font-mono text-[9px] text-muted">{slug}</p>
+                <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                  <button type="button" disabled={busy} className={smallBtn} onClick={() => showAgainProject(slug)}>
+                    ↺ show again
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+          {hiddenProjects.length === 0 && (
+            <p className="col-span-full font-mono text-[11px] text-muted">no case studies removed.</p>
           )}
         </div>
       </div>

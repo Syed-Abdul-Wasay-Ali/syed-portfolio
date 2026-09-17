@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
-import { projects } from '../data/projects'
-import { useProjectOV, ovProject } from '../data/overrides'
+import { useProjectOV, ovProject, projectsKept } from '../data/overrides'
 import { useRuntime, useT } from '../data/runtime'
 import SpecStrip from '../components/SpecStrip'
 import MediaPanel from '../components/MediaPanel'
@@ -63,7 +62,8 @@ export default function ProjectPage({ slug }: { slug: string }) {
     ? { kind: 'image', src: project.heroSrc, label: `${project.title} — final frame` }
     : project.results.find((m) => m.kind === 'video') ?? allMedia[0]
 
-  const nextRaw = projects[(projects.findIndex((p) => p.slug === slug) + 1) % projects.length]
+  const kept = projectsKept(content)
+  const nextRaw = kept.length ? kept[(kept.findIndex((p) => p.slug === slug) + 1) % kept.length] : project
   const nextProject = ovProject(content, nextRaw)
 
   // ---- story sections (orderable from the admin) --------------------------

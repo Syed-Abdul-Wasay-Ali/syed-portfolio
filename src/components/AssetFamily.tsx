@@ -18,7 +18,10 @@ export default function AssetFamily() {
   const t = useT()
   const { content } = useRuntime()
   const removed = new Set(content?.removedMedia ?? [])
+  const ccsRemoved = new Set(content?.removedProjects ?? []).has('commercial-creative-system')
   const assets = ASSETS.map((a, i) => ({ a, i })).filter(({ a }) => !removed.has(a.src))
+  // nothing left to show → the section disappears instead of rendering empty
+  if (assets.length === 0) return null
   return (
     <section className="border-b border-ink-600 py-9 sm:py-12">
       <div className="container-site">
@@ -29,12 +32,14 @@ export default function AssetFamily() {
               {t('assets.title')}
             </h2>
           </div>
-          <a
-            href="#/project/commercial-creative-system"
-            className="font-mono text-[11px] uppercase tracking-wideish text-greenBright underline-offset-4 hover:underline"
-          >
-            {t('assets.link')}
-          </a>
+          {!ccsRemoved && (
+            <a
+              href="#/project/commercial-creative-system"
+              className="font-mono text-[11px] uppercase tracking-wideish text-greenBright underline-offset-4 hover:underline"
+            >
+              {t('assets.link')}
+            </a>
+          )}
         </div>
         <p className="mt-3 max-w-2xl text-muted">{t('assets.sub')}</p>
 

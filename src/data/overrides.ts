@@ -240,17 +240,44 @@ export function ovWorkflows(content: RunContent | null, items: WorkflowItem[]): 
 }
 
 // ---------------------------------------------------------------------------
+// Case-study level removal — whole projects taken off the site (overlay only:
+// projects.ts keeps every entry, so nothing is ever lost and any study can
+// come back with one click). Two stores are honoured so the panel works on
+// every server build: content.removedProjects (canonical) and removedMedia
+// entries prefixed "project:" (fallback used by servers without the route).
+// ---------------------------------------------------------------------------
+export function projectsKept(content: RunContent | null): Project[] {
+  const removed = new Set([
+    ...(content?.removedProjects ?? []),
+    ...(content?.removedMedia ?? [])
+      .filter((s) => s.startsWith('project:'))
+      .map((s) => s.slice(8)),
+  ])
+  return projectsByDate.filter((p) => !removed.has(p.slug))
+}
+
+export function isProjectRemoved(content: RunContent | null, slug: string): boolean {
+  return !projectsKept(content).some((p) => p.slug === slug)
+}
+
+// ---------------------------------------------------------------------------
 // Hooks
 // ---------------------------------------------------------------------------
 export function useProjectOV(slug: string): Project | undefined {
   const { content } = useRuntime()
+  if (isProjectRemoved(content, slug)) return undefined
   const p = getProject(slug)
   return p ? ovProject(content, p) : undefined
 }
 
 export function useProjectsOV(): Project[] {
   const { content } = useRuntime()
-  return projectsByDate.map((p) => ovProject(content, p))
+  return projectsKept(content).map((p) => ovProject(content, p))
+}
+
+export function useProjectsKept(): Project[] {
+  const { content } = useRuntime()
+  return projectsKept(content)
 }
 
 export function useBrandOV(slug: string): Brand | undefined {

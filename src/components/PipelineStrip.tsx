@@ -19,6 +19,8 @@ export default function PipelineStrip() {
   const { content } = useRuntime()
   const removed = new Set(content?.removedMedia ?? [])
   const stages = STAGES.map((s, i) => ({ s, i })).filter(({ s }) => !removed.has(s.src))
+  // every stage deleted → the strip disappears instead of rendering empty
+  if (stages.length === 0) return null
   return (
     <section className="border-b border-ink-600 py-7 sm:py-9">
       <div className="container-site">
