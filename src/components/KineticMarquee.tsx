@@ -57,7 +57,7 @@ export default function KineticMarquee({
                   href={to}
                   tabIndex={decorative ? -1 : undefined}
                   title={label}
-                  className="mx-2 block shrink-0 bg-white px-3 py-1.5 transition-transform duration-200 hover:scale-105"
+                  className="mx-2 block shrink-0 bg-paper px-3 py-1.5 transition-transform duration-200 hover:scale-105"
                 >
                   <img
                     src={chip}
@@ -68,7 +68,7 @@ export default function KineticMarquee({
                   />
                 </a>
               ) : (
-                <span title={label} className="mx-2 block shrink-0 bg-white px-3 py-1.5">
+                <span title={label} className="mx-2 block shrink-0 bg-paper px-3 py-1.5">
                   <img
                     src={chip}
                     alt={label}

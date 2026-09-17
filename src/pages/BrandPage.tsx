@@ -78,7 +78,7 @@ function BrandSkin({ brand }: { brand: Brand }) {
   .brand-page .text-muted, .brand-page .text-snow\\/60, .brand-page .text-snow\\/40 { color: ${muted}; }
   .brand-page .border-ink-600, .brand-page .border-ink-500 { border-color: ${line}; }
   .brand-page .bg-mist, .brand-page .bg-ink-950 { background-color: ${panel}; }
-  .brand-page .text-green { color: ${c}; }
+  .brand-page .text-green, .brand-page .text-greenReadable { color: ${c}; }
   .brand-page .border-green { border-color: ${c}; }
   .brand-page svg path[fill="#1F3A93"], svg path[fill="#94A8EE"] { fill: ${c}; }
   .brand-page .gallery-label { color: ${muted}; }
@@ -171,7 +171,7 @@ function BrandProjectCard({
             </div>
           )}
           {project.status && (
-            <span className="absolute left-2 top-2 bg-ink-950/90 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish text-greenBright">
+            <span className="absolute left-2 top-2 bg-ink-950/90 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
               {project.status}
             </span>
           )}
@@ -180,7 +180,7 @@ function BrandProjectCard({
           <p className="brand-overline font-mono text-[11px] uppercase tracking-wideish">
             project {String(index + 1).padStart(2, '0')}
           </p>
-          <h3 className="mt-1.5 font-display text-xl font-bold leading-snug text-snow group-hover:text-greenBright">
+          <h3 className="mt-1.5 font-display text-xl font-bold leading-snug text-snow group-hover:text-greenReadable">
             {project.title}
           </h3>
           <p className="mt-1 font-mono text-[11px] uppercase tracking-wideish text-muted">
@@ -196,7 +196,7 @@ function BrandProjectCard({
             {project.workflow.map((w, i) => (
               <span
                 key={`${w.label}-${i}`}
-                className="brand-chip border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish"
+                className="brand-chip border px-2 py-0.5 font-mono text-[11px] uppercase tracking-wideish"
               >
                 {w.label}
               </span>
@@ -235,7 +235,7 @@ function BrandProjectCard({
                 />
               )
             )}
-            <span className="font-mono text-[10px] uppercase tracking-wideish text-muted">
+            <span className="font-mono text-[11px] uppercase tracking-wideish text-muted">
               {project.results.length} {project.results.length === 1 ? 'output' : 'outputs'}
             </span>
             <span className="brand-link-arrow ml-auto font-display text-xl">→</span>
@@ -409,7 +409,7 @@ export default function BrandPage({ slug }: { slug: string }) {
               />
             </div>
             <div>
-              <span className="brand-chip border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wideish">
+              <span className="brand-chip border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish">
                 {brand.name}
               </span>
               <h1 className="mt-3 font-display text-3xl font-black uppercase leading-tight tracking-tight sm:text-5xl">

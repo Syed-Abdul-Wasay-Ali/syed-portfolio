@@ -48,7 +48,7 @@ export default function BrandTile({
         {monogram}
       </span>
       {size === 'lg' && (
-        <span className="absolute bottom-2 right-3 font-mono text-[10px] uppercase tracking-wideish text-muted">
+        <span className="absolute bottom-2 right-3 font-mono text-[11px] uppercase tracking-wideish text-muted">
           logo: pending
         </span>
       )}

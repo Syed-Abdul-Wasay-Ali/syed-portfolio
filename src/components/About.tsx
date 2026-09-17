@@ -129,7 +129,7 @@ export default function About() {
                 <ul className="mt-2.5 space-y-1">
                   {tl(`about.t${i + 1}.bullets`, item.bullets).map((b) => (
                     <li key={b} className="flex gap-2.5 text-[13px] leading-snug text-paper/80">
-                      <span className="shrink-0 text-green">→</span>
+                      <span className="shrink-0 text-greenReadable">→</span>
                       <span>{b}</span>
                     </li>
                   ))}
@@ -150,7 +150,7 @@ export default function About() {
                 href={linkedinUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-greenBright hover:text-greenBright"
+                className="inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
               >
                 <LinkedInIcon className="h-4 w-4" />
                 {t('about.cur.linkedin')}
@@ -159,7 +159,7 @@ export default function About() {
                 href={githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-greenBright hover:text-greenBright"
+                className="inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
               >
                 <GitHubIcon className="h-4 w-4" />
                 {t('about.cur.github')}

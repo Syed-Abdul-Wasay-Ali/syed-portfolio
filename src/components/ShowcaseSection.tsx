@@ -66,18 +66,18 @@ export default function ShowcaseSection() {
             <Reveal key={item.id} delay={(i % 4) * 70}>
               <button
                 onClick={() => setLightbox(i)}
-                className="tilt-3d panel disc-hover group block w-full text-left hover:border-green"
+                className="tilt-3d panel disc-hover group block w-full text-left hover:border-greenBright"
                 data-tilt
                 data-tilt-max="8"
               >
                 <div className="relative border-b border-ink-600">
                   <MediaPanel item={item} className="aspect-[4/3] !object-cover" />
-                  <span className="absolute left-3 top-3 bg-ink-950/90 px-2 py-1 font-mono text-[10px] uppercase tracking-wideish text-greenBright">
+                  <span className="absolute left-3 top-3 bg-ink-950/90 px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
                     {item.tag === 'concept-ad' ? 'concept ad' : 'image'}
                   </span>
                 </div>
                 <div className="p-3.5">
-                  <h3 className="font-display text-base text-paper transition-colors group-hover:text-green">
+                  <h3 className="font-display text-base text-paper transition-colors group-hover:text-greenReadable">
                     {item.title}
                   </h3>
                   {item.note && (

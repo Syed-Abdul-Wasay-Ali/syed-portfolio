@@ -49,13 +49,10 @@ export default function ConceptImagesSection() {
               >
                 <div className="relative">
                   <MediaPanel item={item} className="aspect-[4/3] !object-cover" />
-                  <span className="absolute left-3 top-3 bg-ink-950/90 px-2 py-1 font-mono text-[10px] uppercase tracking-wideish text-greenBright">
-                    image
-                  </span>
                 </div>
                 {item.title && (
                   <div className="border-t border-ink-600 p-3.5">
-                    <h3 className="font-display text-base text-paper transition-colors group-hover:text-green">
+                    <h3 className="font-display text-base text-paper transition-colors group-hover:text-greenReadable">
                       {item.title}
                     </h3>
                   </div>

@@ -43,7 +43,7 @@ export default function MediaGallery({
             >
               <MediaPanel item={m} className={`aspect-video ${isVideoItem(m) ? '!object-contain' : '!object-cover'}`} />
               {m.label && (
-                <p className="gallery-label mt-2 font-mono text-[11px] text-muted transition-colors group-hover:text-green">
+                <p className="gallery-label mt-2 font-mono text-[11px] text-muted transition-colors group-hover:text-greenReadable">
                   {m.label}
                 </p>
               )}
@@ -53,7 +53,7 @@ export default function MediaGallery({
                 href={m.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-2 inline-block font-mono text-[11px] text-muted underline decoration-dotted underline-offset-4 transition-colors hover:text-greenBright"
+                className="mt-2 inline-block font-mono text-[11px] text-muted underline decoration-dotted underline-offset-4 transition-colors hover:text-greenReadable"
               >
                 {m.hrefLabel ?? 'open original ↗'}
               </a>

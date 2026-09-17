@@ -31,12 +31,12 @@ export default function PipelineStrip() {
               {t('pipeline.title')}
             </h2>
           </div>
-          <p className="font-mono text-[10px] uppercase tracking-wideish text-muted">
+          <p className="font-mono text-[11px] uppercase tracking-wideish text-muted">
             {t('pipeline.aside')}
           </p>
         </div>
 
-        <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-greenBright">
+        <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-greenReadable">
           {t('pipeline.chain')}
         </p>
 
@@ -51,12 +51,12 @@ export default function PipelineStrip() {
                     loading="lazy"
                     className="media-asset absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
-                  <span className="absolute left-2 top-2 bg-ink-950/85 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wideish text-greenBright">
+                  <span className="absolute left-2 top-2 bg-ink-950/85 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
                     {s.num}
                   </span>
                 </div>
                 <figcaption className="border-t border-ink-600 p-2.5">
-                  <p className="font-mono text-[10px] uppercase tracking-wideish text-paper">
+                  <p className="font-mono text-[11px] uppercase tracking-wideish text-paper">
                     {t(`pipeline.${i + 1}.label`, s.label)}
                   </p>
                   <p className="mt-0.5 text-[11px] leading-snug text-muted">

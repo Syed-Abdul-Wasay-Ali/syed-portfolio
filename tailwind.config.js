@@ -13,6 +13,7 @@ export default {
           700: '#171716',
           600: '#232320',
           500: '#2C2C29',
+          400: '#34342F',
         },
         // canvas (pure black page)
         canvas: '#050505',
@@ -30,6 +31,8 @@ export default {
         // flat aliases used as `text-greenBright` / `text-greenDeep`
         greenBright: '#4C6FDE',
         greenDeep: '#0B1846',
+        // readable accent TEXT on the dark canvas (AA on ink-950..ink-700)
+        greenReadable: '#5F80E4',
         // legacy hover slots — now warm neutrals (white hover / taupe metadata)
         neonBlue: '#F2EFE8',
         violet: '#B9AFA3',

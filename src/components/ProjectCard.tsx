@@ -11,7 +11,7 @@ export default function ProjectCard({ project }: { project: Project }) {
       href={`#/project/${project.slug}`}
       data-tilt
       data-tilt-max="8"
-      className="tilt-3d panel disc-hover group block border-ink-600 hover:border-green"
+      className="tilt-3d panel disc-hover group block hover:border-greenBright"
     >
       <div className="flex items-stretch">
         <div className="relative min-h-[118px] w-[46%] shrink-0 overflow-hidden border-r border-ink-600">
@@ -25,32 +25,29 @@ export default function ProjectCard({ project }: { project: Project }) {
           ) : (
             <div className="node-grid flex h-full items-center justify-center bg-ink-800 p-3">
               <NodeGraph className="max-w-[90px] opacity-90" animated={false} />
-              <span className="absolute bottom-1.5 right-2 font-mono text-[9px] uppercase tracking-wideish text-muted">
-                cover: pending
-              </span>
             </div>
           )}
           {project.status && (
-            <span className="absolute left-2 top-2 bg-ink-950/90 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wideish text-greenBright">
+            <span className="absolute right-2 top-2 bg-ink-950/90 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
               {project.status}
             </span>
           )}
         </div>
         <div className="min-w-0 flex-1 p-3.5 sm:p-4">
-          <p className="font-mono text-[10px] uppercase tracking-wideish text-slateAccent">
+          <p className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">
             <span className={project.company === 'Ogilvy' ? 'co-ogilvy' : 'co-cleandirty'}>
               {project.company}
             </span>{' '}
             · {project.year}
           </p>
-          <h3 className="mt-1.5 line-clamp-2 font-display text-[15px] leading-snug text-paper group-hover:text-green">
+          <h3 className="mt-1.5 line-clamp-2 font-display text-[15px] leading-snug text-paper group-hover:text-greenReadable">
             {project.title}
           </h3>
           <p className="mt-1.5 line-clamp-2 text-[13px] leading-relaxed text-muted">
             {project.excerpt}
           </p>
           <div className="mt-2.5 border-t border-ink-600 pt-2">
-            <SpecStrip spec={project.spec} className="truncate" />
+            <SpecStrip spec={project.spec} className="line-clamp-2" />
           </div>
         </div>
       </div>

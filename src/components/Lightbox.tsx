@@ -60,14 +60,14 @@ export default function Lightbox({
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenBright"
+              className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
             >
               {item.hrefLabel ?? 'open original ↗'}
             </a>
           )}
           <button
             onClick={onClose}
-            className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenBright"
+            className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
           >
             esc / close
           </button>
@@ -106,14 +106,14 @@ export default function Lightbox({
       <div className="flex items-center justify-between px-5 py-3">
         <button
           onClick={prev}
-          className="border border-snow/30 px-4 py-1.5 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenBright"
+          className="border border-snow/30 px-4 py-1.5 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
         >
           ← prev
         </button>
         <span className="font-mono text-[11px] text-snow/60">arrow keys to browse</span>
         <button
           onClick={next}
-          className="border border-snow/30 px-4 py-1.5 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenBright"
+          className="border border-snow/30 px-4 py-1.5 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
         >
           next →
         </button>

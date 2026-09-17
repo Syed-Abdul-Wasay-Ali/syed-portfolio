@@ -33,11 +33,11 @@ export default function MediaPanel({
               </svg>
             </span>
           )}
-          <p className="font-mono text-sm uppercase tracking-wideish text-green">
+          <p className="font-mono text-sm uppercase tracking-wideish text-greenReadable">
             {item.label ?? 'media pending'}
           </p>
         </div>
-        <p className="font-mono text-[10px] text-muted/70">
+        <p className="font-mono text-[11px] text-muted/70">
           drop file into public/media — src: pending
         </p>
       </div>

@@ -76,7 +76,7 @@ export default function Capabilities() {
           {SYSTEMS.map((c, i) => (
             <Reveal key={c.num} delay={i * 110} className="h-full">
               <div className="panel h-full p-5">
-                <p className="font-mono text-[11px] uppercase tracking-wideish text-green">
+                <p className="font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
                   {c.num} / system
                 </p>
                 <h3 className="mt-2 font-display text-lg font-bold text-paper">
@@ -89,7 +89,7 @@ export default function Capabilities() {
                 <ul className="mt-4 space-y-2 border-t border-ink-600 pt-4">
                   {tl(`cap.${i + 1}.items`, c.items).map((item) => (
                     <li key={item} className="flex gap-2 text-[13px] leading-snug text-paper/90">
-                      <span className="shrink-0 text-green">→</span>
+                      <span className="shrink-0 text-greenReadable">→</span>
                       <span>{item}</span>
                     </li>
                   ))}
@@ -103,15 +103,15 @@ export default function Capabilities() {
         <Reveal delay={140} className="mt-7">
           <div className="panel p-5">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <p className="font-mono text-[11px] uppercase tracking-wideish text-green">{t('cap.m.tag')}</p>
-              <p className="font-mono text-[10px] uppercase tracking-wideish text-muted">
+              <p className="font-mono text-[11px] uppercase tracking-wideish text-greenReadable">{t('cap.m.tag')}</p>
+              <p className="font-mono text-[11px] uppercase tracking-wideish text-muted">
                 {t('cap.m.note')}
               </p>
             </div>
             <div className="mt-4 grid gap-6 sm:grid-cols-2">
               <div>
                 <p className="eyebrow">{t('cap.m.img')}</p>
-                <p className="mt-3 font-mono text-[10px] uppercase tracking-wideish text-green">
+                <p className="mt-3 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
                   {t('cap.m.most')}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -128,7 +128,7 @@ export default function Capabilities() {
                     </span>
                   ))}
                 </div>
-                <p className="mt-4 font-mono text-[10px] uppercase tracking-wideish text-muted">
+                <p className="mt-4 font-mono text-[11px] uppercase tracking-wideish text-muted">
                   {t('cap.m.also')}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">

@@ -102,7 +102,7 @@ export function HoverPreviewProvider({ children }: { children: ReactNode }) {
               </div>
             )}
             {item.badge && (
-              <span className="absolute left-3 top-3 bg-ink-950/90 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish text-greenBright">
+              <span className="absolute left-3 top-3 bg-ink-950/90 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
                 {item.badge}
               </span>
             )}
@@ -111,12 +111,12 @@ export function HoverPreviewProvider({ children }: { children: ReactNode }) {
             <div className="min-w-0">
               <p className="truncate font-display text-sm font-bold text-paper">{item.title}</p>
               {item.subtitle && (
-                <p className="mt-0.5 truncate font-mono text-[10px] uppercase tracking-wideish text-muted">
+                <p className="mt-0.5 truncate font-mono text-[11px] uppercase tracking-wideish text-muted">
                   {item.subtitle}
                 </p>
               )}
             </div>
-            <span className="shrink-0 font-display text-xl text-green">→</span>
+            <span className="shrink-0 font-display text-xl text-greenReadable">→</span>
           </div>
         </div>
       )}

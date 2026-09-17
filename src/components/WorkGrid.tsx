@@ -33,7 +33,7 @@ function Lane({
         <h3 className="font-display text-lg font-black uppercase tracking-tight sm:text-xl">
           {title}
         </h3>
-        <span className="font-mono text-[10px] uppercase tracking-wideish text-muted">
+        <span className="font-mono text-[11px] uppercase tracking-wideish text-muted">
           {String(projects.length).padStart(2, '0')} projects
         </span>
       </div>
@@ -86,7 +86,7 @@ export default function WorkGrid() {
             footer={
               <div className="space-y-3.5">
                 <div className="border border-dashed border-ink-600 p-4">
-                <p className="font-mono text-[10px] uppercase tracking-wideish text-green">
+                <p className="font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
                   {t('work.card.tag')}
                 </p>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
@@ -96,14 +96,14 @@ export default function WorkGrid() {
                   </a>
                   .
                 </p>
-                <p className="mt-3 font-mono text-[10px] uppercase tracking-wideish text-muted">
+                <p className="mt-3 font-mono text-[11px] uppercase tracking-wideish text-muted">
                   {t('work.card.tooling')}
                 </p>
                 <div className="mt-1.5 flex flex-wrap gap-1.5">
                   {tl('work.card.tools', ['comfyui', 'seedance 2.5', 'blender + mcp', 'krea 2']).map((chip) => (
                     <span
                       key={chip}
-                      className="border border-ink-600 px-2 py-0.5 font-mono text-[10px] text-paper/80"
+                      className="border border-ink-600 px-2 py-0.5 font-mono text-[11px] text-paper/80"
                     >
                       {chip}
                     </span>
@@ -112,7 +112,7 @@ export default function WorkGrid() {
                 </div>
                 <div className="panel p-4">
                   <NodeGraph className="mx-auto max-w-[240px] opacity-90" animated={false} />
-                  <p className="mt-2 text-center font-mono text-[10px] uppercase tracking-wideish text-muted">
+                  <p className="mt-2 text-center font-mono text-[11px] uppercase tracking-wideish text-muted">
                     {t('work.fig')}
                   </p>
                 </div>

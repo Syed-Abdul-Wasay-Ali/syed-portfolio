@@ -34,10 +34,10 @@ export default function EcomConcept() {
   return (
     <div>
       <div className="mb-5 flex flex-wrap items-center gap-3">
-        <span className="bg-green px-2 py-1 font-mono text-[10px] uppercase tracking-wideish text-snow">
+        <span className="bg-green px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-snow">
           {t('ecom.badge')}
         </span>
-        <p className="font-mono text-[10px] uppercase tracking-wideish text-muted">
+        <p className="font-mono text-[11px] uppercase tracking-wideish text-muted">
           {t('ecom.note')}
         </p>
       </div>
@@ -107,7 +107,7 @@ export default function EcomConcept() {
               </span>
             </div>
           </div>
-          <p className="mt-2 font-mono text-[10px] uppercase tracking-wideish text-muted">
+          <p className="mt-2 font-mono text-[11px] uppercase tracking-wideish text-muted">
             {t('ecom.desktop')}
           </p>
         </div>
@@ -140,7 +140,7 @@ export default function EcomConcept() {
               </div>
             </div>
           </div>
-          <p className="mt-2 text-center font-mono text-[10px] uppercase tracking-wideish text-muted">
+          <p className="mt-2 text-center font-mono text-[11px] uppercase tracking-wideish text-muted">
             {t('ecom.mobile')}
           </p>
         </div>
@@ -149,7 +149,7 @@ export default function EcomConcept() {
       <div className="mt-6 grid gap-x-8 gap-y-0 sm:grid-cols-2">
         {NOTES.map((n, i) => (
           <div key={n.term} className="flex gap-4 border-b border-ink-600 py-3">
-            <p className="w-36 shrink-0 font-mono text-[10px] uppercase tracking-wideish text-green">
+            <p className="w-36 shrink-0 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
               {t(`ecom.n${i + 1}.term`, n.term)}
             </p>
             <p className="text-[13px] leading-relaxed text-muted">{t(`ecom.n${i + 1}.line`, n.line)}</p>

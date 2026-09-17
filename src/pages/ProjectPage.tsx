@@ -84,7 +84,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
       secs.push([
         k,
         <Section key={k} tag={t(`pui.row.${k}.tag`)} title={t(`pui.row.${k}.title`)}>
-          <p className="max-w-3xl leading-relaxed text-paper/90">{body}</p>
+          <p className="max-w-[64ch] leading-relaxed text-paper/90">{body}</p>
         </Section>,
       ])
     }
@@ -167,7 +167,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
     secs.push([
       'overview',
       <Section key="overview" tag={t('pui.ov.tag')} title={t('pui.ov.title')}>
-        <p className="max-w-3xl leading-relaxed text-paper/90">{project.overview}</p>
+        <p className="max-w-[64ch] leading-relaxed text-paper/90">{project.overview}</p>
       </Section>,
     ])
 
@@ -190,17 +190,17 @@ export default function ProjectPage({ slug }: { slug: string }) {
     secs.push([
       'challenge',
       <Section key="challenge" tag={t('pui.ch.tag')} title={t('pui.ch.title')}>
-        <p className="max-w-3xl leading-relaxed text-paper/90">{project.challenge}</p>
+        <p className="max-w-[64ch] leading-relaxed text-paper/90">{project.challenge}</p>
       </Section>,
     ])
 
     secs.push([
       'approach',
       <Section key="approach" tag={t('pui.ap.tag')} title={t('pui.ap.title')}>
-        <ol className="max-w-3xl space-y-4">
+        <ol className="max-w-[64ch] space-y-4">
           {project.approach.map((step, i) => (
             <li key={i} className="flex gap-4">
-              <span className="mt-0.5 font-mono text-xs text-green">
+              <span className="mt-0.5 font-mono text-xs text-greenReadable">
                 {String(i + 1).padStart(2, '0')}
               </span>
               <p className="leading-relaxed text-paper/90">{step}</p>
@@ -227,10 +227,10 @@ export default function ProjectPage({ slug }: { slug: string }) {
       'workflow',
       <Section key="workflow" tag={t('pui.pr.tag')} title={t('pui.pr.title')}>
         <p className="mb-5 max-w-3xl text-sm text-muted">{t('pui.pr.note')}</p>
-        <ol className="max-w-3xl space-y-3">
+        <ol className="max-w-[64ch] space-y-3">
           {project.workflow.map((w, i) => (
             <li key={i} className="flex gap-4">
-              <span className="mt-0.5 font-mono text-xs text-green">
+              <span className="mt-0.5 font-mono text-xs text-greenReadable">
                 {String(i + 1).padStart(2, '0')}
               </span>
               <p className="leading-relaxed text-paper/90">{w.label ?? 'step'}</p>
@@ -258,12 +258,12 @@ export default function ProjectPage({ slug }: { slug: string }) {
     <main className="pt-14">
       {/* Project header */}
       <div className="container-site pb-10 pt-10">
-        <a href="#/" className="font-mono text-[11px] uppercase tracking-wideish text-muted hover:text-green">
+        <a href="#/" className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent hover:text-greenReadable">
           {t('pui.back')}
         </a>
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <span
-            className={`border px-2.5 py-1 font-mono text-[10px] uppercase tracking-wideish ${
+            className={`border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish ${
               project.company === 'Ogilvy'
                 ? 'co-ogilvy border-[#ff3b4e]'
                 : 'co-cleandirty border-[#C9C2B6]'
@@ -273,14 +273,14 @@ export default function ProjectPage({ slug }: { slug: string }) {
           </span>
           <span className="font-mono text-[11px] text-muted">
             {project.role} · {project.year}
-            {project.status ? ` · ${project.status}` : ''}
+            {project.status && project.status.toLowerCase() !== project.company.toLowerCase() ? ` · ${project.status}` : ''}
           </span>
         </div>
         <h1 className="mt-4 max-w-4xl font-display text-3xl font-black uppercase leading-tight tracking-tight sm:text-5xl">
           {project.title}
         </h1>
         {project.subtitle && (
-          <p className="mt-3 font-mono text-[12px] uppercase tracking-wideish text-green">
+          <p className="mt-3 font-mono text-[12px] uppercase tracking-wideish text-greenReadable">
             {project.subtitle}
           </p>
         )}
@@ -294,7 +294,8 @@ export default function ProjectPage({ slug }: { slug: string }) {
         {hero ? (
           <MediaPanel item={hero} className="max-h-[70vh]" />
         ) : (
-          <div className="node-grid flex aspect-video items-center justify-center">
+          <div className="node-grid flex min-h-[280px] flex-col items-center justify-center gap-5 py-10">
+            <p className="eyebrow">fig. — the production route</p>
             <NodeGraph />
           </div>
         )}
@@ -310,7 +311,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
             <dl className="mt-4 space-y-2.5">
               {project.spec.map((s) => (
                 <div key={s.label} className="flex justify-between gap-4 border-b border-ink-700 pb-2 last:border-0">
-                  <dt className="font-mono text-[11px] text-slateAccent">{s.label}</dt>
+                  <dt className="font-mono text-[11px] uppercase text-slateAccent">{s.label}</dt>
                   <dd className="font-mono text-[11px] text-right text-paper">{s.value}</dd>
                 </div>
               ))}

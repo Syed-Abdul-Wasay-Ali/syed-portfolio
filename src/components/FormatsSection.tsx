@@ -35,8 +35,8 @@ export default function FormatsSection({
                   />
                 </div>
                 <figcaption className="p-3">
-                  <p className="flex items-baseline justify-between gap-2 font-mono text-[10px] uppercase tracking-wideish text-paper">
-                    {f.label} <span className="text-greenBright">{f.ratio}</span>
+                  <p className="flex items-baseline justify-between gap-2 font-mono text-[11px] uppercase tracking-wideish text-paper">
+                    {f.label} <span className="text-greenReadable">{f.ratio}</span>
                   </p>
                   {f.note && <p className="mt-1 text-[11px] leading-snug text-muted">{f.note}</p>}
                 </figcaption>
@@ -82,7 +82,7 @@ export default function FormatsSection({
                   )}
                 </div>
                 <figcaption className="mt-1.5">
-                  <p className="font-mono text-[10px] uppercase tracking-wideish text-paper">{p.label}</p>
+                  <p className="font-mono text-[11px] uppercase tracking-wideish text-paper">{p.label}</p>
                   {p.note && <p className="mt-0.5 text-[11px] leading-snug text-muted">{p.note}</p>}
                 </figcaption>
               </figure>

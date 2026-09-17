@@ -63,17 +63,17 @@ export default function BrandsSection({ compact = false }: { compact?: boolean }
                     className={
                       compact
                         ? `truncate font-display text-[11px] leading-tight text-paper sm:text-xs ${
-                            linked ? 'transition-colors group-hover:text-green' : ''
+                            linked ? 'transition-colors group-hover:text-greenReadable' : ''
                           }`
                         : `font-display text-sm text-paper sm:text-base ${
-                            linked ? 'transition-colors group-hover:text-green' : ''
+                            linked ? 'transition-colors group-hover:text-greenReadable' : ''
                           }`
                     }
                   >
                     {b.name}
                   </h3>
                   {!compact && (
-                    <p className="mt-1 font-mono text-[9px] uppercase tracking-wideish text-muted sm:text-[10px]">
+                    <p className="mt-1 font-mono text-[11px] uppercase tracking-wideish text-muted sm:text-[11px]">
                       {b.note}
                     </p>
                   )}

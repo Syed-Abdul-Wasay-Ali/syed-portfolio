@@ -73,11 +73,11 @@ export default function WorkflowsSection() {
             <div className="mt-3.5 flex flex-wrap items-center gap-y-2">
               {tl('wf.route', PIPELINE).map((step, i, arr) => (
                 <span key={step + i} className="flex items-center">
-                  <span className="border border-ink-600 bg-ink-900 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wideish text-paper/90">
+                  <span className="border border-ink-600 bg-ink-900 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish text-paper/90">
                     {step}
                   </span>
                   {i < arr.length - 1 && (
-                    <span aria-hidden="true" className="px-1.5 font-mono text-[11px] text-greenBright">
+                    <span aria-hidden="true" className="px-1.5 font-mono text-[11px] text-greenReadable">
                       →
                     </span>
                   )}
@@ -100,7 +100,7 @@ export default function WorkflowsSection() {
                   {tl(`wf.g${i + 1}.items`, g.items).map((chip) => (
                     <span
                       key={chip}
-                      className="border border-ink-600 px-2 py-0.5 font-mono text-[10px] text-paper/85"
+                      className="border border-ink-600 px-2 py-0.5 font-mono text-[11px] text-paper/85"
                     >
                       {chip}
                     </span>
@@ -116,7 +116,7 @@ export default function WorkflowsSection() {
           <h3 className="font-display text-lg font-black uppercase tracking-tight sm:text-xl">
             {t('wf.runs.title')}
           </h3>
-          <span className="font-mono text-[10px] uppercase tracking-wideish text-muted">
+          <span className="font-mono text-[11px] uppercase tracking-wideish text-muted">
             {t('wf.runs.sub')}
           </span>
         </div>
@@ -125,13 +125,13 @@ export default function WorkflowsSection() {
             <Reveal key={item.id} delay={(i % 4) * 70}>
               <button
                 onClick={() => setLightbox(i)}
-                className="tilt-3d panel disc-hover group block w-full text-left hover:border-green"
+                className="tilt-3d panel disc-hover group block w-full text-left hover:border-greenBright"
                 data-tilt
                 data-tilt-max="8"
               >
                 <div className="relative border-b border-ink-600">
                   <MediaPanel item={item} className="aspect-[16/10] !object-cover" />
-                  <span className="absolute left-3 top-3 bg-ink-950/90 px-2 py-1 font-mono text-[10px] uppercase tracking-wideish text-greenBright">
+                  <span className="absolute left-3 top-3 bg-ink-950/90 px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
                     {item.kind === 'video'
                       ? item.output
                         ? t('wf.badge.runOutput')
@@ -144,14 +144,14 @@ export default function WorkflowsSection() {
                       className="absolute bottom-3 right-3 block h-14 w-14 overflow-hidden border border-snow/40 bg-ink-950 shadow-lg sm:h-16 sm:w-16"
                     >
                       <img src={item.output.src} alt="" className="h-full w-full object-cover" />
-                      <span className="absolute inset-x-0 bottom-0 bg-ink-950/85 text-center font-mono text-[8px] uppercase tracking-wideish text-greenBright">
+                      <span className="absolute inset-x-0 bottom-0 bg-ink-950/85 text-center font-mono text-[10px] uppercase tracking-wideish text-greenReadable">
                         output
                       </span>
                     </span>
                   )}
                 </div>
                 <div className="p-3.5">
-                  <h3 className="font-display text-base text-paper transition-colors group-hover:text-green">
+                  <h3 className="font-display text-base text-paper transition-colors group-hover:text-greenReadable">
                     {item.title}
                   </h3>
                   {item.note && (

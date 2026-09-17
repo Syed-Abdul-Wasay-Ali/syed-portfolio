@@ -56,10 +56,10 @@ export default function AssetFamily() {
                   />
                 </div>
                 <figcaption className="mt-1.5 flex items-baseline justify-between gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-wideish text-paper">
+                  <span className="font-mono text-[11px] uppercase tracking-wideish text-paper">
                     {t(`assets.${i + 1}.label`, a.label)}
                   </span>
-                  <span className="font-mono text-[10px] text-muted">{a.ratio}</span>
+                  <span className="font-mono text-[11px] text-muted">{a.ratio}</span>
                 </figcaption>
               </figure>
             </Reveal>

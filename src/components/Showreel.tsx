@@ -53,7 +53,7 @@ export default function Showreel() {
           aria-label="Showreel 2026: concept films and selected client work, 26 seconds, sound off"
         />
       </div>
-      <figcaption className="mt-2.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 font-mono text-[10px] uppercase tracking-wideish text-muted">
+      <figcaption className="mt-2.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 font-mono text-[11px] uppercase tracking-wideish text-muted">
         <span>{t('work.reel.c1')}</span>
         <span>{t('work.reel.c2')}</span>
       </figcaption>

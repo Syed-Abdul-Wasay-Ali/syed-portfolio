@@ -71,7 +71,7 @@ export default function Hero() {
 
       <div className="container-site relative grid items-end gap-8 lg:grid-cols-[1.25fr_1fr]">
         <div>
-          <p className="k-fade flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.24em] text-green">
+          <p className="k-fade flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.24em] text-greenReadable">
             <span className="disc inline-block h-1.5 w-1.5" />
             {t('hero.eyebrow')}
           </p>
@@ -94,7 +94,7 @@ export default function Hero() {
           </div>
 
           <p
-            className="k-fade mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-greenBright"
+            className="k-fade mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-greenReadable"
             style={{ animationDelay: '320ms' }}
           >
             {t('hero.keywords')}
@@ -116,7 +116,7 @@ export default function Hero() {
             style={{ animationDelay: '480ms' }}
             aria-hidden="true"
           >
-            <span className="text-green">&gt;</span> {t('hero.log')}
+            <span className="text-greenReadable">&gt;</span> {t('hero.log')}
             <span className="ml-1 inline-block h-3.5 w-2 animate-blink bg-green align-middle" />
           </p>
 
@@ -153,7 +153,7 @@ export default function Hero() {
             {stats.map(([v, l]) => (
               <div key={l}>
                 <div className="font-display text-2xl text-paper">{v}</div>
-                <div className="font-mono text-[10px] uppercase tracking-wideish text-muted">
+                <div className="font-mono text-[11px] uppercase tracking-wideish text-muted">
                   {l}
                 </div>
               </div>
@@ -162,7 +162,7 @@ export default function Hero() {
 
           {/* HUD micro row */}
           <div
-            className="k-fade mt-8 flex items-center justify-between border-t border-ink-600 pt-4 font-mono text-[10px] uppercase tracking-wideish text-muted"
+            className="k-fade mt-8 flex items-center justify-between border-t border-ink-600 pt-4 font-mono text-[11px] uppercase tracking-wideish text-muted"
             style={{ animationDelay: '720ms' }}
           >
             <span>
@@ -170,7 +170,7 @@ export default function Hero() {
             </span>
             <span className="flex items-center gap-2">
               {t('hero.hudScroll')}
-              <span className="text-green">↓</span>
+              <span className="text-greenReadable">↓</span>
             </span>
           </div>
         </div>
@@ -181,7 +181,7 @@ export default function Hero() {
               <NodeGraph className="w-full" />
             </div>
           </div>
-          <p className="mt-3 text-right font-mono text-[10px] uppercase tracking-wideish text-muted">
+          <p className="mt-3 text-right font-mono text-[11px] uppercase tracking-wideish text-muted">
             {t('hero.fig')}
           </p>
         </div>

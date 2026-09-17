@@ -63,16 +63,18 @@ export default function Header() {
       <div className="container-site flex h-14 items-center justify-between">
         <a href="#/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
           <span aria-hidden="true" className="disc h-2 w-2" />
-          <span className="font-display text-base tracking-tight text-paper">
-            {t('header.name')}
-          </span>
-          <span className="hidden font-mono text-[10px] uppercase tracking-wideish text-violet md:inline">
-            {t('header.tagline')}
+          <span className="flex flex-col leading-none">
+            <span className="whitespace-nowrap font-display text-base tracking-tight text-paper">
+              {t('header.name')}
+            </span>
+            <span className="mt-1 hidden whitespace-nowrap font-mono text-[11px] uppercase tracking-wideish text-violet md:inline">
+              {t('header.tagline')}
+            </span>
           </span>
         </a>
 
         {/* desktop nav */}
-        <nav className="hidden items-center gap-5 md:flex">
+        <nav className="hidden items-center gap-4 md:flex">
           {links.map((l) => (
             <a
               key={l.href}
@@ -84,7 +86,7 @@ export default function Header() {
           ))}
           <a
             href="#/admin"
-            className="rounded-md border border-ink-600 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wideish text-muted transition-colors hover:border-green hover:text-green"
+            className="rounded-md border border-ink-500 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish text-muted transition-colors hover:border-greenBright hover:text-greenReadable"
           >
             {t('header.admin')}
           </a>
@@ -105,7 +107,7 @@ export default function Header() {
             href={githubUrl}
             target="_blank"
             rel="noreferrer"
-            className="text-muted transition-colors hover:text-green"
+            className="btn-ghost !px-2.5 !py-1.5"
             aria-label="GitHub profile"
           >
             <GitHubIcon className="h-4 w-4" />
@@ -119,7 +121,7 @@ export default function Header() {
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
-          className="flex h-10 w-10 items-center justify-center rounded-md border border-green/30 text-paper transition-colors hover:border-green hover:text-green md:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-md border border-green/30 text-paper transition-colors hover:border-greenBright hover:text-greenReadable md:hidden"
         >
           <span className="relative block h-3.5 w-5">
             <span
@@ -153,7 +155,7 @@ export default function Header() {
                 key={l.href}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="py-3 font-mono text-sm uppercase tracking-wideish text-paper transition-colors hover:text-green"
+                className="py-3 font-mono text-sm uppercase tracking-wideish text-paper transition-colors hover:text-greenReadable"
               >
                 {t(l.labelKey, l.label)}
               </a>
@@ -192,7 +194,7 @@ export default function Header() {
             <a
               href="#/admin"
               onClick={() => setOpen(false)}
-              className="mt-2 justify-center rounded-md border border-ink-600 px-4 py-1.5 font-mono text-[11px] uppercase tracking-wideish text-muted transition-colors hover:border-green hover:text-green"
+              className="mt-2 justify-center rounded-md border border-ink-500 px-4 py-1.5 font-mono text-[11px] uppercase tracking-wideish text-muted transition-colors hover:border-greenBright hover:text-greenReadable"
             >
               {t('header.admin')}
             </a>

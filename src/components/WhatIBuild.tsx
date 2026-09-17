@@ -52,8 +52,8 @@ export default function WhatIBuild() {
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {ITEMS.map((it, i) => (
             <Reveal key={it.num} delay={i * 70} className="h-full">
-              <div className="panel h-full p-4">
-                <p className="font-mono text-[11px] uppercase tracking-wideish text-green">
+              <div className="panel h-full p-5">
+                <p className="font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
                   {it.num}
                 </p>
                 <h3 className="mt-2 font-display text-base font-bold text-paper">

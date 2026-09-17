@@ -29,7 +29,7 @@ export default function CraftSection() {
           {PRINCIPLES.map((p, i) => (
             <Reveal key={p.term} delay={(i % 2) * 80}>
               <div className="flex gap-4 border-b border-ink-600 py-3.5">
-                <p className="w-36 shrink-0 font-mono text-[10px] uppercase tracking-wideish text-green">
+                <p className="w-36 shrink-0 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
                   {t(`craft.p${i + 1}.term`, p.term)}
                 </p>
                 <p className="text-[13px] leading-relaxed text-muted">

@@ -26,7 +26,7 @@ export default function Footer() {
             <p className="font-display text-sm uppercase tracking-tight text-ink-950">
               {t('footer.name')}
             </p>
-            <p className="mt-1 font-mono text-[10px] uppercase tracking-wideish text-ink-950/60">
+            <p className="mt-1 font-mono text-[11px] uppercase tracking-wideish text-ink-950/70">
               {t('footer.tagline')}
             </p>
           </div>
@@ -35,7 +35,7 @@ export default function Footer() {
               href={linkedinUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:text-green"
+              className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wideish text-ink-950/70 transition-colors hover:text-greenReadable"
             >
               <LinkedInIcon className="h-3.5 w-3.5" />
               {t('footer.linkedin')}
@@ -44,7 +44,7 @@ export default function Footer() {
               href={githubUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:text-green"
+              className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wideish text-ink-950/70 transition-colors hover:text-greenReadable"
             >
               <GitHubIcon className="h-3.5 w-3.5" />
               {t('footer.github')}
@@ -53,25 +53,25 @@ export default function Footer() {
               href={resumeUrl}
               target="_blank"
               rel="noreferrer"
-              className="font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:text-green"
+              className="font-mono text-[11px] uppercase tracking-wideish text-ink-950/70 transition-colors hover:text-greenReadable"
             >
               {t('footer.resume')}
             </a>
             <a
               href={`mailto:${email}`}
-              className="font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:text-green"
+              className="font-mono text-[11px] uppercase tracking-wideish text-ink-950/70 transition-colors hover:text-greenReadable"
             >
               {t('footer.email')}
             </a>
             <a
               href="#/admin"
-              className="rounded-md border border-ink-950/20 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:border-green hover:text-green"
+              className="rounded-md border border-ink-950/20 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish text-ink-950/70 transition-colors hover:border-greenBright hover:text-greenReadable"
             >
               {t('footer.admin')}
             </a>
           </div>
         </div>
-        <p className="container-site pb-8 pt-6 font-mono text-[10px] text-ink-950/50">
+        <p className="container-site pb-8 pt-6 font-mono text-[11px] text-ink-950/65">
           {t('footer.credits').replace('{year}', String(year))}
         </p>
       </div>

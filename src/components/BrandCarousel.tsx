@@ -128,7 +128,7 @@ export default function BrandCarousel() {
               </div>
               <div className="p-4">
                 <h3 className="font-display text-base font-bold text-paper">{b.name}</h3>
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-wideish text-muted">
+                <p className="mt-1 font-mono text-[11px] uppercase tracking-wideish text-muted">
                   {b.note}
                 </p>
               </div>
@@ -145,7 +145,7 @@ export default function BrandCarousel() {
         >
           ← prev
         </button>
-        <p className="font-mono text-[10px] uppercase tracking-wideish text-muted">
+        <p className="font-mono text-[11px] uppercase tracking-wideish text-muted">
           swipe · drag · hover a logo to float it · {displayBrands.length} brands
         </p>
         <button

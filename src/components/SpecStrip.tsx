@@ -14,7 +14,7 @@ export default function SpecStrip({
     <p className={`spec-strip ${className}`} aria-label="Pipeline parameters">
       {spec.map((s, i) => (
         <span key={s.label}>
-          {i > 0 && <span className="text-ink-500"> · </span>}
+          {i > 0 && <span className="text-muted">{' · '}</span>}
           <span className="k">{s.label} </span>
           <span className="v">{s.value}</span>
         </span>

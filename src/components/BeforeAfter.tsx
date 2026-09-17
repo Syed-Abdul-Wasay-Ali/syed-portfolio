@@ -33,11 +33,11 @@ export default function BeforeAfter({
                   loading="lazy"
                   className="media-asset absolute inset-0 h-full w-full object-cover"
                 />
-                <span className="absolute left-2.5 top-2.5 bg-ink-950/90 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish text-paper">
+                <span className="absolute left-2.5 top-2.5 bg-ink-950/90 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-paper">
                   {tag}
                 </span>
               </div>
-              <figcaption className={`px-3 py-2.5 font-mono text-[10px] uppercase tracking-wideish ${accent}`}>
+              <figcaption className={`px-3 py-2.5 font-mono text-[11px] uppercase tracking-wideish ${accent}`}>
                 {item.label}
               </figcaption>
             </figure>
@@ -49,7 +49,7 @@ export default function BeforeAfter({
           {annotations.map((a) => (
             <span
               key={a}
-              className="border border-ink-600 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wideish text-paper/80"
+              className="border border-ink-600 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish text-paper/80"
             >
               {a}
             </span>
