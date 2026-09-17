@@ -3,7 +3,8 @@
 //
 //   words     : every editable string on the site (registry groups + each case
 //               study + each brand + showcase/workflow items)
-//   pictures  : every picture/video slot — replace, hide/restore, add
+//   pictures  : every picture/video slot — replace, delete/restore, add;
+//               the deleted area lists removed items + a restorable trash
 //   sections  : show/hide + reorder sections on home / brand / case-study pages
 //   concept   : the concept-images gallery manager (upload, caption, reorder)
 //
@@ -97,7 +98,7 @@ function SlotCard({
   onReplace,
   onHide,
   onRestore,
-  hideLabel = 'hide',
+  hideLabel = 'delete',
   extra,
 }: {
   label: string
@@ -154,7 +155,7 @@ function SlotCard({
             ↺ restore
           </button>
         )}
-        {removed && <span className="font-mono text-[9px] uppercase text-amber-300">hidden from site</span>}
+        {removed && <span className="font-mono text-[9px] uppercase text-amber-300">removed from site</span>}
         {extra}
       </div>
     </div>
@@ -500,7 +501,7 @@ function ListInput({
 // ---------------------------------------------------------------------------
 // PICTURES tab
 // ---------------------------------------------------------------------------
-type PicArea = 'home' | 'project' | 'brand' | 'showcase' | 'workflows'
+type PicArea = 'home' | 'project' | 'brand' | 'showcase' | 'workflows' | 'deleted'
 
 const HOME_EXTRAS: { group: string; items: [string, string][] }[] = [
   {
@@ -590,7 +591,7 @@ function PicturesTab() {
   const removedSet = new Set(content?.removedMedia ?? [])
   const hide = (src: string) => void notice(async () => {
     await api('/api/media/remove', { src })
-    return 'hidden — the site no longer shows it'
+    return 'removed from site — restore it any time from the deleted area'
   })
   const restore = (src: string) => void notice(async () => {
     await api('/api/media/remove', { src, restore: true })
@@ -612,7 +613,7 @@ function PicturesTab() {
   const deleteAdded = (collection: string, src: string) =>
     void notice(async () => {
       await api('/api/media/edit', { collection, src, patch: { remove: true } })
-      return 'deleted'
+      return 'moved to deleted — restore it any time'
     })
 
   const project = projects.find((p) => p.slug === projSlug)
@@ -645,6 +646,7 @@ function PicturesTab() {
         {areaBtn('brand', 'brands')}
         {areaBtn('showcase', 'showcase')}
         {areaBtn('workflows', 'workflows')}
+        {areaBtn('deleted', 'deleted')}
       </div>
       <Notice msg={msg} err={err} />
 
@@ -827,7 +829,7 @@ function PicturesTab() {
                   onHide={() =>
                     void notice(async () => {
                       await api('/api/remove', { brand: brandSlug, section: brandSection, src: m.src ?? m.label ?? '' })
-                      return 'removed upload'
+                      return 'moved to deleted — restore it any time'
                     })
                   }
                   hideLabel="delete"
@@ -970,7 +972,9 @@ function PicturesTab() {
                             output
                             <input
                               type="file"
-                              accept="image/*"
+                              accept={
+                                /\.(mp4|webm|mov|mkv|m4v)$/i.test(w.output!.src) ? 'video/*' : 'image/*'
+                              }
                               className="hidden"
                               onChange={(e) => {
                                 const f = e.target.files?.[0]
@@ -989,6 +993,8 @@ function PicturesTab() {
           </div>
         </div>
       )}
+
+      {area === 'deleted' && <DeletedArea />}
     </div>
   )
 }
@@ -1061,6 +1067,242 @@ function AddFilesRow({ label, onFiles }: { label: string; onFiles: (files: File[
         }}
       />
     </label>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// deleted area — removed-from-site items + the restorable trash
+// ---------------------------------------------------------------------------
+type TrashItem = {
+  id: string
+  file: string
+  src: string
+  name: string
+  size: number
+  kind: string
+  at: number
+  meta?: {
+    type?: string
+    brand?: string
+    section?: string
+    collection?: string
+    item?: { label?: string; src?: string }
+  }
+}
+
+function DeletedArea() {
+  const { content, refresh } = useRuntime()
+  const [items, setItems] = useState<TrashItem[] | null>(null)
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [err, setErr] = useState('')
+
+  const load = async () => {
+    try {
+      const r = await fetch('/api/trash', { cache: 'no-store' })
+      const j = await r.json()
+      setItems(Array.isArray(j.items) ? (j.items as TrashItem[]) : [])
+    } catch {
+      setItems([])
+    }
+  }
+  useEffect(() => {
+    void load()
+  }, [])
+
+  const act = async (fn: () => Promise<unknown>, m: string) => {
+    setBusy(true)
+    setMsg('')
+    setErr('')
+    try {
+      await fn()
+      setMsg(m)
+      await refresh()
+      await load()
+    } catch (e) {
+      setErr(String((e as Error).message || e))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const restoreTrash = (id: string) =>
+    void act(async () => {
+      await api('/api/trash/restore', { id })
+    }, 'restored — it is back on the site')
+  const purgeTrash = (id: string) =>
+    void act(async () => {
+      await api('/api/trash/purge', { id })
+    }, 'deleted forever')
+  const emptyTrash = () =>
+    void act(async () => {
+      await api('/api/trash/purge', { all: true })
+    }, 'trash emptied')
+  const showAgainMedia = (src: string) =>
+    void act(async () => {
+      await api('/api/media/remove', { src, restore: true })
+    }, 'back on the site')
+  const showAgainBrand = (brand: string, section: string, id: string) =>
+    void act(async () => {
+      await api('/api/remove', { brand, section, src: id, restore: true })
+      await api('/api/media/remove', { src: id, restore: true })
+    }, 'back on the site')
+
+  const fmtSize = (n: number) =>
+    n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : n > 1024 ? Math.round(n / 1024) + ' KB' : n + ' B'
+  const fmtDate = (t: number) => new Date(t).toLocaleString()
+  const metaText = (it: TrashItem) => {
+    const m = it.meta ?? {}
+    if (m.type === 'upload') return `brand upload · ${m.brand ?? ''} ${m.section ?? ''}`
+    if (m.type === 'addition') return `added media · ${m.collection ?? ''}`
+    if (m.type === 'concept') return 'concept images band'
+    return 'media file'
+  }
+
+  const hiddenMedia = content?.removedMedia ?? []
+  const hiddenBrand = Object.entries(content?.removedItems ?? {}).flatMap(([brand, secs]) =>
+    Object.entries(secs ?? {}).flatMap(([section, ids]) => (ids ?? []).map((id) => ({ brand, section, id }))),
+  )
+  const hiddenCount = hiddenMedia.length + hiddenBrand.length
+
+  return (
+    <div className="mt-5 space-y-8">
+      <div>
+        <div className="flex flex-wrap items-center gap-3">
+          <p className="eyebrow-green">deleted files — {items === null ? '…' : items.length} in the trash</p>
+          {(items?.length ?? 0) > 0 && (
+            <button
+              type="button"
+              disabled={busy}
+              className={`${smallBtn} !text-red-400 hover:!border-red-400`}
+              onClick={() => {
+                if (confirm('delete all trashed files forever?')) emptyTrash()
+              }}
+            >
+              ✕ empty trash
+            </button>
+          )}
+        </div>
+        <p className="mt-2 text-[12px] text-muted">
+          Deleting a file puts it here first. “restore” puts it back exactly where it was (with its
+          caption / brand slot); “delete forever” removes it for good.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+          {(items ?? []).map((it) => (
+            <div key={it.id} className="rounded-md border border-ink-600 bg-ink-900 p-2">
+              {it.kind === 'video' ? (
+                <video
+                  src={`/__trash/${it.id}`}
+                  controls
+                  preload="metadata"
+                  className="aspect-video w-full rounded-sm bg-ink-950 object-cover"
+                />
+              ) : (
+                <img
+                  src={`/__trash/${it.id}`}
+                  alt={it.name}
+                  loading="lazy"
+                  className="aspect-video w-full rounded-sm bg-ink-950 object-cover"
+                />
+              )}
+              <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{it.name}</p>
+              <p className="line-clamp-1 font-mono text-[9px] text-muted">
+                {metaText(it)} · {fmtSize(it.size)} · {fmtDate(it.at)}
+              </p>
+              <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                <button type="button" disabled={busy} className={smallBtn} onClick={() => restoreTrash(it.id)}>
+                  ↺ restore
+                </button>
+                <button
+                  type="button"
+                  disabled={busy}
+                  className={`${smallBtn} !text-red-400 hover:!border-red-400`}
+                  onClick={() => {
+                    if (confirm('delete this file forever?')) purgeTrash(it.id)
+                  }}
+                >
+                  ✕ delete forever
+                </button>
+              </div>
+            </div>
+          ))}
+          {items !== null && items.length === 0 && (
+            <p className="col-span-full font-mono text-[11px] text-muted">trash is empty.</p>
+          )}
+        </div>
+      </div>
+
+      <div>
+        <p className="eyebrow-green">removed from site — {hiddenCount} item(s)</p>
+        <p className="mt-2 text-[12px] text-muted">
+          Hidden with the delete buttons elsewhere (their files are kept). “show again” puts them
+          back on the site.
+        </p>
+        <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+          {hiddenMedia.map((src) => (
+            <div key={src} className="rounded-md border border-ink-600 bg-ink-900 p-2">
+              {isVideoSrc(src) ? (
+                <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 text-lg text-muted">
+                  ▶ video
+                </div>
+              ) : (
+                <img
+                  src={src}
+                  alt={src}
+                  loading="lazy"
+                  className="aspect-video w-full rounded-sm bg-ink-950 object-cover"
+                />
+              )}
+              <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{src}</p>
+              <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                <button type="button" disabled={busy} className={smallBtn} onClick={() => showAgainMedia(src)}>
+                  ↺ show again
+                </button>
+              </div>
+            </div>
+          ))}
+          {hiddenBrand.map((h) => (
+            <div key={`${h.brand}-${h.section}-${h.id}`} className="rounded-md border border-ink-600 bg-ink-900 p-2">
+              {isVideoSrc(h.id) ? (
+                <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 text-lg text-muted">
+                  ▶ video
+                </div>
+              ) : h.id.startsWith('media/') ? (
+                <img
+                  src={h.id}
+                  alt={h.id}
+                  loading="lazy"
+                  className="aspect-video w-full rounded-sm bg-ink-950 object-cover"
+                />
+              ) : (
+                <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 px-2 text-center font-mono text-[10px] text-muted">
+                  {h.id}
+                </div>
+              )}
+              <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{h.id}</p>
+              <p className="line-clamp-1 font-mono text-[9px] text-muted">
+                brand · {h.brand} / {h.section}
+              </p>
+              <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  disabled={busy}
+                  className={smallBtn}
+                  onClick={() => showAgainBrand(h.brand, h.section, h.id)}
+                >
+                  ↺ show again
+                </button>
+              </div>
+            </div>
+          ))}
+          {hiddenCount === 0 && (
+            <p className="col-span-full font-mono text-[11px] text-muted">nothing is hidden right now.</p>
+          )}
+        </div>
+      </div>
+
+      <Notice msg={msg} err={err} />
+    </div>
   )
 }
 

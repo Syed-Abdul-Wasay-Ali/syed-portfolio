@@ -10,6 +10,8 @@
 //   POST /api/remove               { brand, section, src | label }
 //   POST /api/sections             { brand, hidden: [sectionName] }
 //   POST /api/page                 { hidden: [siteSection] }
+//   GET  /api/trash                deleted-media trash (restorable files)
+//   POST /api/trash/restore|purge  { id } | purge { all: true }
 //
 // Uploads land in public/media/brands/<slug>/<stills|animatic|film>/ AND in
 // dist/media/... (so they show instantly). content.json is written to both
@@ -121,6 +123,113 @@ const deleteMedia = async (slug, dir, file) => {
   }
 }
 
+// ---- deleted-media trash: every delete is recoverable ---------------------
+const TRASH_DIR = path.join(ROOT, '.admin-backups', 'trash')
+const TRASH_INDEX = path.join(ROOT, '.admin-backups', 'trash.json')
+
+const readTrash = async () => {
+  try {
+    return JSON.parse(await readFile(TRASH_INDEX, 'utf8'))
+  } catch {
+    return []
+  }
+}
+
+const writeTrash = async (list) => {
+  await mkdir(path.dirname(TRASH_INDEX), { recursive: true })
+  await writeFile(TRASH_INDEX, JSON.stringify(list, null, 2))
+}
+
+// move a media file (by site src) out of both roots and into the trash dir.
+// meta records how to put the content.json entry back on restore.
+const trashFile = async (relSrc, meta) => {
+  const src = String(relSrc || '').replace(/\\/g, '/')
+  if (!src.startsWith('media/') || src.includes('..')) return null
+  const name = path.basename(src)
+  let buf = null
+  for (const root of [PUBLIC, DIST]) {
+    try {
+      buf = await readFile(path.join(root, src))
+      break
+    } catch {
+      /* try the other root */
+    }
+  }
+  if (!buf) return null
+  const id = 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)
+  const file = id + '--' + name
+  await mkdir(TRASH_DIR, { recursive: true })
+  await writeFile(path.join(TRASH_DIR, file), buf)
+  for (const root of [PUBLIC, DIST]) {
+    try {
+      await unlink(path.join(root, src))
+    } catch {
+      /* already gone in this root */
+    }
+  }
+  const entry = {
+    id,
+    file,
+    src,
+    name,
+    size: buf.length,
+    kind: VIDEO_EXT.test(name) ? 'video' : 'image',
+    at: Date.now(),
+    meta: meta && typeof meta === 'object' ? meta : {},
+  }
+  const list = await readTrash()
+  list.unshift(entry)
+  await writeTrash(list)
+  return entry
+}
+
+const trashDrop = async (id) => {
+  const list = await readTrash()
+  const e = list.find((x) => x.id === id)
+  if (!e) return false
+  try {
+    await unlink(path.join(TRASH_DIR, e.file))
+  } catch {
+    /* already gone */
+  }
+  await writeTrash(list.filter((x) => x.id !== id))
+  return true
+}
+
+// restore = file goes back to its src, content.json entry goes back in
+const trashRestore = async (id) => {
+  const list = await readTrash()
+  const e = list.find((x) => x.id === id)
+  if (!e) return null
+  const buf = await readFile(path.join(TRASH_DIR, e.file))
+  for (const root of [PUBLIC, DIST]) {
+    const abs = path.normalize(path.join(root, e.src))
+    await mkdir(path.dirname(abs), { recursive: true })
+    await writeFile(abs, buf)
+  }
+  const content = await readContent()
+  const m = e.meta || {}
+  if (m.type === 'upload' && m.brand && m.section && m.item) {
+    content.uploads = content.uploads || {}
+    content.uploads[m.brand] = content.uploads[m.brand] || {}
+    const arr = (content.uploads[m.brand][m.section] = content.uploads[m.brand][m.section] || [])
+    if (!arr.some((x) => x && x.src === m.item.src)) arr.push(m.item)
+  } else if (m.type === 'addition' && m.collection && m.item) {
+    content.additions = content.additions || {}
+    const arr = (content.additions[m.collection] = content.additions[m.collection] || [])
+    if (!arr.some((x) => x && x.src === m.item.src)) arr.push(m.item)
+  } else if (m.type === 'concept' && m.item) {
+    const arr = (content.conceptImages = content.conceptImages || [])
+    if (!arr.some((x) => x && x.id === m.item.id)) {
+      const at = Math.min(Math.max(0, Number(m.index) || 0), arr.length)
+      arr.splice(at, 0, m.item)
+    }
+  }
+  await writeContent(content)
+  await trashDrop(id)
+  return content
+}
+
 const cache = {} // don't re-read body twice on dry-run flows
 
 const onApi = async (req, res) => {
@@ -128,6 +237,10 @@ const onApi = async (req, res) => {
 
   if (req.method === 'GET' && url.pathname === '/api/content') {
     return json(res, 200, await readContent())
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/trash') {
+    return json(res, 200, { items: await readTrash() })
   }
 
   if (req.method !== 'POST') return json(res, 405, { error: 'method not allowed' })
@@ -183,19 +296,20 @@ const onApi = async (req, res) => {
         return json(res, 200, { ok: true, content })
       }
 
-      // uploaded item? parse its src and delete the files
+      // uploaded item? parse its src and move the file to the trash (restorable)
       const m = id.match(/^media\/brands\/([a-z0-9-]+)\/(stills|animatic|film)\/(.+)$/)
+      let trashed = false
       if (m && content.uploads?.[slug]?.[section]) {
         const list = content.uploads[slug][section] || []
-        const before = list.length
-        content.uploads[slug][section] = list.filter((x) => x.src !== id && (x.label || '') !== id)
-        if (content.uploads[slug][section].length !== before) {
-          await deleteMedia(m[1], m[2], m[3])
+        const hit = list.find((x) => x && (x.src === id || (x.label || '') === id))
+        if (hit) {
+          content.uploads[slug][section] = list.filter((x) => x !== hit)
+          await trashFile(hit.src || id, { type: 'upload', brand: slug, section, item: hit })
+          trashed = true
         }
       }
-      // still present? treat as a base-item removal (no file delete)
-      const elsewhere = m ? content.uploads?.[slug]?.[section]?.some((x) => x.src === id || x.label === id) : false
-      if (!m || !elsewhere) {
+      // not an uploaded file? treat as a base-item removal (file kept)
+      if (!trashed) {
         content.removedItems = content.removedItems || {}
         content.removedItems[slug] = content.removedItems[slug] || {}
         const list = content.removedItems[slug][section] || []
@@ -260,6 +374,24 @@ const onApi = async (req, res) => {
       content.sectionOrder[page] = order
       await writeContent(content)
       return json(res, 200, { ok: true, content })
+    }
+
+    // trash — restore or permanently drop deleted media files
+    if (url.pathname === '/api/trash/restore') {
+      const id = String(body.id || '')
+      const c = await trashRestore(id)
+      if (!c) return json(res, 404, { error: 'trash item not found' })
+      return json(res, 200, { ok: true, content: c })
+    }
+
+    if (url.pathname === '/api/trash/purge') {
+      if (body.all === true) {
+        const list = await readTrash()
+        for (const e of list) await trashDrop(e.id)
+        return json(res, 200, { ok: true, purged: list.length })
+      }
+      const gone = await trashDrop(String(body.id || ''))
+      return json(res, gone ? 200 : 404, { ok: gone })
     }
 
     // media/replace — overwrite one media file IN PLACE (compiled srcs stay
@@ -345,17 +477,8 @@ const onApi = async (req, res) => {
       if (!item) return json(res, 404, { error: 'item not found' })
       if (typeof patch.label === 'string') item.label = patch.label.slice(0, 300)
       if (patch.remove === true) {
-        const m = String(item.src || '').match(/^media\/added\/(.+)$/)
-        if (m) {
-          for (const root of [PUBLIC, DIST]) {
-            const abs = path.normalize(path.join(root, 'media', 'added', m[1]))
-            if (!abs.startsWith(path.join(root, 'media') + path.sep)) continue
-            try {
-              await unlink(abs)
-            } catch {
-              /* already gone */
-            }
-          }
+        if (String(item.src || '').startsWith('media/added/')) {
+          await trashFile(item.src, { type: 'addition', collection: coll, item })
         }
         content.additions[coll] = list.filter((x) => x !== item)
       }
@@ -373,6 +496,26 @@ const serveStatic = async (req, res) => {
   const url = new URL(req.url, 'http://x')
   let p = decodeURIComponent(url.pathname)
   if (p === '/') p = '/index.html'
+  if (p.startsWith('/__trash/')) {
+    const id = p.slice('/__trash/'.length)
+    const list = await readTrash()
+    const e = list.find((x) => x.id === id)
+    if (!e) {
+      res.writeHead(404)
+      return res.end('gone')
+    }
+    try {
+      const buf = await readFile(path.join(TRASH_DIR, e.file))
+      res.writeHead(200, {
+        'Content-Type': MIME[path.extname(e.file).toLowerCase()] || 'application/octet-stream',
+        'Cache-Control': 'no-store',
+      })
+      return res.end(buf)
+    } catch {
+      res.writeHead(404)
+      return res.end('gone')
+    }
+  }
   const abs = path.normalize(path.join(DIST, p))
   if (!abs.startsWith(DIST)) {
     res.writeHead(403)
@@ -471,6 +614,33 @@ function __conceptRoutes(req, res) {
         try { await fs.unlink(abs); } catch {}
       }
     };
+    // deleted concept files go to the shared trash (restorable from the panel)
+    const TRASH_DIR = path.join(HERE, '.admin-backups', 'trash');
+    const TRASH_INDEX = path.join(HERE, '.admin-backups', 'trash.json');
+    const readTrash = async () => {
+      try { return JSON.parse(await fs.readFile(TRASH_INDEX, 'utf8')); } catch { return []; }
+    };
+    const writeTrash = async (list) => {
+      await fs.mkdir(path.dirname(TRASH_INDEX), { recursive: true });
+      await fs.writeFile(TRASH_INDEX, JSON.stringify(list, null, 2));
+    };
+    const trashOld = async (relSrc, meta) => {
+      if (!relSrc) return null;
+      let buf = null;
+      for (const root of [PUB, DIST]) {
+        try { buf = await fs.readFile(path.join(root, relSrc)); break; } catch {}
+      }
+      if (!buf) return null;
+      const name = path.basename(relSrc);
+      const id = 't' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      const file = id + '--' + name;
+      await fs.mkdir(TRASH_DIR, { recursive: true });
+      await fs.writeFile(path.join(TRASH_DIR, file), buf);
+      for (const root of [PUB, DIST]) { try { await fs.unlink(path.join(root, relSrc)); } catch {} }
+      const entry = { id, file, src: relSrc, name, size: buf.length, kind: isVideo(name) ? 'video' : 'image', at: Date.now(), meta: meta || {} };
+      const list = await readTrash(); list.unshift(entry); await writeTrash(list);
+      return entry;
+    };
     const readContent = async () => {
       for (const f of [path.join(PUB, 'content.json'), path.join(DIST, 'content.json')]) {
         try { return JSON.parse(await fs.readFile(f, 'utf8')); } catch {}
@@ -546,8 +716,9 @@ function __conceptRoutes(req, res) {
       const name = safeName(f.name);
       const buf = Buffer.from(String(f.data || ''), 'base64');
       if (!buf.length) { send(400, { error: 'empty file' }); return true; }
-      const m = String(item.src || '').match(/^media\/concept\/(.+)$/);
-      if (m) await delMedia(path.join('concept', m[1]));
+      if (String(item.src || '').startsWith('media/concept/')) {
+        await trashOld(item.src, { type: 'file', note: 'previous image replaced by ' + name });
+      }
       let finalName = name;
       let src = 'media/concept/' + finalName;
       const usedElsewhere = content.conceptImages.some((x) => x !== item && x && x.src === src);
@@ -563,8 +734,9 @@ function __conceptRoutes(req, res) {
     if (p === '/api/concept/remove') {
       const item = findItem(String(body.id || ''));
       if (!item) { send(400, { error: 'item not found' }); return true; }
-      const m = String(item.src || '').match(/^media\/concept\/(.+)$/);
-      if (m) await delMedia(path.join('concept', m[1]));
+      if (String(item.src || '').startsWith('media/concept/')) {
+        await trashOld(item.src, { type: 'concept', item, index: content.conceptImages.indexOf(item) });
+      }
       content.conceptImages = content.conceptImages.filter((x) => x !== item);
       await writeContent(content);
       send(200, { ok: true, content });
