@@ -80,6 +80,8 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789642556007,
-  "removedProjects": []
+  "stamp": 1789659300162,
+  "removedProjects": [
+    "commercial-creative-system"
+  ]
 }
