@@ -1,4 +1,5 @@
 import Reveal from './Reveal'
+import { useT } from '../data/runtime'
 
 // "Where AI meets image craft" — the six controls that turn a generation into
 // a deliverable. One line each, no essay.
@@ -12,18 +13,16 @@ const PRINCIPLES = [
 ]
 
 export default function CraftSection() {
+  const t = useT()
   return (
     <section className="border-b border-ink-600 py-9 sm:py-12">
       <div className="container-site">
         <div className="max-w-2xl">
-          <p className="eyebrow-green">08 / craft</p>
+          <p className="eyebrow-green">{t('craft.tag')}</p>
           <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-            Where AI Meets Image Craft
+            {t('craft.title')}
           </h2>
-          <p className="mt-3 text-muted">
-            A model gets you close. These are the controls that make the output a commercial
-            deliverable.
-          </p>
+          <p className="mt-3 text-muted">{t('craft.sub')}</p>
         </div>
 
         <div className="mt-6 grid gap-x-10 gap-y-0 sm:grid-cols-2">
@@ -31,9 +30,11 @@ export default function CraftSection() {
             <Reveal key={p.term} delay={(i % 2) * 80}>
               <div className="flex gap-4 border-b border-ink-600 py-3.5">
                 <p className="w-36 shrink-0 font-mono text-[10px] uppercase tracking-wideish text-green">
-                  {p.term}
+                  {t(`craft.p${i + 1}.term`, p.term)}
                 </p>
-                <p className="text-[13px] leading-relaxed text-muted">{p.line}</p>
+                <p className="text-[13px] leading-relaxed text-muted">
+                  {t(`craft.p${i + 1}.line`, p.line)}
+                </p>
               </div>
             </Reveal>
           ))}

@@ -4,14 +4,15 @@
 //                   logos moving"): brand logos scroll as white chips (img) or,
 //                   if a brand has no logo yet, its mono name, directly on the
 //                   page canvas. Chips are spaced by plain margin only (the
-//                   user removed the red dot separators). Each item is
-//                   clickable to #/brand/<slug>. rows=2 splits the items
-//                   across two lines that scroll in opposite directions (top
-//                   left, bottom right). The band pauses on hover (see
-//                   .marquee:hover in index.css).
+//                   user removed the red dot separators). Items with a `to`
+//                   value link to #/brand/<slug>; items without one (brands
+//                   with no uploaded media) render as plain chips. rows=2
+//                   splits the items across two lines that scroll in opposite
+//                   directions (top left, bottom right). The band pauses on
+//                   hover (see .marquee:hover in index.css).
 // variant 'ghost' : giant outlined display words on black (footer band).
-// Items are plain strings or { label, to, img? }.
-type MarqueeItem = string | { label: string; to: string; img?: string }
+// Items are plain strings or { label, to?, img? }.
+type MarqueeItem = string | { label: string; to?: string; img?: string }
 
 // Deal items alternately across the rows so both lines get a similar mix of
 // wide and narrow logos.
@@ -44,27 +45,42 @@ export default function KineticMarquee({
       {list.map((item, idx) => {
         const obj = typeof item === 'string' ? null : item
         const label = typeof item === 'string' ? item : item.label
+        // `to` is absent for brands with no uploaded media: those render as
+        // plain chips (no dead links to empty brand pages).
+        const to = obj?.to
         const chip = red && obj ? obj.img : undefined
         return (
           <span key={`${label}-${idx}`} className="flex items-center">
             {chip && obj ? (
+              to ? (
+                <a
+                  href={to}
+                  tabIndex={decorative ? -1 : undefined}
+                  title={label}
+                  className="mx-2 block shrink-0 bg-white px-3 py-1.5 transition-transform duration-200 hover:scale-105"
+                >
+                  <img
+                    src={chip}
+                    alt={label}
+                    loading="eager"
+                    decoding="async"
+                    className="h-6 w-auto"
+                  />
+                </a>
+              ) : (
+                <span title={label} className="mx-2 block shrink-0 bg-white px-3 py-1.5">
+                  <img
+                    src={chip}
+                    alt={label}
+                    loading="eager"
+                    decoding="async"
+                    className="h-6 w-auto"
+                  />
+                </span>
+              )
+            ) : to ? (
               <a
-                href={obj.to}
-                tabIndex={decorative ? -1 : undefined}
-                title={label}
-                className="mx-2 block shrink-0 bg-white px-3 py-1.5 transition-transform duration-200 hover:scale-105"
-              >
-                <img
-                  src={chip}
-                  alt={label}
-                  loading="eager"
-                  decoding="async"
-                  className="h-6 w-auto"
-                />
-              </a>
-            ) : obj ? (
-              <a
-                href={obj.to}
+                href={to}
                 tabIndex={decorative ? -1 : undefined}
                 className={
                   red

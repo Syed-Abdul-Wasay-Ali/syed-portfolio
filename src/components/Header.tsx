@@ -2,30 +2,41 @@ import { useEffect, useState } from 'react'
 import LinkedInIcon from './LinkedInIcon'
 import GitHubIcon from './GitHubIcon'
 import { LINKEDIN_URL, GITHUB_URL, RESUME_URL } from '../data/social'
-import { useRuntime } from '../data/runtime'
+import { useRuntime, useT } from '../data/runtime'
 
 // Nav order mirrors the home page section order (concept images first, brands last).
+// `section` maps to the home section key used by the admin's section manager.
 const LINKS = [
-  { href: '#concept-images', label: 'Concepts' },
-  { href: '#work', label: 'Work' },
-  { href: '#showcase', label: 'Showcase' },
-  { href: '#capabilities', label: 'Systems' },
-  { href: '#workflows', label: 'Workflows' },
-  { href: '#brands', label: 'Brands' },
-  { href: '#about', label: 'About' },
+  { href: '#concept-images', section: 'concept-images', labelKey: 'nav.concepts', label: 'Concepts' },
+  { href: '#work', section: 'workgrid', labelKey: 'nav.work', label: 'Work' },
+  { href: '#showcase', section: 'showcase', labelKey: 'nav.showcase', label: 'Showcase' },
+  { href: '#capabilities', section: 'capabilities', labelKey: 'nav.systems', label: 'Systems' },
+  { href: '#workflows', section: 'workflows', labelKey: 'nav.workflows', label: 'Workflows' },
+  { href: '#brands', section: 'brands', labelKey: 'nav.brands', label: 'Brands' },
+  { href: '#about', section: 'about', labelKey: 'nav.about', label: 'About' },
 ]
+
+const NAV_SECTIONS = LINKS.map((l) => l.section)
 
 export default function Header() {
   const [progress, setProgress] = useState(0)
   const [open, setOpen] = useState(false)
   const { content } = useRuntime()
-  const hidden = content?.pageSections ?? []
+  const t = useT()
+  const order = content?.sectionOrder?.home
+  // sectionOrder (admin v2) wins when present; pageSections is the legacy hide-list
+  const hidden = order
+    ? NAV_SECTIONS.filter((k) => !order.includes(k))
+    : (content?.pageSections ?? [])
   const conceptCount = content?.conceptImages?.length ?? 0
   const links = LINKS.filter(
     (l) =>
-      !hidden.includes(l.href.slice(1)) &&
+      !hidden.includes(l.section) &&
       (l.href !== '#concept-images' || conceptCount > 0),
   )
+  const resumeUrl = t('social.resume', RESUME_URL)
+  const linkedinUrl = t('social.linkedin', LINKEDIN_URL)
+  const githubUrl = t('social.github', GITHUB_URL)
 
   useEffect(() => {
     const onScroll = () => {
@@ -53,10 +64,10 @@ export default function Header() {
         <a href="#/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
           <span aria-hidden="true" className="disc h-2 w-2" />
           <span className="font-display text-base tracking-tight text-paper">
-            SYED ABDUL WASAY ALI
+            {t('header.name')}
           </span>
           <span className="hidden font-mono text-[10px] uppercase tracking-wideish text-violet md:inline">
-            ai creative · image specialist
+            {t('header.tagline')}
           </span>
         </a>
 
@@ -68,30 +79,30 @@ export default function Header() {
               href={l.href}
               className="glitch-link font-mono text-[11px] uppercase tracking-wideish text-muted transition-colors"
             >
-              {l.label}
+              {t(l.labelKey, l.label)}
             </a>
           ))}
           <a
             href="#/admin"
             className="rounded-md border border-ink-600 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wideish text-muted transition-colors hover:border-green hover:text-green"
           >
-            admin
+            {t('header.admin')}
           </a>
-          <a href={RESUME_URL} target="_blank" rel="noreferrer" className="btn-ghost !py-1.5">
-            resume
+          <a href={resumeUrl} target="_blank" rel="noreferrer" className="btn-ghost !py-1.5">
+            {t('header.resume')}
           </a>
           <a
-            href={LINKEDIN_URL}
+            href={linkedinUrl}
             target="_blank"
             rel="noreferrer"
             className="btn-ghost !py-1.5"
             aria-label="View LinkedIn profile"
           >
             <LinkedInIcon className="h-3.5 w-3.5" />
-            linkedin
+            {t('header.linkedin')}
           </a>
           <a
-            href={GITHUB_URL}
+            href={githubUrl}
             target="_blank"
             rel="noreferrer"
             className="text-muted transition-colors hover:text-green"
@@ -144,20 +155,20 @@ export default function Header() {
                 onClick={() => setOpen(false)}
                 className="py-3 font-mono text-sm uppercase tracking-wideish text-paper transition-colors hover:text-green"
               >
-                {l.label}
+                {t(l.labelKey, l.label)}
               </a>
             ))}
             <a
-              href={RESUME_URL}
+              href={resumeUrl}
               target="_blank"
               rel="noreferrer"
               onClick={() => setOpen(false)}
               className="btn-ghost mt-2 justify-center !py-2.5"
             >
-              resume
+              {t('header.resume')}
             </a>
             <a
-              href={LINKEDIN_URL}
+              href={linkedinUrl}
               target="_blank"
               rel="noreferrer"
               onClick={() => setOpen(false)}
@@ -165,10 +176,10 @@ export default function Header() {
               aria-label="View LinkedIn profile"
             >
               <LinkedInIcon className="h-4 w-4" />
-              linkedin
+              {t('header.linkedin')}
             </a>
             <a
-              href={GITHUB_URL}
+              href={githubUrl}
               target="_blank"
               rel="noreferrer"
               onClick={() => setOpen(false)}
@@ -183,7 +194,7 @@ export default function Header() {
               onClick={() => setOpen(false)}
               className="mt-2 justify-center rounded-md border border-ink-600 px-4 py-1.5 font-mono text-[11px] uppercase tracking-wideish text-muted transition-colors hover:border-green hover:text-green"
             >
-              admin
+              {t('header.admin')}
             </a>
           </div>
         </nav>

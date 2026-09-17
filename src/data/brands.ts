@@ -12,6 +12,7 @@
 // ---------------------------------------------------------------------------
 
 import type { MediaItem } from './projects'
+import type { RunContent } from './runtime'
 
 export interface Brand {
   slug: string
@@ -268,18 +269,94 @@ export const BRANDS: Brand[] = [
     accent: '#EE2737',
     logo: 'media/brands/vi/logo.jpg',
     story:
-      'Vi 5G FanFest turned the 2025 IPL season into a cricket quiz: questions on every match day, answers in the comments, vouchers worth ₹5,000 up for grabs. I trained the clay-style character on those cards as a character LoRA using Flux, and that training is what held the campaign together: same face, same clay finish, same world in every card, match after match, question after question. Once the look is trained in, it stops drifting.',
+      'Vi 5G FanFest turned the 2025 IPL season into a cricket quiz: questions on every match day, answers in the comments, vouchers worth ₹5,000 up for grabs. I trained the clay-style character on those cards as a character LoRA using Flux, and that training is what held the campaign together: same face, same clay finish, same world in every card, match after match, question after question. Once the look is trained in, it stops drifting. Getting there took 200+ renders in the first week alone: colourways, rooms, scenes, until the look held anywhere.',
     images: [
       {
         kind: 'image',
-        label: 'fanfest quiz q2 · clay-style character · blr vs raj',
+        label: 'fanfest quiz q4 · del vs hydr · 30 mar',
+        src: 'media/brands/vi/stills/vi-fanfest-quiz-x-30mar.jpg',
+        href: 'https://x.com/ViCustomerCare/status/1906319255290929392',
+        hrefLabel: 'view on x ↗',
+      },
+      {
+        kind: 'image',
+        label: 'fanfest quiz q4 · lkn vs guj · 12 apr',
+        src: 'media/brands/vi/stills/vi-fanfest-quiz-x-12apr.jpg',
+        href: 'https://x.com/ViCustomerCare/status/1911030303126172097',
+        hrefLabel: 'view on x ↗',
+      },
+      {
+        kind: 'image',
+        label: 'fanfest quiz q1 · del vs mum · 13 apr',
+        src: 'media/brands/vi/stills/vi-fanfest-quiz-x-13apr.jpg',
+        href: 'https://x.com/ViCustomerCare/status/1911419108232515820',
+        hrefLabel: 'view on x ↗',
+      },
+      {
+        kind: 'image',
+        label: 'fanfest quiz q4 · mum vs hyd · 17 apr',
+        src: 'media/brands/vi/stills/vi-fanfest-quiz-x-17apr.jpg',
+        href: 'https://x.com/ViCustomerCare/status/1912902632227922291',
+        hrefLabel: 'view on x ↗',
+      },
+      {
+        kind: 'image',
+        label: 'fanfest quiz q2 · blr vs raj · 24 apr',
         src: 'media/brands/vi/stills/vi-fanfest-quiz-q2.jpg',
         href: 'https://www.facebook.com/viofficialfanworld/posts/cricky-is-testing-your-cricket-iq-comment-vi5gfanfest-with-the-right-answers-to-/985824210433197/',
         hrefLabel: 'view on facebook ↗',
       },
+      {
+        kind: 'image',
+        label: 'fanfest quiz q5 · blr vs che · 03 may',
+        src: 'media/brands/vi/stills/vi-fanfest-quiz-x-03may.jpg',
+        href: 'https://x.com/ViCustomerCare/status/1918712163373597153',
+        hrefLabel: 'view on x ↗',
+      },
+      {
+        kind: 'image',
+        label: 'iteration · yellow metro · 21 mar',
+        src: 'media/brands/vi/iterations/vi-iter-yellow-metro.jpg',
+      },
+      {
+        kind: 'image',
+        label: 'iteration · teal armchair · 21 mar',
+        src: 'media/brands/vi/iterations/vi-iter-teal-armchair.jpg',
+      },
+      {
+        kind: 'image',
+        label: 'iteration · red office · 21 mar',
+        src: 'media/brands/vi/iterations/vi-iter-red-office.jpg',
+      },
+      {
+        kind: 'image',
+        label: 'iteration · purple street · 21 mar',
+        src: 'media/brands/vi/iterations/vi-iter-purple-street.jpg',
+      },
+      {
+        kind: 'image',
+        label: 'iteration · event aisle · 21 mar',
+        src: 'media/brands/vi/iterations/vi-iter-event-aisle.jpg',
+      },
+      {
+        kind: 'image',
+        label: 'iteration · ice-cream street · 24 mar',
+        src: 'media/brands/vi/iterations/vi-iter-icecream-street.jpg',
+      },
+      {
+        kind: 'image',
+        label: 'iteration · red carpet · 24 mar',
+        src: 'media/brands/vi/iterations/vi-iter-red-carpet.jpg',
+      },
+      {
+        kind: 'image',
+        label: 'iteration · mall run · 27 mar',
+        src: 'media/brands/vi/iterations/vi-iter-mall.jpg',
+      },
     ],
     animatics: [],
     films: [],
+    projects: ['ogilvy-vi-5g-fanfest'],
   },
   {
     slug: 'lacta',
@@ -328,3 +405,28 @@ export const brandMedia = (b: Brand): MediaItem[] => [
   ...b.animatics,
   ...b.films,
 ]
+
+// ---------------------------------------------------------------------------
+// Content awareness (static data + admin uploads).
+// A brand "has content" when at least one media item resolves to a file —
+// compiled in above, or uploaded through the admin layer (content.json
+// `uploads`). Brands without content are shown as static logos: never linked
+// (no dead detail pages) and sorted behind the ones that open.
+// ---------------------------------------------------------------------------
+export const brandHasContent = (b: Brand, content?: RunContent | null): boolean => {
+  if (brandMedia(b).some((m) => m.src)) return true
+  const up = content?.uploads?.[b.slug]
+  return Boolean(up && Object.values(up).some((list) => (list?.length ?? 0) > 0))
+}
+
+// Public display order: brands with content lead the line (newest-first
+// inside each group); the rest keep their relative order behind them.
+export const orderedBrands = (content?: RunContent | null): Brand[] => [
+  ...displayBrands.filter((b) => brandHasContent(b, content)),
+  ...displayBrands.filter((b) => !brandHasContent(b, content)),
+]
+
+// Only the brands that actually open — used for "next brand" navigation so it
+// never lands on an empty page.
+export const contentBrands = (content?: RunContent | null): Brand[] =>
+  displayBrands.filter((b) => brandHasContent(b, content))

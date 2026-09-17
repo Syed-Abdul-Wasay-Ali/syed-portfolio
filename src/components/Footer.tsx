@@ -2,69 +2,77 @@ import LinkedInIcon from './LinkedInIcon'
 import GitHubIcon from './GitHubIcon'
 import KineticMarquee from './KineticMarquee'
 import { LINKEDIN_URL, GITHUB_URL, EMAIL, RESUME_URL } from '../data/social'
+import { useT } from '../data/runtime'
 
 export default function Footer() {
+  const t = useT()
+  const year = new Date().getFullYear()
+  const resumeUrl = t('social.resume', RESUME_URL)
+  const linkedinUrl = t('social.linkedin', LINKEDIN_URL)
+  const githubUrl = t('social.github', GITHUB_URL)
+  const email = t('social.email', EMAIL)
+
   return (
     <footer className="site-footer bg-ink-950">
       <KineticMarquee
         variant="ghost"
         speed={44}
-        items={['Syed Abdul Wasay Ali', 'AI Creative Manager · Image Specialist', 'Open Source First']}
+        items={[t('footer.m1'), t('footer.m2'), t('footer.m3')]}
       />
       {/* polarity flip — the white end card */}
       <div className="bg-paper text-ink-950">
         <div className="container-site flex flex-col items-start justify-between gap-6 pt-10 sm:flex-row sm:items-center">
           <div>
             <p className="font-display text-sm uppercase tracking-tight text-ink-950">
-              Syed Abdul Wasay Ali
+              {t('footer.name')}
             </p>
             <p className="mt-1 font-mono text-[10px] uppercase tracking-wideish text-ink-950/60">
-              ai creative manager · image specialist · ogilvy · ex-cleandirty.ai
+              {t('footer.tagline')}
             </p>
           </div>
           <div className="flex flex-wrap gap-5">
             <a
-              href={LINKEDIN_URL}
+              href={linkedinUrl}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:text-green"
             >
               <LinkedInIcon className="h-3.5 w-3.5" />
-              linkedin
+              {t('footer.linkedin')}
             </a>
             <a
-              href={GITHUB_URL}
+              href={githubUrl}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:text-green"
             >
               <GitHubIcon className="h-3.5 w-3.5" />
-              github
+              {t('footer.github')}
             </a>
             <a
-              href={RESUME_URL}
+              href={resumeUrl}
               target="_blank"
               rel="noreferrer"
               className="font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:text-green"
             >
-              resume
+              {t('footer.resume')}
             </a>
             <a
-              href={`mailto:${EMAIL}`}
+              href={`mailto:${email}`}
               className="font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:text-green"
             >
-              email
+              {t('footer.email')}
             </a>
             <a
               href="#/admin"
               className="rounded-md border border-ink-950/20 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish text-ink-950/60 transition-colors hover:border-green hover:text-green"
             >
-              admin
+              {t('footer.admin')}
             </a>
           </div>
         </div>
         <p className="container-site pb-8 pt-6 font-mono text-[10px] text-ink-950/50">
-          rendered with open-source everything · {new Date().getFullYear()}
+          {t('footer.credits').replace('{year}', String(year))}
         </p>
       </div>
     </footer>

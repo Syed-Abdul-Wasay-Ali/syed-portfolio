@@ -766,7 +766,7 @@ const csMattressHeroStudio: Project = {
   stack: [
     'Own product concept + art direction',
     'Product isolation + mask extraction',
-    'Environment generation — Krea 2 · ComfyUI',
+    'Environment generation — Midjourney v7',
     'Compositing — placement, perspective, scale',
     'Light direction + contact shadow integration',
     'Retouch + grade + format crops',
@@ -859,7 +859,7 @@ const csBedroomLifestyle: Project = {
   ],
   stack: [
     'Own art direction + light plan',
-    'Environment generation — Krea 2 · ComfyUI',
+    'Environment generation — Midjourney v7',
     'Reference-controlled placement',
     'Perspective + scale match',
     'Light direction, temperature + contact shadows',
@@ -911,7 +911,7 @@ const csReferenceControlled: Project = {
     { label: 'discipline', value: 'controlled generation + variations' },
     { label: 'product', value: 'one product, six environments' },
     { label: 'route', value: 'reference → control → generation → edit' },
-    { label: 'engine', value: 'krea 2 + identity-edit pass · comfyui' },
+    { label: 'engine', value: 'midjourney v7 + chatgpt edit pass' },
     { label: 'year', value: '2026' },
   ],
   production: {
@@ -953,8 +953,8 @@ const csReferenceControlled: Project = {
   ],
   stack: [
     'Structured prompt system (environment / camera / light)',
-    'Reference conditioning — Krea 2 · ComfyUI',
-    'Identity-edit passes (LoRA + grounded edit)',
+    'Reference conditioning — Midjourney v7',
+    'Edit passes — chatgpt relight + cleanup',
     'Per-frame cleanup + unified grade',
     'Variation set — six environments, one product',
   ],

@@ -2,6 +2,8 @@
 // Clearly labelled as a design study: the layout idea is the point — how the
 // generated imagery behaves in a product page and on a phone. Imagery comes
 // from the same pipeline as the rest of the study.
+import { useT } from '../data/runtime'
+
 const DESKTOP_HERO = 'media/ecommerce-image-system/desktop-hero.jpg'
 const DESKTOP_LIFESTYLE = 'media/ecommerce-image-system/desktop-lifestyle.jpg'
 const DESKTOP_DETAIL = 'media/ecommerce-image-system/desktop-detail.jpg'
@@ -25,14 +27,15 @@ function Bar({ w }: { w: string }) {
 }
 
 export default function EcomConcept() {
+  const t = useT()
   return (
     <div>
       <div className="mb-5 flex flex-wrap items-center gap-3">
         <span className="bg-green px-2 py-1 font-mono text-[10px] uppercase tracking-wideish text-snow">
-          concept
+          {t('ecom.badge')}
         </span>
         <p className="font-mono text-[10px] uppercase tracking-wideish text-muted">
-          design study — fictional page · no real brand · the imagery is the system&rsquo;s output
+          {t('ecom.note')}
         </p>
       </div>
 
@@ -78,9 +81,9 @@ export default function EcomConcept() {
                 </div>
               </div>
               <div className="grid grid-cols-4 gap-2">
-                {[THUMB_1, THUMB_2, THUMB_3, THUMB_4].map((t, i) => (
-                  <span key={t} className={`relative block aspect-square overflow-hidden rounded-sm border ${i === 0 ? 'border-greenBright' : 'border-ink-600'}`}>
-                    <img src={t} alt={`thumbnail ${i + 1}`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                {[THUMB_1, THUMB_2, THUMB_3, THUMB_4].map((th, i) => (
+                  <span key={th} className={`relative block aspect-square overflow-hidden rounded-sm border ${i === 0 ? 'border-greenBright' : 'border-ink-600'}`}>
+                    <img src={th} alt={`thumbnail ${i + 1}`} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
                   </span>
                 ))}
               </div>
@@ -96,7 +99,7 @@ export default function EcomConcept() {
             </div>
           </div>
           <p className="mt-2 font-mono text-[10px] uppercase tracking-wideish text-muted">
-            desktop — product page layout
+            {t('ecom.desktop')}
           </p>
         </div>
 
@@ -117,9 +120,9 @@ export default function EcomConcept() {
                 <span className="block h-4 w-16 rounded-sm bg-ink-700" />
                 <span className="block h-7 w-full rounded-sm bg-paper/80" />
                 <div className="flex gap-1.5 pt-1">
-                  {[THUMB_1, THUMB_2, THUMB_3].map((t) => (
-                    <span key={t} className="relative block h-9 w-9 overflow-hidden rounded-sm border border-ink-700">
-                      <img src={t} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+                  {[THUMB_1, THUMB_2, THUMB_3].map((th) => (
+                    <span key={th} className="relative block h-9 w-9 overflow-hidden rounded-sm border border-ink-700">
+                      <img src={th} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
                     </span>
                   ))}
                 </div>
@@ -127,18 +130,18 @@ export default function EcomConcept() {
             </div>
           </div>
           <p className="mt-2 text-center font-mono text-[10px] uppercase tracking-wideish text-muted">
-            mobile — recomposed, not cropped
+            {t('ecom.mobile')}
           </p>
         </div>
       </div>
 
       <div className="mt-6 grid gap-x-8 gap-y-0 sm:grid-cols-2">
-        {NOTES.map((n) => (
+        {NOTES.map((n, i) => (
           <div key={n.term} className="flex gap-4 border-b border-ink-600 py-3">
             <p className="w-36 shrink-0 font-mono text-[10px] uppercase tracking-wideish text-green">
-              {n.term}
+              {t(`ecom.n${i + 1}.term`, n.term)}
             </p>
-            <p className="text-[13px] leading-relaxed text-muted">{n.line}</p>
+            <p className="text-[13px] leading-relaxed text-muted">{t(`ecom.n${i + 1}.line`, n.line)}</p>
           </div>
         ))}
       </div>

@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Local admin + working backups
+*.bak
+.admin-backups/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -1,5 +1,7 @@
-import { projectsByDate, type Project } from '../data/projects'
+import type { Project } from '../data/projects'
 import type { ReactNode } from 'react'
+import { useProjectsOV } from '../data/overrides'
+import { useT, useTL } from '../data/runtime'
 import ProjectCard from './ProjectCard'
 import FeaturedCard from './FeaturedCard'
 import Reveal from './Reveal'
@@ -58,16 +60,19 @@ function Lane({
 }
 
 export default function WorkGrid() {
-  const conceptLane = projectsByDate.filter((p) => p.company === 'Concept')
-  const shippedLane = projectsByDate.filter((p) => p.company !== 'Concept')
+  const all = useProjectsOV()
+  const t = useT()
+  const tl = useTL()
+  const conceptLane = all.filter((p) => p.company === 'Concept')
+  const shippedLane = all.filter((p) => p.company !== 'Concept')
 
   return (
     <section id="work" className="scroll-mt-16 py-10 sm:py-12">
       <div className="container-site">
         <div className="max-w-2xl">
-          <p className="eyebrow-green">03 / case studies</p>
+          <p className="eyebrow-green">{t('work.tag')}</p>
           <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-            Case studies
+            {t('work.title')}
           </h2>
         </div>
 
@@ -75,33 +80,32 @@ export default function WorkGrid() {
 
         <div className="mt-7 grid gap-x-8 gap-y-10 lg:grid-cols-2">
           <Lane
-            title="Concept case studies"
-            blurb="Self-set briefs taken end-to-end — five production studies on the commercial imaging system, plus concept films — all on the same pipelines as client work."
+            title={t('work.lane1.title')}
+            blurb={t('work.lane1.blurb')}
             projects={conceptLane}
             footer={
               <div className="space-y-3.5">
                 <div className="border border-dashed border-ink-600 p-4">
                 <p className="font-mono text-[10px] uppercase tracking-wideish text-green">
-                  concept lane
+                  {t('work.card.tag')}
                 </p>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
-                  Every file here started as a self-set brief and was taken to a final cut on the
-                  same pipelines as client work. More experiments and stills live in the{' '}
+                  {t('work.card.body')}{' '}
                   <a href="#showcase" className="text-greenBright underline-offset-2 hover:underline">
                     showcase
                   </a>
                   .
                 </p>
                 <p className="mt-3 font-mono text-[10px] uppercase tracking-wideish text-muted">
-                  tooling
+                  {t('work.card.tooling')}
                 </p>
                 <div className="mt-1.5 flex flex-wrap gap-1.5">
-                  {['comfyui', 'seedance 2.5', 'blender + mcp', 'krea 2'].map((t) => (
+                  {tl('work.card.tools', ['comfyui', 'seedance 2.5', 'blender + mcp', 'krea 2']).map((chip) => (
                     <span
-                      key={t}
+                      key={chip}
                       className="border border-ink-600 px-2 py-0.5 font-mono text-[10px] text-paper/80"
                     >
-                      {t}
+                      {chip}
                     </span>
                   ))}
                 </div>
@@ -109,15 +113,15 @@ export default function WorkGrid() {
                 <div className="panel p-4">
                   <NodeGraph className="mx-auto max-w-[240px] opacity-90" animated={false} />
                   <p className="mt-2 text-center font-mono text-[10px] uppercase tracking-wideish text-muted">
-                    fig. 02 · the same graphs as client work
+                    {t('work.fig')}
                   </p>
                 </div>
               </div>
             }
           />
           <Lane
-            title="Shipped work"
-            blurb="Client campaigns made at Ogilvy, shipped to real audiences."
+            title={t('work.lane2.title')}
+            blurb={t('work.lane2.blurb')}
             projects={shippedLane}
           />
         </div>

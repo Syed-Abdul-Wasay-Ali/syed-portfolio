@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
-import { getBrand, displayBrands, type Brand } from '../data/brands'
+import type { ReactNode } from 'react'
+import { useBrandOV, ovBrand, ovBrandItems, ovProject } from '../data/overrides'
 import { getProject, type Project, type MediaItem } from '../data/projects'
-import { useRuntime, type SectionName } from '../data/runtime'
+import { contentBrands, type Brand } from '../data/brands'
+import { useRuntime, useT, type SectionName } from '../data/runtime'
 import MediaGallery from '../components/MediaGallery'
 import Lightbox from '../components/Lightbox'
 import BrandTile from '../components/BrandTile'
@@ -191,9 +193,9 @@ function BrandProjectCard({
           )}
           <p className="mt-3 line-clamp-2 text-sm leading-relaxed text-muted">{project.excerpt}</p>
           <div className="mt-3 flex flex-wrap gap-1.5">
-            {project.workflow.map((w) => (
+            {project.workflow.map((w, i) => (
               <span
-                key={w.label}
+                key={`${w.label}-${i}`}
                 className="brand-chip border px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish"
               >
                 {w.label}
@@ -245,9 +247,10 @@ function BrandProjectCard({
 }
 
 export default function BrandPage({ slug }: { slug: string }) {
-  const brand = getBrand(slug)
-  const [lightbox, setLightbox] = useState<number | null>(null)
+  const brand = useBrandOV(slug)
   const { content } = useRuntime()
+  const t = useT()
+  const [lightbox, setLightbox] = useState<number | null>(null)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -262,29 +265,29 @@ export default function BrandPage({ slug }: { slug: string }) {
   if (!brand) {
     return (
       <div className="container-site py-32 text-center">
-        <p className="eyebrow-green">404 / brand not found</p>
-        <h1 className="mt-3 font-display text-3xl font-black uppercase">Brand missing</h1>
+        <p className="eyebrow-green">{t('bui.404.tag')}</p>
+        <h1 className="mt-3 font-display text-3xl font-black uppercase">{t('bui.404.title')}</h1>
         <a href="#/" className="btn-ghost mt-6">
-          ← back home
+          {t('bui.404.back')}
         </a>
       </div>
     )
   }
 
-  // runtime layer: admin uploads, removed items, hidden sections
+  // runtime layer: hidden sections + admin uploads + removed items + new media
   const hidden = (s: SectionName) => (content?.hiddenSections?.[brand.slug] ?? []).includes(s)
-  const eff = (items: MediaItem[], s: SectionName): MediaItem[] => {
-    const removed = new Set(content?.removedItems?.[brand.slug]?.[s] ?? [])
-    const keep = items.filter((m) => !removed.has(m.src ?? m.label ?? ''))
-    return [...(content?.uploads?.[brand.slug]?.[s] ?? []), ...keep]
-  }
-  const stillsItems = eff(brand.images, 'stills')
-  const animaticsItems = eff(brand.animatics, 'animatics')
-  const filmsItems = eff(brand.films, 'films')
+  const stillsItems = ovBrandItems(content, brand.slug, 'stills', brand.images)
+  const animaticsItems = ovBrandItems(content, brand.slug, 'animatics', brand.animatics)
+  const filmsItems = ovBrandItems(content, brand.slug, 'films', brand.films)
   const all = [...stillsItems, ...animaticsItems, ...filmsItems]
   const imagesEnd = stillsItems.length
   const animaticsEnd = imagesEnd + animaticsItems.length
-  const next = displayBrands[(displayBrands.findIndex((b) => b.slug === slug) + 1) % displayBrands.length]
+  // next-brand nav cycles only through brands that open (media present), so
+  // it never lands on an empty page.
+  const navBrands = contentBrands(content)
+  const navIdx = navBrands.findIndex((b) => b.slug === slug)
+  const nextRaw = navBrands.length > 0 ? navBrands[(navIdx + 1) % navBrands.length] : brand
+  const next = ovBrand(content, nextRaw)
 
   // case studies pinned to this brand (newest FIRST: last added shows on top,
   // older projects go down). NUMBERING is by addition order: the slug list
@@ -293,7 +296,7 @@ export default function BrandPage({ slug }: { slug: string }) {
   const rawBrandProjects = (brand.projects ?? [])
     .map((s) => getProject(s))
     .filter((p): p is Project => Boolean(p))
-  const brandProjects = [...rawBrandProjects].reverse()
+  const brandProjects = [...rawBrandProjects].reverse().map((p) => ovProject(content, p))
   const projectNumber = (slug: string) => brand.projects!.indexOf(slug) + 1
   const hasProjects = brandProjects.length > 0
 
@@ -304,8 +307,84 @@ export default function BrandPage({ slug }: { slug: string }) {
 
   // section numbers are sequential per rendered section (story = 00)
   const pad = (n: number) => String(n).padStart(2, '0')
+
+  // ---- ordered sections (admin-controlled) -------------------------------
+  const order = content?.sectionOrder?.brand
+  const SECTION_KEYS = ['story', 'projects', 'stills', 'animatics', 'films']
+  const available = (k: string): boolean => {
+    if (k === 'story') return !hasProjects && Boolean(brand.story)
+    if (k === 'projects') return hasProjects
+    if (k === 'stills') return stillsItems.length > 0
+    if (k === 'animatics') return animaticsItems.length > 0
+    if (k === 'films') return filmsItems.length > 0
+    return false
+  }
+  const orderedKeys = order
+    ? order.filter((k) => SECTION_KEYS.includes(k))
+    : SECTION_KEYS
   let sec = 0
-  const take = () => pad(++sec)
+  const sectionNodes: ReactNode[] = []
+  for (const k of orderedKeys) {
+    if (!available(k) || hidden(k as SectionName)) continue
+    if (k === 'story') {
+      sectionNodes.push(
+        <Section key="story" tag={`${pad(0)} / story`} title={t('bui.story.title')} delay={0}>
+          <p className="max-w-3xl border-l-2 border-green/50 pl-4 text-[13px] font-bold leading-relaxed text-[#94A8EE]">
+            {brand.story}
+          </p>
+        </Section>
+      )
+      continue
+    }
+    const num = pad(++sec)
+    if (k === 'projects') {
+      sectionNodes.push(
+        <Section key="projects" tag={`${num} / projects`} title={t('bui.projects.title')} delay={0}>
+          <div className="space-y-5">
+            {brandProjects.map((p) => (
+              <BrandProjectCard
+                key={p.slug}
+                project={p}
+                index={projectNumber(p.slug) - 1}
+                story={p.slug === storyOwner ? brand.story : undefined}
+              />
+            ))}
+          </div>
+          <p className="mt-5 max-w-3xl text-sm text-muted">{t('bui.projects.note')}</p>
+        </Section>
+      )
+    } else if (k === 'stills') {
+      sectionNodes.push(
+        <Section key="stills" tag={`${num} / stills`} title={t('bui.stills.title')} delay={60}>
+          <MediaGallery
+            items={stillsItems}
+            onOpen={(i) => setLightbox(i)}
+            cols="sm:grid-cols-3"
+          />
+        </Section>
+      )
+    } else if (k === 'animatics') {
+      sectionNodes.push(
+        <Section key="animatics" tag={`${num} / animatics`} title={t('bui.animatics.title')} delay={60}>
+          <MediaGallery
+            items={animaticsItems}
+            onOpen={(i) => setLightbox(imagesEnd + i)}
+          />
+        </Section>
+      )
+    } else if (k === 'films') {
+      sectionNodes.push(
+        <Section key="films" tag={`${num} / final film`} title={t('bui.films.title')} delay={120}>
+          <MediaGallery
+            items={filmsItems}
+            onOpen={(i) => setLightbox(animaticsEnd + i)}
+          />
+        </Section>
+      )
+    }
+  }
+
+  const showNext = !order || order.includes('next')
 
   return (
     <main className="brand-page pt-14">
@@ -318,7 +397,7 @@ export default function BrandPage({ slug }: { slug: string }) {
             href="#brands"
             className="brand-back font-mono text-[11px] uppercase tracking-wideish text-muted transition-colors"
           >
-            ← all brands
+            {t('bui.back')}
           </a>
           <div className="mt-6 flex flex-wrap items-center gap-6">
             <div className="brand-reel compact">
@@ -336,7 +415,7 @@ export default function BrandPage({ slug }: { slug: string }) {
                 {brand.name}
               </h1>
               <p className="mt-2 font-mono text-[11px] uppercase tracking-wideish text-muted">
-                {brand.note} · click any frame to inspect
+                {brand.note} · {t('bui.inspect')}
               </p>
             </div>
           </div>
@@ -345,77 +424,24 @@ export default function BrandPage({ slug }: { slug: string }) {
 
       {/* Galleries */}
       <div className="container-site pb-4 pt-8">
-        {/* Brands without pinned case studies show their story as section 00. */}
-        {!hasProjects && brand.story && !hidden('story') && (
-          <Section tag={`${pad(0)} / story`} title="The campaign" delay={0}>
-            <p className="max-w-3xl border-l-2 border-green/50 pl-4 text-[13px] font-bold leading-relaxed text-[#94A8EE]">
-              {brand.story}
-            </p>
-          </Section>
-        )}
+        {sectionNodes}
 
-        {hasProjects && !hidden('projects') && (
-          <Section tag={`${take()} / projects`} title="Projects on this brand" delay={0}>
-            <div className="space-y-5">
-              {brandProjects.map((p) => (
-                <BrandProjectCard
-                  key={p.slug}
-                  project={p}
-                  index={projectNumber(p.slug) - 1}
-                  story={p.slug === storyOwner ? brand.story : undefined}
-                />
-              ))}
-            </div>
-            <p className="mt-5 max-w-3xl text-sm text-muted">
-              Every project opens its full case study: the process, the
-              models and the frames that shipped. Click any project above, or
-              use the outputs strip to jump straight in.
-            </p>
-          </Section>
+        {showNext && (
+          <Reveal delay={120} className="pb-8 pt-2">
+            <a
+              href={`#/brand/${next.slug}`}
+              className="brand-link card-lift group flex items-center justify-between rounded-md p-5"
+            >
+              <div>
+                <p className="font-mono text-[11px] uppercase tracking-wideish text-snow/60">
+                  {t('bui.next')}
+                </p>
+                <p className="mt-2 font-display text-lg font-bold text-snow">{next.name}</p>
+              </div>
+              <span className="brand-link-arrow font-display text-2xl">→</span>
+            </a>
+          </Reveal>
         )}
-
-        {!hidden('stills') && stillsItems.length > 0 && (
-          <Section tag={`${take()} / stills`} title="Campaign images" delay={60}>
-            <MediaGallery
-              items={stillsItems}
-              onOpen={(i) => setLightbox(i)}
-              cols="sm:grid-cols-3"
-            />
-          </Section>
-        )}
-
-        {!hidden('animatics') && animaticsItems.length > 0 && (
-          <Section tag={`${take()} / animatics`} title="Animatics" delay={60}>
-            <MediaGallery
-              items={animaticsItems}
-              onOpen={(i) => setLightbox(imagesEnd + i)}
-            />
-          </Section>
-        )}
-
-        {!hidden('films') && filmsItems.length > 0 && (
-          <Section tag={`${take()} / final film`} title="Final films" delay={120}>
-            <MediaGallery
-              items={filmsItems}
-              onOpen={(i) => setLightbox(animaticsEnd + i)}
-            />
-          </Section>
-        )}
-
-        <Reveal delay={120} className="pb-8 pt-2">
-          <a
-            href={`#/brand/${next.slug}`}
-            className="brand-link card-lift group flex items-center justify-between rounded-md p-5"
-          >
-            <div>
-              <p className="font-mono text-[11px] uppercase tracking-wideish text-snow/60">
-                next brand
-              </p>
-              <p className="mt-2 font-display text-lg font-bold text-snow">{next.name}</p>
-            </div>
-            <span className="brand-link-arrow font-display text-2xl">→</span>
-          </a>
-        </Reveal>
       </div>
 
       {lightbox !== null && (

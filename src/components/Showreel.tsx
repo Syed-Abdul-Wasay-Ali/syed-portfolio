@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react'
+import { useT } from '../data/runtime'
 
 // Sound-off showreel cut (2026): concept films + selected client work.
 // Plays only while in view so it does not burn cycles off-screen.
 export default function Showreel() {
   const ref = useRef<HTMLVideoElement | null>(null)
+  const t = useT()
 
   useEffect(() => {
     const el = ref.current
@@ -24,7 +26,7 @@ export default function Showreel() {
   }, [])
 
   return (
-    <figure className="mt-10">
+    <figure className="mt-7">
       <div className="panel overflow-hidden">
         <video
           ref={ref}
@@ -44,9 +46,9 @@ export default function Showreel() {
           aria-label="Showreel 2026: concept films and selected client work, 26 seconds, sound off"
         />
       </div>
-      <figcaption className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 font-mono text-[10px] uppercase tracking-wideish text-muted">
-        <span>showreel / 2026 · concept films + selected client work</span>
-        <span>26s · sound off</span>
+      <figcaption className="mt-2.5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 font-mono text-[10px] uppercase tracking-wideish text-muted">
+        <span>{t('work.reel.c1')}</span>
+        <span>{t('work.reel.c2')}</span>
       </figcaption>
     </figure>
   )

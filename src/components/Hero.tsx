@@ -3,9 +3,11 @@ import NodeGraph from './NodeGraph'
 import LinkedInIcon from './LinkedInIcon'
 import { LINKEDIN_URL, EMAIL, RESUME_URL } from '../data/social'
 import { projectsByDate } from '../data/projects'
+import { useT } from '../data/runtime'
 
 export default function Hero() {
   const titleRef = useRef<HTMLDivElement | null>(null)
+  const t = useT()
 
   // scroll push-in: the name scales toward the camera as you scroll (title-card move)
   useEffect(() => {
@@ -24,6 +26,21 @@ export default function Hero() {
   }, [])
 
   const year = new Date().getFullYear()
+  const resumeUrl = t('social.resume', RESUME_URL)
+  const linkedinUrl = t('social.linkedin', LINKEDIN_URL)
+  const email = t('social.email', EMAIL)
+
+  const stats: [string, string][] = [
+    [t('hero.stat1.v'), t('hero.stat1.l')],
+    [t('hero.stat2.v'), t('hero.stat2.l')],
+    [t('hero.stat3.v'), t('hero.stat3.l')],
+    [
+      t('hero.stat4.v') || String(projectsByDate.filter((p) => p.company !== 'Concept').length),
+      t('hero.stat4.l'),
+    ],
+    [t('hero.stat5.v') || String(projectsByDate.length), t('hero.stat5.l')],
+    [t('hero.stat6.v'), t('hero.stat6.l')],
+  ]
 
   return (
     <section className="relative overflow-hidden border-b border-ink-600 pb-8 pt-20 sm:pb-10 sm:pt-28">
@@ -55,7 +72,7 @@ export default function Hero() {
         <div>
           <p className="k-fade flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.24em] text-green">
             <span className="disc inline-block h-1.5 w-1.5" />
-            AI Creative Manager · AI Image Specialist
+            {t('hero.eyebrow')}
           </p>
 
           <div
@@ -68,9 +85,9 @@ export default function Hero() {
             }}
           >
             <h1 className="font-display uppercase leading-[0.9] tracking-tight text-paper text-[clamp(2.7rem,8.5vw,7rem)]">
-              <span className="k-wipe">SYED ABDUL</span>
+              <span className="k-wipe">{t('hero.first')}</span>
               <span className="k-wipe" style={{ animationDelay: '160ms' }}>
-                WASAY ALI
+                {t('hero.last')}
               </span>
             </h1>
           </div>
@@ -79,20 +96,17 @@ export default function Hero() {
             className="k-fade mt-4 font-mono text-[11px] uppercase tracking-[0.22em] text-greenBright"
             style={{ animationDelay: '320ms' }}
           >
-            comfyui · flux · stable diffusion · ai image generation · image editing ·
-            product compositing · creative automation
+            {t('hero.keywords')}
           </p>
 
           <p
             className="k-fade mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg"
             style={{ animationDelay: '380ms' }}
           >
-            Building photorealistic product imagery, commercial visuals and
-            production-ready AI workflows — real products placed into generated environments
-            without losing product fidelity, composited with matched perspective, light and
-            shadow. AI Creative Manager at{' '}
-            <span className="co-ogilvy">Ogilvy</span> · ex-AI Head Artist at{' '}
-            <span className="co-cleandirty">cleanDirty.ai</span>.
+            {t('hero.introLead')}{' '}
+            <span className="co-ogilvy">Ogilvy</span> {t('hero.introMid')}{' '}
+            <span className="co-cleandirty">cleanDirty.ai</span>
+            {t('hero.introTail')}
           </p>
 
           {/* log line — the site's signature flourish */}
@@ -101,8 +115,7 @@ export default function Hero() {
             style={{ animationDelay: '480ms' }}
             aria-hidden="true"
           >
-            <span className="text-green">&gt;</span> loading comfyui ... ok · 3 packs ·
-            lora: locked · queue: ready
+            <span className="text-green">&gt;</span> {t('hero.log')}
             <span className="ml-1 inline-block h-3.5 w-2 animate-blink bg-green align-middle" />
           </p>
 
@@ -112,23 +125,23 @@ export default function Hero() {
             style={{ animationDelay: '560ms' }}
           >
             <a href="#work" className="btn-green">
-              view work
+              {t('hero.ctaWork')}
             </a>
-            <a href={RESUME_URL} target="_blank" rel="noreferrer" className="btn-ghost">
-              resume
+            <a href={resumeUrl} target="_blank" rel="noreferrer" className="btn-ghost">
+              {t('hero.ctaResume')}
             </a>
             <a
-              href={LINKEDIN_URL}
+              href={linkedinUrl}
               target="_blank"
               rel="noreferrer"
               className="btn-ghost"
               aria-label="View LinkedIn profile"
             >
               <LinkedInIcon className="h-4 w-4" />
-              connect on linkedin
+              {t('hero.ctaLinkedin')}
             </a>
-            <a href={`mailto:${EMAIL}`} className="btn-ghost">
-              email me
+            <a href={`mailto:${email}`} className="btn-ghost">
+              {t('hero.ctaEmail')}
             </a>
           </div>
 
@@ -136,17 +149,7 @@ export default function Hero() {
             className="k-fade mt-8 flex flex-wrap gap-x-8 gap-y-4 border-t border-ink-600 pt-5"
             style={{ animationDelay: '640ms' }}
           >
-            {[
-              ['2', 'companies shipped'],
-              ['1y5m+', 'ai creative manager · ogilvy'],
-              ['1y5m+', 'ai head artist · cleandirty'],
-              [
-                String(projectsByDate.filter((p) => p.company !== 'Concept').length),
-                'shipped brand campaigns',
-              ],
-              [String(projectsByDate.length), 'case studies below'],
-              ['2y10m+', 'total ai experience'],
-            ].map(([v, l]) => (
+            {stats.map(([v, l]) => (
               <div key={l}>
                 <div className="font-display text-2xl text-paper">{v}</div>
                 <div className="font-mono text-[10px] uppercase tracking-wideish text-muted">
@@ -161,9 +164,11 @@ export default function Hero() {
             className="k-fade mt-8 flex items-center justify-between border-t border-ink-600 pt-4 font-mono text-[10px] uppercase tracking-wideish text-muted"
             style={{ animationDelay: '720ms' }}
           >
-            <span>Portfolio / {year}</span>
+            <span>
+              {t('hero.hudLeft')} / {year}
+            </span>
             <span className="flex items-center gap-2">
-              Scroll for work
+              {t('hero.hudScroll')}
               <span className="text-green">↓</span>
             </span>
           </div>
@@ -176,7 +181,7 @@ export default function Hero() {
             </div>
           </div>
           <p className="mt-3 text-right font-mono text-[10px] uppercase tracking-wideish text-muted">
-            fig. 01 · every project starts here
+            {t('hero.fig')}
           </p>
         </div>
       </div>

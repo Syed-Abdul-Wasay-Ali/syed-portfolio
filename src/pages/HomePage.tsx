@@ -13,44 +13,64 @@ import CraftSection from '../components/CraftSection'
 import About from '../components/About'
 import CtaBand from '../components/CtaBand'
 import { useRuntime } from '../data/runtime'
-import { brandHasContent, orderedBrands } from '../data/brands'
+import { useBrandListOV } from '../data/overrides'
+import { brandHasContent } from '../data/brands'
+import type { ReactNode } from 'react'
 
-// Home order (user-set): hero → the production pipeline strip → logo ticker →
+// Home order (default): hero → the production pipeline strip → logo ticker →
 // what-i-solve → concept images → case studies → one product / many assets →
 // showcase → systems → workflow + stack → craft → brands → about → contact.
+//
+// The admin "sections" tab controls visibility AND order: when
+// content.sectionOrder.home exists it is authoritative (only listed sections
+// render, in that order). Otherwise the legacy pageSections hide-list applies.
 export default function HomePage() {
   const { content } = useRuntime()
+  const order = content?.sectionOrder?.home
   const hidden = content?.pageSections ?? []
-  return (
-    <>
-      <Hero />
-      {/* the production route, straight under the hero */}
-      <PipelineStrip />
-      {/* red logo ticker: brand logos as white chips on two lines moving in
-          opposite directions (hover pauses the scroll, see .marquee:hover).
-          Brands with media lead the line and open on click; the rest stay as
-          texture. Brands without a logo fall back to the name. */}
-      <KineticMarquee
-        variant="red"
-        rows={2}
-        speed={26}
-        items={orderedBrands(content).map((b) => ({
-          label: b.name,
-          img: b.logo,
-          ...(brandHasContent(b, content) ? { to: `#/brand/${b.slug}` } : {}),
-        }))}
-      />
-      <WhatIBuild />
-      {!hidden.includes('concept-images') && <ConceptImagesSection />}
-      <WorkGrid />
-      {!hidden.includes('assets') && <AssetFamily />}
-      {!hidden.includes('showcase') && <ShowcaseSection />}
-      {!hidden.includes('capabilities') && <Capabilities />}
-      {!hidden.includes('workflows') && <WorkflowsSection />}
-      {!hidden.includes('craft') && <CraftSection />}
-      {!hidden.includes('brands') && <BrandsSection compact />}
-      {!hidden.includes('about') && <About />}
-      {!hidden.includes('contact') && <CtaBand />}
-    </>
-  )
+  const brands = useBrandListOV()
+
+  const all: { k: string; node: ReactNode }[] = [
+    { k: 'hero', node: <Hero key="hero" /> },
+    { k: 'pipeline', node: <PipelineStrip key="pipeline" /> },
+    {
+      k: 'marquee',
+      node: (
+        // red logo ticker: brand logos as white chips on two lines moving in
+        // opposite directions (hover pauses the scroll, see .marquee:hover).
+        // Brands with media lead the line and open on click; the rest stay as
+        // texture. Brands without a logo fall back to the name.
+        <KineticMarquee
+          key="marquee"
+          variant="red"
+          rows={2}
+          speed={26}
+          items={brands.map((b) => ({
+            label: b.name,
+            img: b.logo,
+            ...(brandHasContent(b, content) ? { to: `#/brand/${b.slug}` } : {}),
+          }))}
+        />
+      ),
+    },
+    { k: 'whatibuild', node: <WhatIBuild key="whatibuild" /> },
+    { k: 'concept-images', node: <ConceptImagesSection key="concept-images" /> },
+    { k: 'workgrid', node: <WorkGrid key="workgrid" /> },
+    { k: 'assets', node: <AssetFamily key="assets" /> },
+    { k: 'showcase', node: <ShowcaseSection key="showcase" /> },
+    { k: 'capabilities', node: <Capabilities key="capabilities" /> },
+    { k: 'workflows', node: <WorkflowsSection key="workflows" /> },
+    { k: 'craft', node: <CraftSection key="craft" /> },
+    { k: 'brands', node: <BrandsSection key="brands" compact /> },
+    { k: 'about', node: <About key="about" /> },
+    { k: 'contact', node: <CtaBand key="contact" /> },
+  ]
+
+  const visible = order
+    ? (order
+        .map((k) => all.find((s) => s.k === k))
+        .filter(Boolean) as { k: string; node: ReactNode }[])
+    : all.filter((s) => !hidden.includes(s.k))
+
+  return <>{visible.map((s) => s.node)}</>
 }

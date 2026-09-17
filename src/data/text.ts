@@ -1,0 +1,525 @@
+// ---------------------------------------------------------------------------
+// Text registry — every static word on the site, with its key and default.
+//
+// Components call t('key') / tl('key', fallback) and the runtime resolves:
+//   content.texts[key]  →  fallback argument  →  registry default (this file).
+// The admin panel ("words" tab) renders these groups as editable fields, so
+// this file is the single source of truth for default copy.
+//
+// Key families:
+//   proj.<slug>.<field>     per case study (admin builds from data)
+//   brand.<slug>.<field>    per brand (name / note / story)
+//   sc.<id>.* / wf.<id>.*   showcase / workflow items
+//   pui.* / bui.*           case-study / brand page chrome (all projects/brands)
+// ---------------------------------------------------------------------------
+
+export const pk = (slug: string, f: string) => `proj.${slug}.${f}`
+export const bk = (slug: string, f: string) => `brand.${slug}.${f}`
+export const sck = (id: string, f: string) => `sc.${id}.${f}`
+export const wfk = (id: string, f: string) => `wf.${id}.${f}`
+
+export const collKey = {
+  projectResults: (slug: string) => `project:${slug}:results`,
+  showcase: 'showcase',
+  workflows: 'workflows',
+}
+
+export interface TextField {
+  /** key */
+  k: string
+  /** human label shown in the admin panel */
+  label: string
+  /** default text (scalar fields) */
+  def?: string
+  /** default items (list fields) */
+  list?: string[]
+  /** render as textarea */
+  multi?: boolean
+}
+
+export interface TextGroup {
+  id: string
+  label: string
+  hint?: string
+  fields: TextField[]
+}
+
+export const UI_GROUPS: TextGroup[] = [
+  {
+    id: 'site',
+    label: 'Site — title & links',
+    hint: 'browser tab title and the profile links used across the site',
+    fields: [
+      { k: 'site.title', label: 'browser title', def: 'Syed Abdul Wasay Ali — AI Creative Manager & AI Image Specialist' },
+      { k: 'social.linkedin', label: 'linkedin url', def: 'https://www.linkedin.com/in/syed-abdul-wasay-ali-084a88179/' },
+      { k: 'social.github', label: 'github url', def: 'https://github.com/Syed-Abdul-Wasay-Ali' },
+      { k: 'social.email', label: 'email', def: 'hello@syedwasay.dev' },
+      { k: 'social.resume', label: 'resume file', def: 'media/resume/Syed-Abdul-Wasay-Ali-Resume.pdf' },
+    ],
+  },
+  {
+    id: 'header',
+    label: 'Header',
+    fields: [
+      { k: 'header.name', label: 'wordmark', def: 'SYED ABDUL WASAY ALI' },
+      { k: 'header.tagline', label: 'wordmark tagline', def: 'ai creative · image specialist' },
+      { k: 'nav.concepts', label: 'nav — concepts', def: 'Concepts' },
+      { k: 'nav.work', label: 'nav — work', def: 'Work' },
+      { k: 'nav.showcase', label: 'nav — showcase', def: 'Showcase' },
+      { k: 'nav.systems', label: 'nav — systems', def: 'Systems' },
+      { k: 'nav.workflows', label: 'nav — workflows', def: 'Workflows' },
+      { k: 'nav.brands', label: 'nav — brands', def: 'Brands' },
+      { k: 'nav.about', label: 'nav — about', def: 'About' },
+      { k: 'header.resume', label: 'header — resume button', def: 'resume' },
+      { k: 'header.linkedin', label: 'header — linkedin button', def: 'linkedin' },
+      { k: 'header.admin', label: 'header — admin link', def: 'admin' },
+    ],
+  },
+  {
+    id: 'hero',
+    label: 'Home — hero',
+    fields: [
+      { k: 'hero.eyebrow', label: 'eyebrow line', def: 'AI Creative Manager · AI Image Specialist' },
+      { k: 'hero.first', label: 'name line 1', def: 'SYED ABDUL' },
+      { k: 'hero.last', label: 'name line 2', def: 'WASAY ALI' },
+      { k: 'hero.keywords', label: 'keyword line', def: 'comfyui · flux · stable diffusion · ai image generation · image editing · product compositing · creative automation' },
+      { k: 'hero.introLead', label: 'intro — opening', multi: true, def: 'Building photorealistic product imagery, commercial visuals and production-ready AI workflows — real products placed into generated environments without losing product fidelity, composited with matched perspective, light and shadow. AI Creative Manager at' },
+      { k: 'hero.introMid', label: 'intro — middle (after “Ogilvy”)', def: '· ex-AI Head Artist at' },
+      { k: 'hero.introTail', label: 'intro — ending (after “cleanDirty.ai”)', def: '.' },
+      { k: 'hero.log', label: 'terminal log line', def: 'loading comfyui ... ok · 3 packs · lora: locked · queue: ready' },
+      { k: 'hero.ctaWork', label: 'button — view work', def: 'view work' },
+      { k: 'hero.ctaResume', label: 'button — resume', def: 'resume' },
+      { k: 'hero.ctaLinkedin', label: 'button — linkedin', def: 'connect on linkedin' },
+      { k: 'hero.ctaEmail', label: 'button — email', def: 'email me' },
+      { k: 'hero.stat1.v', label: 'stat 1 — value', def: '2' },
+      { k: 'hero.stat1.l', label: 'stat 1 — label', def: 'companies shipped' },
+      { k: 'hero.stat2.v', label: 'stat 2 — value', def: '1y5m+' },
+      { k: 'hero.stat2.l', label: 'stat 2 — label', def: 'ai creative manager · ogilvy' },
+      { k: 'hero.stat3.v', label: 'stat 3 — value', def: '1y5m+' },
+      { k: 'hero.stat3.l', label: 'stat 3 — label', def: 'ai head artist · cleandirty' },
+      { k: 'hero.stat4.v', label: 'stat 4 — value (empty = live count)', def: '' },
+      { k: 'hero.stat4.l', label: 'stat 4 — label', def: 'shipped brand campaigns' },
+      { k: 'hero.stat5.v', label: 'stat 5 — value (empty = live count)', def: '' },
+      { k: 'hero.stat5.l', label: 'stat 5 — label', def: 'case studies below' },
+      { k: 'hero.stat6.v', label: 'stat 6 — value', def: '2y10m+' },
+      { k: 'hero.stat6.l', label: 'stat 6 — label', def: 'total ai experience' },
+      { k: 'hero.hudLeft', label: 'HUD — left', def: 'Portfolio' },
+      { k: 'hero.hudScroll', label: 'HUD — scroll hint', def: 'Scroll for work' },
+      { k: 'hero.fig', label: 'hero figure caption', def: 'fig. 01 · every project starts here' },
+    ],
+  },
+  {
+    id: 'pipeline',
+    label: 'Home — pipeline strip',
+    fields: [
+      { k: 'pipeline.tag', label: 'eyebrow', def: 'the production pipeline' },
+      { k: 'pipeline.title', label: 'title', def: 'From Product to Production-Ready Image' },
+      { k: 'pipeline.aside', label: 'note (right)', def: 'the same route every time — not lucky frames' },
+      { k: 'pipeline.chain', label: 'chain line', def: 'product → reference → ai generation → compositing → lighting → final asset' },
+      { k: 'pipeline.1.label', label: 'stage 01 — label', def: 'Product' },
+      { k: 'pipeline.1.note', label: 'stage 01 — note', def: 'real product, isolated' },
+      { k: 'pipeline.2.label', label: 'stage 02 — label', def: 'Reference' },
+      { k: 'pipeline.2.note', label: 'stage 02 — note', def: 'brief + reference pack' },
+      { k: 'pipeline.3.label', label: 'stage 03 — label', def: 'AI Generation' },
+      { k: 'pipeline.3.note', label: 'stage 03 — note', def: 'environment generated' },
+      { k: 'pipeline.4.label', label: 'stage 04 — label', def: 'Compositing' },
+      { k: 'pipeline.4.note', label: 'stage 04 — note', def: 'product placed, scale matched' },
+      { k: 'pipeline.5.label', label: 'stage 05 — label', def: 'Lighting' },
+      { k: 'pipeline.5.note', label: 'stage 05 — note', def: 'light direction + contact shadow' },
+      { k: 'pipeline.6.label', label: 'stage 06 — label', def: 'Final Asset' },
+      { k: 'pipeline.6.note', label: 'stage 06 — note', def: 'ad-ready, format-cropped' },
+    ],
+  },
+  {
+    id: 'whatibuild',
+    label: 'Home — what i solve',
+    fields: [
+      { k: 'whatibuild.tag', label: 'eyebrow', def: '01 / what i solve' },
+      { k: 'whatibuild.title', label: 'title', def: 'What I Solve' },
+      { k: 'whatibuild.sub', label: 'intro', multi: true, def: 'I build production-ready AI image systems for commercial product and lifestyle advertising — product accuracy, compositing, and repeatable workflows.' },
+      { k: 'whatibuild.1.title', label: 'card 01 — title', def: 'Product Fidelity' },
+      { k: 'whatibuild.1.desc', label: 'card 01 — text', multi: true, def: 'Maintaining recognizable product shape, proportions, materials and details.' },
+      { k: 'whatibuild.2.title', label: 'card 02 — title', def: 'Photorealistic Environments' },
+      { k: 'whatibuild.2.desc', label: 'card 02 — text', multi: true, def: 'Creating believable commercial environments around existing products.' },
+      { k: 'whatibuild.3.title', label: 'card 03 — title', def: 'Lighting Matching' },
+      { k: 'whatibuild.3.desc', label: 'card 03 — text', multi: true, def: 'Matching key light direction, softness, intensity and color temperature.' },
+      { k: 'whatibuild.4.title', label: 'card 04 — title', def: 'Perspective Matching' },
+      { k: 'whatibuild.4.desc', label: 'card 04 — text', multi: true, def: 'Aligning camera angle, scale and product placement with the environment.' },
+      { k: 'whatibuild.5.title', label: 'card 05 — title', def: 'Controlled AI Generation' },
+      { k: 'whatibuild.5.desc', label: 'card 05 — text', multi: true, def: 'Using references, prompting and workflow controls to produce consistent results.' },
+      { k: 'whatibuild.6.title', label: 'card 06 — title', def: 'Production Variations' },
+      { k: 'whatibuild.6.desc', label: 'card 06 — text', multi: true, def: 'Creating multiple useful assets from one visual system and adapting them across formats.' },
+    ],
+  },
+  {
+    id: 'concept',
+    label: 'Home — concept images',
+    fields: [
+      { k: 'concept.tag', label: 'eyebrow', def: '02 / concept images' },
+      { k: 'concept.title', label: 'title', def: 'Concept images' },
+      { k: 'concept.sub', label: 'intro', multi: true, def: 'Standalone image work — AI-made concept frames and studies. Click any image to inspect.' },
+    ],
+  },
+  {
+    id: 'work',
+    label: 'Home — case studies band',
+    fields: [
+      { k: 'work.tag', label: 'eyebrow', def: '03 / case studies' },
+      { k: 'work.title', label: 'title', def: 'Case studies' },
+      { k: 'work.lane1.title', label: 'lane 1 — title', def: 'Concept case studies' },
+      { k: 'work.lane1.blurb', label: 'lane 1 — blurb', multi: true, def: 'Self-set briefs taken end-to-end — five production studies on the commercial imaging system, plus concept films — all on the same pipelines as client work.' },
+      { k: 'work.lane2.title', label: 'lane 2 — title', def: 'Shipped work' },
+      { k: 'work.lane2.blurb', label: 'lane 2 — blurb', multi: true, def: 'Client campaigns made at Ogilvy, shipped to real audiences.' },
+      { k: 'work.card.tag', label: 'concept lane card — eyebrow', def: 'concept lane' },
+      { k: 'work.card.body', label: 'concept lane card — text', multi: true, def: 'Every file here started as a self-set brief and was taken to a final cut on the same pipelines as client work. More experiments and stills live in the showcase.' },
+      { k: 'work.card.tooling', label: 'concept lane card — tooling label', def: 'tooling' },
+      { k: 'work.card.tools', label: 'concept lane card — tool chips', list: ['comfyui', 'seedance 2.5', 'blender + mcp', 'krea 2'] },
+      { k: 'work.fig', label: 'graph figure caption', def: 'fig. 02 · the same graphs as client work' },
+      { k: 'work.reel.c1', label: 'showreel caption — left', def: 'showreel / 2026 · concept films + selected client work' },
+      { k: 'work.reel.c2', label: 'showreel caption — right', def: '26s · sound off' },
+    ],
+  },
+  {
+    id: 'assets',
+    label: 'Home — one system (assets)',
+    fields: [
+      { k: 'assets.tag', label: 'eyebrow', def: '04 / one system' },
+      { k: 'assets.title', label: 'title', def: 'One Product. Multiple Production-Ready Assets.' },
+      { k: 'assets.link', label: 'link text', def: 'how the system is built →' },
+      { k: 'assets.sub', label: 'intro', multi: true, def: 'Every asset below left the same pipeline, in the same grade, from the same product lock — hero to social, product page to mobile, each framed for where it ships.' },
+      { k: 'assets.1.label', label: 'tile 1 — label', def: 'Studio hero' },
+      { k: 'assets.2.label', label: 'tile 2 — label', def: 'Bedroom lifestyle' },
+      { k: 'assets.3.label', label: 'tile 3 — label', def: 'Wide room' },
+      { k: 'assets.4.label', label: 'tile 4 — label', def: 'Product page' },
+      { k: 'assets.5.label', label: 'tile 5 — label', def: 'Close-up detail' },
+      { k: 'assets.6.label', label: 'tile 6 — label', def: 'Mobile' },
+      { k: 'assets.7.label', label: 'tile 7 — label', def: 'Social ad' },
+    ],
+  },
+  {
+    id: 'showcase',
+    label: 'Home — showcase band',
+    fields: [
+      { k: 'showcase.tag', label: 'eyebrow', def: '05 / showcase' },
+      { k: 'showcase.title', label: 'title', def: 'Concept ads & personal work' },
+      { k: 'showcase.sub', label: 'intro', multi: true, def: 'Spec work, campaign concepts and experiments — AI-made, no client brief required. Click any piece to inspect.' },
+      { k: 'showcase.f.all', label: 'filter — all', def: 'All' },
+      { k: 'showcase.f.concept', label: 'filter — concept ads', def: 'Concept ads' },
+      { k: 'showcase.f.image', label: 'filter — images', def: 'Images' },
+      { k: 'showcase.empty', label: 'empty state', def: 'Nothing under this tab yet.' },
+    ],
+  },
+  {
+    id: 'capabilities',
+    label: 'Home — ai systems',
+    fields: [
+      { k: 'cap.tag', label: 'eyebrow', def: '06 / ai systems' },
+      { k: 'cap.title', label: 'title', def: 'AI systems I build' },
+      { k: 'cap.sub', label: 'intro', multi: true, def: 'Not one-off renders: reusable, documented systems that solve a production problem. Brief goes in, finished frames and films come out, on repeat.' },
+      { k: 'cap.1.title', label: 'system 01 — title', def: 'Character Consistency Pipeline' },
+      { k: 'cap.1.solves', label: 'system 01 — solves', multi: true, def: 'the same face, wardrobe and look carried across every scene, pose and lighting setup.' },
+      { k: 'cap.1.items', label: 'system 01 — bullet list', list: ['ComfyUI graphs with reference conditioning for identity', 'Subject / character LoRA training (dataset curation, JSON captions, trigger discipline)', 'Krea 2 · Flux Klein · Z-Image Turbo mixed in one graph, per-model strength tuning', 'Batch generation with locked seeds and A/B sweeps', 'Upscale + composite chains (Topaz, latent pass)'] },
+      { k: 'cap.2.title', label: 'system 02 — title', def: 'Product Consistency Pipeline' },
+      { k: 'cap.2.solves', label: 'system 02 — solves', multi: true, def: 'product shape, label and branding held exact across every generated environment.' },
+      { k: 'cap.2.items', label: 'system 02 — bullet list', list: ['Reference conditioning so the physical product stays exact', 'Campaign-scale still production: key visuals + lifestyle environments', 'Packaging, label and branding locked across outputs', 'Compositing and retouch passes for delivery'] },
+      { k: 'cap.3.title', label: 'system 03 — title', def: 'AI Video Pipeline' },
+      { k: 'cap.3.solves', label: 'system 03 — solves', multi: true, def: 'still concepts turned into finished motion, shot by shot.' },
+      { k: 'cap.3.items', label: 'system 03 — bullet list', list: ['MiniMax H3: ref2v / i2v ad films', 'Seedance 2.5 closed-source tier when a brief demands it', 'Wan Animate motion transfer from real capture', 'Sampler + scheduler tuning for motion vs sharpness', 'Shot-to-shot continuity: extend, keyframe pass, LoRA-locked identity', '20s+ spots, batch queued, review-ready stills', 'Video → mocap → rig pipelines (Rokoko → Blender)'] },
+      { k: 'cap.4.title', label: 'system 04 — title', def: 'Automated Generation Pipeline' },
+      { k: 'cap.4.solves', label: 'system 04 — solves', multi: true, def: 'dozens of variants generated, queued and cataloged without babysitting every run.' },
+      { k: 'cap.4.items', label: 'system 04 — bullet list', list: ['Agent / API-driven ComfyUI control (MCP)', 'Headless render queues with progress visibility', 'Batch seed sweeps and parameter journals', 'Asset cataloging so outputs land where the team expects them', 'Working with devs to ship generation into products'] },
+      { k: 'cap.m.tag', label: 'models — tag', def: '[models]' },
+      { k: 'cap.m.note', label: 'models — note', def: 'open-source first · closed-source when the brief demands it' },
+      { k: 'cap.m.img', label: 'models — image column label', def: 'image generation' },
+      { k: 'cap.m.most', label: 'models — “most used” label', def: 'most used' },
+      { k: 'cap.m.mostList', label: 'models — most used chips', list: ['GPT Image 2.5 (closed)', 'Nano Banana Pro (closed)', 'Seedream 5 Pro (closed)'] },
+      { k: 'cap.m.also', label: 'models — “also in the stack” label', def: 'also in the stack' },
+      { k: 'cap.m.alsoList', label: 'models — stack chips', list: ['Krea 2', 'Flux · Klein', 'Z-Image Turbo', 'Ideogram 4', 'Midjourney — aesthetic styles', 'SDXL / Illustrious family'] },
+      { k: 'cap.m.vid', label: 'models — video column label', def: 'video generation' },
+      { k: 'cap.m.vidList', label: 'models — video chips', list: ['MiniMax H3 (open)', 'LTX / Wan (open)', 'Seedance 2.5 (closed)', 'ref2v / i2v routes', 'LoRA-locked identity'] },
+    ],
+  },
+  {
+    id: 'workflows',
+    label: 'Home — workflows',
+    fields: [
+      { k: 'wf.tag', label: 'eyebrow', def: '07 / ai production workflow' },
+      { k: 'wf.title', label: 'title', def: 'AI Production Workflow' },
+      { k: 'wf.sub', label: 'intro', multi: true, def: 'A repeatable route, not trial-and-error prompting: references and controls go in, commercial frames come out — and the same route reruns for the next product, room or format.' },
+      { k: 'wf.routeLabel', label: 'route — card label', def: 'the route' },
+      { k: 'wf.route', label: 'route — steps', list: ['reference images', 'image preparation', 'comfyui', 'model / lora', 'control / guidance', 'ai generation', 'image editing', 'compositing', 'final asset'] },
+      { k: 'wf.g1.label', label: 'stack group 1 — label', def: 'generation' },
+      { k: 'wf.g1.enables', label: 'stack group 1 — text', multi: true, def: 'photoreal bases and range — open-source first, closed-source when the brief demands it.' },
+      { k: 'wf.g1.items', label: 'stack group 1 — chips', list: ['Midjourney', 'Stable Diffusion (SDXL / Illustrious)', 'FLUX · Klein', 'Freepik AI', 'Leonardo AI', 'Krea 2'] },
+      { k: 'wf.g2.label', label: 'stack group 2 — label', def: 'workflow' },
+      { k: 'wf.g2.enables', label: 'stack group 2 — text', multi: true, def: 'the controls: consistency, product lock and repeatability across a whole set.' },
+      { k: 'wf.g2.items', label: 'stack group 2 — chips', list: ['ComfyUI', 'Automatic1111', 'ControlNet', 'LoRA training', 'Reference-based generation'] },
+      { k: 'wf.g3.label', label: 'stack group 3 — label', def: 'video' },
+      { k: 'wf.g3.enables', label: 'stack group 3 — text', multi: true, def: 'motion when the brief needs it — stills that become spots.' },
+      { k: 'wf.g3.items', label: 'stack group 3 — chips', list: ['Runway', 'Kling', 'Dream Machine', 'LTX / Wan', 'MiniMax H3 · Seedance 2.5'] },
+      { k: 'wf.g4.label', label: 'stack group 4 — label', def: 'creative & editing' },
+      { k: 'wf.g4.enables', label: 'stack group 4 — text', multi: true, def: 'where a generation becomes a commercial deliverable.' },
+      { k: 'wf.g4.items', label: 'stack group 4 — chips', list: ['AI image editing', 'Compositing', 'Prompt engineering', 'Retouch + grade'] },
+      { k: 'wf.runs.title', label: 'runs — heading', def: 'Recent runs' },
+      { k: 'wf.runs.sub', label: 'runs — note', def: 'screen recordings — outputs attached' },
+      { k: 'wf.badge.runOutput', label: 'badge — run + output', def: 'workflow run + output' },
+      { k: 'wf.badge.run', label: 'badge — run', def: 'workflow run' },
+      { k: 'wf.badge.still', label: 'badge — output still', def: 'output still' },
+    ],
+  },
+  {
+    id: 'craft',
+    label: 'Home — craft',
+    fields: [
+      { k: 'craft.tag', label: 'eyebrow', def: '08 / craft' },
+      { k: 'craft.title', label: 'title', def: 'Where AI Meets Image Craft' },
+      { k: 'craft.sub', label: 'intro', multi: true, def: 'A model gets you close. These are the controls that make the output a commercial deliverable.' },
+      { k: 'craft.p1.term', label: 'row 1 — term', def: 'Product Fidelity' },
+      { k: 'craft.p1.line', label: 'row 1 — text', multi: true, def: 'Keeping the physical characteristics of the source product intact through generation and compositing.' },
+      { k: 'craft.p2.term', label: 'row 2 — term', def: 'Lighting' },
+      { k: 'craft.p2.line', label: 'row 2 — text', multi: true, def: 'Matching key light direction, softness, intensity and color temperature to the world around the product.' },
+      { k: 'craft.p3.term', label: 'row 3 — term', def: 'Perspective' },
+      { k: 'craft.p3.line', label: 'row 3 — text', multi: true, def: 'Aligning camera height, angle and scale so the product sits in the room instead of on top of it.' },
+      { k: 'craft.p4.term', label: 'row 4 — term', def: 'Materials' },
+      { k: 'craft.p4.line', label: 'row 4 — text', multi: true, def: 'Reading fabric, wood, stone and glass as physical materials — texture, sheen and micro-detail intact.' },
+      { k: 'craft.p5.term', label: 'row 5 — term', def: 'Composition' },
+      { k: 'craft.p5.line', label: 'row 5 — text', multi: true, def: 'Framing every asset for where it will live: hero, feed, banner, product page, mobile.' },
+      { k: 'craft.p6.term', label: 'row 6 — term', def: 'Consistency' },
+      { k: 'craft.p6.line', label: 'row 6 — text', multi: true, def: 'Holding one product, one look and one grade across an entire set, not just one hero frame.' },
+    ],
+  },
+  {
+    id: 'brandssec',
+    label: 'Home — brands strip',
+    fields: [
+      { k: 'brandssec.tag', label: 'eyebrow', def: '09 / brands' },
+      { k: 'brandssec.title', label: 'title', def: "21 brands I've worked within Ogilvy" },
+      { k: 'brandssec.sub', label: 'intro — {n} = brand count', multi: true, def: 'Click a logo with media for the stills, animatics and final films. {n} brands and counting.' },
+    ],
+  },
+  {
+    id: 'about',
+    label: 'Home — about',
+    fields: [
+      { k: 'about.tag', label: 'eyebrow', def: '10 / about' },
+      { k: 'about.title1', label: 'title line 1', def: 'The operator' },
+      { k: 'about.title2', label: 'title line 2', def: 'behind the graph' },
+      { k: 'about.p1', label: 'paragraph 1', multi: true, def: 'I work at the intersection of creative direction, AI image generation and production workflows. My work focuses on using generative AI to create controlled, photorealistic visual assets for commercial applications — real products placed into generated environments without losing fidelity, edited and composited to a deliverable.' },
+      { k: 'about.p2', label: 'paragraph 2', multi: true, def: "I'm from Hyderabad, India, with an art background. Before this I worked in customer service at Amazon, and in 2023 I resigned to pursue better opportunities and learn new things. I went all in on generative AI, and I haven't stopped learning new models since." },
+      { k: 'about.p3', label: 'paragraph 3', multi: true, def: "Most of my production happens in ComfyUI: image-generation workflows, reference-controlled generation, image editing, retouching and compositing — with LoRA training when a set needs consistency. I religiously check the AI subreddits, X accounts and Instagram pages that cover every new tool and breakthrough, so I know what's new the moment it lands, and I automate the workflows around it all with AI agents like Hermes, Codex and Claude Code." },
+      { k: 'about.p4', label: 'paragraph 4', multi: true, def: 'I spend my days on the production side: building the pipelines, tuning the samplers, solving the problems that show up between an idea and a final file. Everything below is documented the way I work: real models, real parameters, real obstacles, and the ComfyUI graphs that got past them.' },
+      { k: 'about.sg1.label', label: 'skills 1 — label', def: 'generative ai' },
+      { k: 'about.sg1.items', label: 'skills 1 — chips', list: ['ComfyUI', 'Ideogram 4', 'Krea 2', 'Flux · Klein', 'Z-Image Turbo', 'Midjourney', 'LoRA training', 'DiffSynth'] },
+      { k: 'about.sg2.label', label: 'skills 2 — label', def: 'video' },
+      { k: 'about.sg2.items', label: 'skills 2 — chips', list: ['MiniMax H3', 'Seedance 2.5', 'LTX / Wan', 'Wan Animate motion transfer'] },
+      { k: 'about.sg3.label', label: 'skills 3 — label', def: 'production' },
+      { k: 'about.sg3.items', label: 'skills 3 — chips', list: ['Blender', 'Rokoko mocap', 'Topaz upscale'] },
+      { k: 'about.sg4.label', label: 'skills 4 — label', def: 'automation & agents' },
+      { k: 'about.sg4.items', label: 'skills 4 — chips', list: ['API automation', 'Hermes agent', 'Codex CLI', 'Claude Code', 'MCP / agent workflows'] },
+      { k: 'about.exp', label: 'experience — heading', def: 'Experience' },
+      { k: 'about.t1.role', label: 'role 1 — title', def: 'AI Creative Manager' },
+      { k: 'about.t1.org', label: 'role 1 — org', def: 'Ogilvy' },
+      { k: 'about.t1.location', label: 'role 1 — location', def: 'Mumbai, India.' },
+      { k: 'about.t1.dates', label: 'role 1 — dates', def: 'Apr 2025 — Present' },
+      { k: 'about.t1.note', label: 'role 1 — note', multi: true, def: 'AI-native production for client campaigns: image and video pipelines, product imagery systems, identity consistency, automation.' },
+      { k: 'about.t1.bullets', label: 'role 1 — bullets', list: ['Generative AI imagery and video for brand campaigns (Cadbury, Lacta, IFB, NDPF).', 'Built ComfyUI pipelines for controlled generation — consistency, product lock and scale.', 'Took ideas from brief to production-ready AI visuals with the creative teams.', 'Experimented with emerging image and video models, open-source first.'] },
+      { k: 'about.t2.role', label: 'role 2 — title', def: 'AI Head Artist' },
+      { k: 'about.t2.org', label: 'role 2 — org', def: 'cleanDirty.ai' },
+      { k: 'about.t2.location', label: 'role 2 — location', def: 'Delhi, India. (Remote)' },
+      { k: 'about.t2.dates', label: 'role 2 — dates', def: 'Sep 2023 — Feb 2025' },
+      { k: 'about.t2.note', label: 'role 2 — note', multi: true, def: 'Led AI art direction and production: custom LoRAs, image & video generation systems, mocap pipelines.' },
+      { k: 'about.t2.bullets', label: 'role 2 — bullets', list: ['Led AI image production as head AI artist for client campaign work.', 'Ran hands-on experiments across every major model wave since 2023.', 'Built reusable generation workflows and trained early custom LoRAs.'] },
+      { k: 'about.cur.label', label: 'currently — label', def: 'currently' },
+      { k: 'about.cur.text', label: 'currently — text', multi: true, def: 'Building AI-native production pipelines at Ogilvy: open-source first, documented always. Open to talking workflow design, automation, and AI production systems.' },
+      { k: 'about.cur.linkedin', label: 'currently — linkedin button', def: 'connect on linkedin' },
+      { k: 'about.cur.github', label: 'currently — github button', def: 'github' },
+    ],
+  },
+  {
+    id: 'contact',
+    label: 'Home — contact band',
+    fields: [
+      { k: 'contact.tag', label: 'eyebrow', def: '11 / contact' },
+      { k: 'contact.title', label: 'title', def: 'Let’s build the next visual system.' },
+      { k: 'contact.sub', label: 'intro', multi: true, def: 'Available for AI image generation, product visualization, commercial creative and AI production workflow projects.' },
+      { k: 'contact.email', label: 'email button', def: 'email me' },
+      { k: 'contact.linkedin', label: 'linkedin button', def: 'connect on linkedin' },
+      { k: 'contact.row1.label', label: 'row 1 — label', def: 'email' },
+      { k: 'contact.row2.label', label: 'row 2 — label', def: 'linkedin' },
+      { k: 'contact.row2.value', label: 'row 2 — value', def: 'in/syed-abdul-wasay-ali' },
+      { k: 'contact.row3.label', label: 'row 3 — label', def: 'based in' },
+      { k: 'contact.row3.value', label: 'row 3 — value', def: 'hyderabad, india · remote-ready' },
+    ],
+  },
+  {
+    id: 'footer',
+    label: 'Footer',
+    fields: [
+      { k: 'footer.m1', label: 'ticker — item 1', def: 'Syed Abdul Wasay Ali' },
+      { k: 'footer.m2', label: 'ticker — item 2', def: 'AI Creative Manager · Image Specialist' },
+      { k: 'footer.m3', label: 'ticker — item 3', def: 'Open Source First' },
+      { k: 'footer.name', label: 'name', def: 'Syed Abdul Wasay Ali' },
+      { k: 'footer.tagline', label: 'tagline', def: 'ai creative manager · image specialist · ogilvy · ex-cleandirty.ai' },
+      { k: 'footer.linkedin', label: 'link — linkedin', def: 'linkedin' },
+      { k: 'footer.github', label: 'link — github', def: 'github' },
+      { k: 'footer.resume', label: 'link — resume', def: 'resume' },
+      { k: 'footer.email', label: 'link — email', def: 'email' },
+      { k: 'footer.admin', label: 'link — admin', def: 'admin' },
+      { k: 'footer.credits', label: 'credits line — {year} = year', def: 'rendered with open-source everything · {year}' },
+    ],
+  },
+  {
+    id: 'projui',
+    label: 'Case-study pages — chrome (all projects)',
+    hint: 'section headings and labels that repeat on every case study',
+    fields: [
+      { k: 'pui.back', label: 'back link', def: '← all work' },
+      { k: 'pui.spec', label: 'sidebar — spec label', def: 'project spec' },
+      { k: 'pui.role', label: 'sidebar — role label', def: 'role' },
+      { k: 'pui.release', label: 'sidebar — release label', def: 'public release' },
+      { k: 'pui.next', label: 'sidebar — next label', def: 'next case study' },
+      { k: 'pui.404.tag', label: '404 — eyebrow', def: '404 / node not found' },
+      { k: 'pui.404.title', label: '404 — title', def: 'Project missing' },
+      { k: 'pui.404.back', label: '404 — back link', def: '← back to work' },
+      { k: 'pui.row.objective.tag', label: 'objective — tag', def: '01 / objective' },
+      { k: 'pui.row.objective.title', label: 'objective — title', def: 'The objective' },
+      { k: 'pui.row.input.tag', label: 'input — tag', def: '02 / input' },
+      { k: 'pui.row.input.title', label: 'input — title', def: 'What went in' },
+      { k: 'pui.row.process.tag', label: 'process — tag', def: '03 / process' },
+      { k: 'pui.row.process.title', label: 'process — title', def: 'How AI was used' },
+      { k: 'pui.row.control.tag', label: 'control — tag', def: '04 / control' },
+      { k: 'pui.row.control.title', label: 'control — title', def: 'How consistency was held' },
+      { k: 'pui.row.refinement.tag', label: 'refinement — tag', def: '05 / refinement' },
+      { k: 'pui.row.refinement.title', label: 'refinement — title', def: 'Lighting, perspective, texture' },
+      { k: 'pui.row.output.tag', label: 'output — tag', def: '06 / output' },
+      { k: 'pui.row.output.title', label: 'output — title', def: 'What shipped' },
+      { k: 'pui.stages.tag', label: 'stages — tag', def: 'the pipeline' },
+      { k: 'pui.stages.title', label: 'stages — title', def: 'Stage by stage' },
+      { k: 'pui.ba.tag', label: 'before/after — tag', def: 'before / after' },
+      { k: 'pui.ba.title', label: 'before/after — title', def: 'Pre- and post-production' },
+      { k: 'pui.formats.tag', label: 'formats — tag', def: 'formats & placements' },
+      { k: 'pui.formats.title', label: 'formats — title', def: 'One master, every format' },
+      { k: 'pui.ecom.tag', label: 'concept page — tag', def: 'concept page' },
+      { k: 'pui.ecom.title', label: 'concept page — title', def: 'How it lands on a page' },
+      { k: 'pui.results.tag', label: 'results — tag', def: '07 / results' },
+      { k: 'pui.results.title', label: 'results — title', def: 'What came out' },
+      { k: 'pui.stack.tag', label: 'stack — tag', def: '08 / stack' },
+      { k: 'pui.stack.title', label: 'stack — title', def: 'Tools & models' },
+      { k: 'pui.contrib.tag', label: 'contribution — tag', def: '09 / my contribution' },
+      { k: 'pui.contrib.title', label: 'contribution — title', def: 'Built by hand' },
+      { k: 'pui.ov.tag', label: 'legacy — overview tag', def: '01 / overview' },
+      { k: 'pui.ov.title', label: 'legacy — overview title', def: 'What shipped' },
+      { k: 'pui.lc.tag', label: 'legacy — contribution tag', def: '02 / my contribution' },
+      { k: 'pui.lc.title', label: 'legacy — contribution title', def: 'What I contributed' },
+      { k: 'pui.lc.note', label: 'legacy — contribution note', multi: true, def: 'My part of the production, not the whole campaign — the client and agency own the work.' },
+      { k: 'pui.ch.tag', label: 'legacy — obstacle tag', def: '03 / the obstacle' },
+      { k: 'pui.ch.title', label: 'legacy — obstacle title', def: 'The problem' },
+      { k: 'pui.ap.tag', label: 'legacy — approach tag', def: '04 / the approach' },
+      { k: 'pui.ap.title', label: 'legacy — approach title', def: 'How I got past it' },
+      { k: 'pui.ls.tag', label: 'legacy — stack tag', def: '05 / stack' },
+      { k: 'pui.ls.title', label: 'legacy — stack title', def: 'Tools & models' },
+      { k: 'pui.pr.tag', label: 'legacy — process tag', def: '06 / process' },
+      { k: 'pui.pr.title', label: 'legacy — process title', def: 'Brief → exploration → final' },
+      { k: 'pui.pr.note', label: 'legacy — process note', multi: true, def: 'The route the work took: brief, exploration, iteration, delivery. Workflow graphs and internal iterations stay in the studio.' },
+    ],
+  },
+  {
+    id: 'brandui',
+    label: 'Brand pages — chrome (all brands)',
+    fields: [
+      { k: 'bui.back', label: 'back link', def: '← all brands' },
+      { k: 'bui.inspect', label: 'header note suffix', def: 'click any frame to inspect' },
+      { k: 'bui.story.title', label: 'story — title', def: 'The campaign' },
+      { k: 'bui.projects.title', label: 'projects — title', def: 'Projects on this brand' },
+      { k: 'bui.projects.note', label: 'projects — note', multi: true, def: 'Every project opens its full case study: the process, the models and the frames that shipped. Click any project above, or use the outputs strip to jump straight in.' },
+      { k: 'bui.stills.title', label: 'stills — title', def: 'Campaign images' },
+      { k: 'bui.animatics.title', label: 'animatics — title', def: 'Animatics' },
+      { k: 'bui.films.title', label: 'films — title', def: 'Final films' },
+      { k: 'bui.next', label: 'next-brand label', def: 'next brand' },
+      { k: 'bui.404.tag', label: '404 — eyebrow', def: '404 / brand not found' },
+      { k: 'bui.404.title', label: '404 — title', def: 'Brand missing' },
+      { k: 'bui.404.back', label: '404 — back link', def: '← back home' },
+    ],
+  },
+  {
+    id: 'ecom',
+    label: 'Case study — e-commerce concept page',
+    hint: 'chrome of the concept product page inside the e-commerce case study',
+    fields: [
+      { k: 'ecom.badge', label: 'badge', def: 'concept' },
+      { k: 'ecom.note', label: 'note line', def: 'design study — fictional page · no real brand · the imagery is the system’s output' },
+      { k: 'ecom.desktop', label: 'desktop caption', def: 'desktop — product page layout' },
+      { k: 'ecom.mobile', label: 'mobile caption', def: 'mobile — recomposed, not cropped' },
+      { k: 'ecom.n1.term', label: 'note 1 — term', def: 'Focal point' },
+      { k: 'ecom.n1.line', label: 'note 1 — text', multi: true, def: 'One decision per frame: where the eye lands first is built into the composition, not left to the crop.' },
+      { k: 'ecom.n2.term', label: 'note 2 — term', def: 'Product visibility' },
+      { k: 'ecom.n2.line', label: 'note 2 — text', multi: true, def: 'The mattress line stays fully readable at every size the page renders it.' },
+      { k: 'ecom.n3.term', label: 'note 3 — term', def: 'Image hierarchy' },
+      { k: 'ecom.n3.line', label: 'note 3 — text', multi: true, def: 'Hero sets the world, lifestyle sells the life, detail proves the make.' },
+      { k: 'ecom.n4.term', label: 'note 4 — term', def: 'Aspect ratio' },
+      { k: 'ecom.n4.line', label: 'note 4 — text', multi: true, def: 'Each slot gets its native ratio — 16:9 for the banner, 4:5 for mobile, 1:1 for thumbnails.' },
+      { k: 'ecom.n5.term', label: 'note 5 — term', def: 'Mobile crop' },
+      { k: 'ecom.n5.line', label: 'note 5 — text', multi: true, def: 'The vertical frame is recomposed, not sliced from the desktop composition.' },
+      { k: 'ecom.n6.term', label: 'note 6 — term', def: 'Thumbnail readability' },
+      { k: 'ecom.n6.line', label: 'note 6 — text', multi: true, def: 'At 64px the frame still says "mattress in a room" — that is what the crop is tuned for.' },
+    ],
+  },
+]
+
+// flattened default lookups
+export const DEF = new Map<string, string>()
+export const DEF_LIST = new Map<string, string[]>()
+for (const g of UI_GROUPS) {
+  for (const f of g.fields) {
+    if (f.list) DEF_LIST.set(f.k, f.list)
+    else DEF.set(f.k, f.def ?? '')
+  }
+}
+
+// section keys (mirror of the components' render order) — used by the admin
+// "sections" tab; the site reads its own defaults when no order is stored.
+export const HOME_SECTIONS: { k: string; label: string }[] = [
+  { k: 'hero', label: 'Hero' },
+  { k: 'pipeline', label: 'Production pipeline strip' },
+  { k: 'marquee', label: 'Brand logo ticker' },
+  { k: 'whatibuild', label: 'What I solve' },
+  { k: 'concept-images', label: 'Concept images' },
+  { k: 'workgrid', label: 'Case studies (work grid)' },
+  { k: 'assets', label: 'One system — assets' },
+  { k: 'showcase', label: 'Showcase' },
+  { k: 'capabilities', label: 'AI systems' },
+  { k: 'workflows', label: 'Workflows' },
+  { k: 'craft', label: 'Craft' },
+  { k: 'brands', label: 'Brands strip' },
+  { k: 'about', label: 'About' },
+  { k: 'contact', label: 'Contact band' },
+]
+
+export const BRAND_SECTIONS: { k: string; label: string }[] = [
+  { k: 'story', label: 'Story (brands without case studies)' },
+  { k: 'projects', label: 'Projects on this brand' },
+  { k: 'stills', label: 'Campaign images' },
+  { k: 'animatics', label: 'Animatics' },
+  { k: 'films', label: 'Final films' },
+  { k: 'next', label: 'Next-brand card' },
+]
+
+export const PROJECT_SECTIONS: { k: string; label: string }[] = [
+  { k: 'objective', label: '01 objective' },
+  { k: 'input', label: '02 input' },
+  { k: 'process', label: '03 process' },
+  { k: 'control', label: '04 control' },
+  { k: 'refinement', label: '05 refinement' },
+  { k: 'output', label: '06 output' },
+  { k: 'stages', label: 'production stages strip' },
+  { k: 'beforeafter', label: 'before / after' },
+  { k: 'formats', label: 'formats & placements' },
+  { k: 'ecom', label: 'concept page' },
+  { k: 'results', label: 'results gallery' },
+  { k: 'stack', label: 'stack chips' },
+  { k: 'contribution', label: 'my contribution' },
+  { k: 'overview', label: '(legacy) overview' },
+  { k: 'challenge', label: '(legacy) the problem' },
+  { k: 'approach', label: '(legacy) the approach' },
+  { k: 'workflow', label: '(legacy) process steps' },
+]

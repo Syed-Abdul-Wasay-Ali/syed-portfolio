@@ -1,27 +1,44 @@
 // ---------------------------------------------------------------------------
-// Admin panel — content manager for the portfolio.
-// Reachable at  #/admin  (discreet link in the footer). Requires the local
-// admin server (node admin-server.mjs) for uploads; the passcode is a light
-// client-side gate (change ADMIN_PASS below).
+// Admin panel — full content manager for the portfolio.
+//
+//   words     : every editable string on the site (registry groups + each case
+//               study + each brand + showcase/workflow items)
+//   pictures  : every picture/video slot — replace, hide/restore, add
+//   sections  : show/hide + reorder sections on home / brand / case-study pages
+//   concept   : the concept-images gallery manager (upload, caption, reorder)
+//
+// Reachable at  #/admin  (discreet link in the footer + header).
+// Requires the local admin server (node admin-server.mjs) for saves; the
+// passcode is a light client-side gate (change ADMIN_PASS below).
+// Publishing: npm run build && npx gh-pages -d dist
 // ---------------------------------------------------------------------------
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { BRANDS, type Brand } from '../data/brands'
-import { useRuntime, type SectionName } from '../data/runtime'
-import type { MediaItem } from '../data/projects'
+import { projects, type MediaItem, type Project } from '../data/projects'
+import { SHOWCASE } from '../data/showcase'
+import { WORKFLOWS } from '../data/workflows'
+import {
+  UI_GROUPS,
+  HOME_SECTIONS,
+  BRAND_SECTIONS,
+  PROJECT_SECTIONS,
+  pk,
+  bk,
+  sck,
+  wfk,
+  collKey,
+  type TextField,
+} from '../data/text'
+import { useRuntime, type ConceptImage, type SectionName, type TextVal } from '../data/runtime'
 
-const ADMIN_PASS = 'wasay2026' // change me
+const ADMIN_PASS = 'Wasay710#' // change me
 const SESSION_KEY = 'portfolio-admin-unlocked'
 
-type Tab = 'upload' | 'brand-sections' | 'site-sections'
+type Tab = 'words' | 'pictures' | 'sections' | 'concept'
 
-const SECTIONS: { key: SectionName; hint: string }[] = [
-  { key: 'stills', hint: 'campaign images' },
-  { key: 'animatics', hint: 'animatic videos' },
-  { key: 'films', hint: 'final film videos' },
-]
-const BRAND_SECTION_KEYS: SectionName[] = ['story', 'projects', 'stills', 'animatics', 'films']
-const SITE_SECTIONS = ['showcase', 'capabilities', 'about']
-
+// ---------------------------------------------------------------------------
+// shared bits
+// ---------------------------------------------------------------------------
 async function api(path: string, body: unknown) {
   const r = await fetch(path, {
     method: 'POST',
@@ -30,7 +47,7 @@ async function api(path: string, body: unknown) {
   })
   const j = await r.json().catch(() => ({}))
   if (!r.ok) throw new Error((j as { error?: string }).error || `HTTP ${r.status}`)
-  return j as { ok?: boolean; saved?: MediaItem[]; content?: unknown }
+  return j as { ok?: boolean; saved?: MediaItem[]; added?: MediaItem[]; content?: unknown }
 }
 
 const fileToBase64 = (f: File) =>
@@ -41,54 +58,1412 @@ const fileToBase64 = (f: File) =>
     r.readAsDataURL(f)
   })
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+const readFiles = async (files: File[]) => {
+  const out: { name: string; data: string }[] = []
+  for (const f of files) out.push({ name: f.name, data: await fileToBase64(f) })
+  return out
+}
+
+const inputCls =
+  'w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 font-mono text-[13px] text-paper outline-none focus:border-green'
+const selectCls = inputCls
+const btnCls =
+  'rounded-md border border-green/40 px-4 py-2 font-mono text-[11px] uppercase tracking-wideish text-green transition-colors hover:border-green hover:bg-green/10 disabled:cursor-not-allowed disabled:opacity-40'
+const smallBtn =
+  'rounded-sm border border-ink-600 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish text-paper/80 hover:border-green disabled:opacity-40'
+const badgeCls =
+  'rounded-sm bg-green/15 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wideish text-greenBright'
+
+function Notice({ msg, err }: { msg: string; err: string }) {
   return (
-    <label className="block">
-      <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">{label}</span>
-      <div className="mt-1.5">{children}</div>
+    <>
+      {msg && <p className="mt-3 font-mono text-[12px] text-greenBright">{msg}</p>}
+      {err && <p className="mt-3 font-mono text-[12px] text-red-400">error: {err}</p>}
+    </>
+  )
+}
+
+const isVideoSrc = (src: string) => /\.(mp4|webm|mov|mkv|m4v)$/i.test(src)
+
+// ---------------------------------------------------------------------------
+// pictures: one slot card (replace / hide-restore handler)
+// ---------------------------------------------------------------------------
+function SlotCard({
+  label,
+  src,
+  sub,
+  removed,
+  busy,
+  onReplace,
+  onHide,
+  onRestore,
+  hideLabel = 'hide',
+  extra,
+}: {
+  label: string
+  src?: string
+  sub?: string
+  removed?: boolean
+  busy?: boolean
+  onReplace?: (f: File) => void
+  onHide?: () => void
+  onRestore?: () => void
+  hideLabel?: string
+  extra?: React.ReactNode
+}) {
+  return (
+    <div className="rounded-md border border-ink-600 bg-ink-900 p-2">
+      {src && !isVideoSrc(src) && (
+        <img src={src} alt={label} loading="lazy" className="aspect-video w-full rounded-sm bg-ink-950 object-cover" />
+      )}
+      {src && isVideoSrc(src) && (
+        <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 text-lg text-muted">
+          ▶ video
+        </div>
+      )}
+      {!src && (
+        <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 font-mono text-[10px] text-muted">
+          no file
+        </div>
+      )}
+      <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{label}</p>
+      {sub && <p className="line-clamp-1 font-mono text-[9px] text-muted">{sub}</p>}
+      <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+        {onReplace && src && (
+          <label className={`${smallBtn} cursor-pointer`}>
+            replace
+            <input
+              type="file"
+              accept="image/*,video/*,.pdf"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0]
+                e.target.value = ''
+                if (f) onReplace(f)
+              }}
+            />
+          </label>
+        )}
+        {onHide && !removed && (
+          <button type="button" disabled={busy} className={`${smallBtn} !text-red-400 hover:!border-red-400`} onClick={onHide}>
+            ✕ {hideLabel}
+          </button>
+        )}
+        {onRestore && removed && (
+          <button type="button" disabled={busy} className={smallBtn} onClick={onRestore}>
+            ↺ restore
+          </button>
+        )}
+        {removed && <span className="font-mono text-[9px] uppercase text-amber-300">hidden from site</span>}
+        {extra}
+      </div>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// WORDS tab
+// ---------------------------------------------------------------------------
+type WField = TextField
+
+const buildProjectFields = (p: Project): WField[] => {
+  const s = p.slug
+  const f = (k: string, label: string, def: string, multi = false): WField => ({
+    k: pk(s, k),
+    label,
+    def,
+    multi,
+  })
+  const out: WField[] = [
+    f('title', 'title', p.title),
+    f('subtitle', 'subtitle (line under the title)', p.subtitle ?? ''),
+    f('role', 'role', p.role),
+    f('year', 'year', p.year),
+    f('status', 'status chip', p.status ?? ''),
+    f('chain', 'process chain line', p.chain ?? ''),
+    f('excerpt', 'excerpt (cards)', p.excerpt, true),
+    f('overview', 'overview', p.overview, true),
+    f('challenge', 'challenge', p.challenge, true),
+    f('campaign.label', 'public-release link label', p.campaign?.label ?? ''),
+    f('campaign.url', 'public-release url', p.campaign?.url ?? ''),
+    { k: pk(s, 'approach'), label: 'approach — steps', list: p.approach },
+    { k: pk(s, 'stack'), label: 'stack — chips', list: p.stack },
+    { k: pk(s, 'contribution'), label: 'my contribution — chips', list: p.contribution ?? [] },
+  ]
+  if (p.production) {
+    const pr = p.production
+    out.push(
+      f('production.objective', 'production — objective', pr.objective, true),
+      f('production.input', 'production — input', pr.input, true),
+      f('production.process', 'production — process', pr.process, true),
+      f('production.control', 'production — control', pr.control, true),
+      f('production.refinement', 'production — refinement', pr.refinement, true),
+      f('production.output', 'production — output', pr.output, true),
+    )
+  }
+  p.workflow.forEach((w, i) => out.push(f(`workflow.${i}.label`, `process step ${i + 1}`, w.label ?? '')))
+  p.spec.forEach((row, i) => {
+    out.push(f(`spec.${i}.label`, `spec ${i + 1} — label`, row.label))
+    out.push(f(`spec.${i}.value`, `spec ${i + 1} — value`, row.value))
+  })
+  p.results.forEach((m, i) => out.push(f(`res.${i}.label`, `result ${i + 1} — caption`, m.label ?? '')))
+  ;(p.stages ?? []).forEach((st, i) => out.push(f(`stage.${i}.label`, `stage ${i + 1} — label`, st.label ?? '')))
+  if (p.beforeAfter) {
+    out.push(f('ba.before.label', 'before — caption', p.beforeAfter.before.label ?? ''))
+    out.push(f('ba.after.label', 'after — caption', p.beforeAfter.after.label ?? ''))
+    out.push({ k: pk(s, 'ba.annotations'), label: 'before/after — annotations', list: p.beforeAfter.annotations ?? [] })
+  }
+  ;(p.formats ?? []).forEach((row, i) => {
+    out.push(f(`fmt.${i}.label`, `format ${i + 1} — label`, row.label))
+    if (row.note !== undefined) out.push(f(`fmt.${i}.note`, `format ${i + 1} — note`, row.note))
+  })
+  ;(p.placements ?? []).forEach((row, i) => {
+    out.push(f(`pl.${i}.label`, `placement ${i + 1} — label`, row.label))
+    if (row.note !== undefined) out.push(f(`pl.${i}.note`, `placement ${i + 1} — note`, row.note))
+  })
+  return out
+}
+
+const buildBrandFields = (b: Brand): WField[] => [
+  { k: bk(b.slug, 'name'), label: 'brand name', def: b.name },
+  { k: bk(b.slug, 'note'), label: 'note line (under the name)', def: b.note },
+  { k: bk(b.slug, 'story'), label: 'story', def: b.story ?? '', multi: true },
+]
+
+const itemFields: WField[] = [
+  ...SHOWCASE.flatMap((s): WField[] => [
+    { k: sck(s.id, 'title'), label: `showcase ${s.id} — title`, def: s.title },
+    { k: sck(s.id, 'note'), label: `showcase ${s.id} — note`, def: s.note ?? '', multi: true },
+  ]),
+  ...WORKFLOWS.flatMap((w): WField[] => [
+    { k: wfk(w.id, 'title'), label: `workflow ${w.id} — title`, def: w.title },
+    { k: wfk(w.id, 'note'), label: `workflow ${w.id} — note`, def: w.note ?? '', multi: true },
+  ]),
+]
+
+function WordsTab() {
+  const { content, refresh } = useRuntime()
+  const [work, setWork] = useState<Record<string, TextVal>>({})
+  const [deleted, setDeleted] = useState<Set<string>>(new Set())
+  const [cat, setCat] = useState('hero')
+  const [q, setQ] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [err, setErr] = useState('')
+
+  useEffect(() => {
+    setWork(content?.texts ? { ...content.texts } : {})
+    setDeleted(new Set())
+  }, [content])
+
+  const fields: WField[] = useMemo(() => {
+    if (cat.startsWith('P.')) {
+      const slug = cat.slice(2)
+      const p = projects.find((x) => x.slug === slug)
+      return p ? buildProjectFields(p) : []
+    }
+    if (cat.startsWith('B.')) {
+      const slug = cat.slice(2)
+      const b = BRANDS.find((x) => x.slug === slug)
+      return b ? buildBrandFields(b) : []
+    }
+    if (cat === 'items') return itemFields
+    return UI_GROUPS.find((g) => g.id === cat)?.fields ?? []
+  }, [cat])
+
+  const shown = q.trim()
+    ? fields.filter(
+        (f) =>
+          f.label.toLowerCase().includes(q.toLowerCase()) ||
+          f.k.toLowerCase().includes(q.toLowerCase()),
+      )
+    : fields
+
+  const valOf = (f: WField) => {
+    if (deleted.has(f.k)) return f.list ? '' : (f.def ?? '')
+    const v = work[f.k]
+    if (typeof v === 'string') return v
+    return f.def ?? ''
+  }
+  const listOf = (f: WField): string[] => {
+    if (deleted.has(f.k)) return f.list ?? []
+    const v = work[f.k]
+    return Array.isArray(v) ? v : (f.list ?? [])
+  }
+  const edited = (k: string) => (content?.texts ? k in content.texts : false)
+
+  const setVal = (k: string, v: TextVal) => {
+    setWork((w) => ({ ...w, [k]: v }))
+    setDeleted((d) => {
+      if (!d.has(k)) return d
+      const n = new Set(d)
+      n.delete(k)
+      return n
+    })
+  }
+  const reset = (k: string) => {
+    setWork((w) => {
+      const n = { ...w }
+      delete n[k]
+      return n
+    })
+    setDeleted((d) => new Set(d).add(k))
+  }
+
+  const saveGroup = async () => {
+    setBusy(true)
+    setMsg('')
+    setErr('')
+    try {
+      const updates: Record<string, TextVal | null> = {}
+      for (const f of fields) {
+        if (deleted.has(f.k)) updates[f.k] = null
+        else if (work[f.k] !== undefined) updates[f.k] = work[f.k]
+      }
+      if (Object.keys(updates).length === 0) {
+        setMsg('nothing changed yet')
+        return
+      }
+      await api('/api/text', { updates })
+      await refresh()
+      setMsg(`saved ${fields.filter((f) => updates[f.k] !== undefined).length} field(s)`)
+    } catch (e) {
+      setErr(String((e as Error).message || e))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const options: { v: string; l: string }[] = [
+    ...UI_GROUPS.map((g) => ({ v: g.id, l: g.label })),
+    { v: 'items', l: 'Showcase & workflow items' },
+    ...projects.map((p) => ({ v: 'P.' + p.slug, l: `Case study — ${p.title.slice(0, 58)}` })),
+    ...BRANDS.map((b) => ({ v: 'B.' + b.slug, l: `Brand — ${b.name}` })),
+  ]
+
+  return (
+    <div className="mt-6 grid gap-6 lg:grid-cols-[320px_1fr]">
+      <div className="panel h-fit p-5">
+        <label className="block">
+          <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">group</span>
+          <select className={`${selectCls} mt-1.5`} value={cat} onChange={(e) => setCat(e.target.value)}>
+            {options.map((o) => (
+              <option key={o.v} value={o.v}>
+                {o.l}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="mt-3 block">
+          <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">search</span>
+          <input className={`${inputCls} mt-1.5`} value={q} onChange={(e) => setQ(e.target.value)} placeholder="filter fields…" />
+        </label>
+        <p className="mt-3 text-[12px] leading-relaxed text-muted">
+          Every field saves as an override on top of the built-in copy. “reset” returns a field to the
+          compiled default. Empty a field to hide that element on the site.
+        </p>
+        <button className={`${btnCls} mt-4 w-full`} onClick={() => void saveGroup()} disabled={busy}>
+          {busy ? 'saving…' : `save ${fields.length} field(s)`}
+        </button>
+        <Notice msg={msg} err={err} />
+      </div>
+
+      <div className="grid gap-3">
+        {shown.map((f) =>
+          f.list ? (
+            <ListInput
+              key={f.k}
+              field={f}
+              items={listOf(f)}
+              edited={edited(f.k)}
+              onChange={(items) => setVal(f.k, items)}
+              onReset={() => reset(f.k)}
+            />
+          ) : (
+            <TextInput
+              key={f.k}
+              field={f}
+              value={valOf(f)}
+              edited={edited(f.k)}
+              onChange={(v) => setVal(f.k, v)}
+              onReset={() => reset(f.k)}
+            />
+          ),
+        )}
+        {shown.length === 0 && (
+          <p className="font-mono text-[12px] text-muted">no fields match “{q}”.</p>
+        )}
+      </div>
+    </div>
+  )
+}
+
+function TextInput({
+  field,
+  value,
+  edited,
+  onChange,
+  onReset,
+}: {
+  field: WField
+  value: string
+  edited: boolean
+  onChange: (v: string) => void
+  onReset: () => void
+}) {
+  return (
+    <div className="rounded-md border border-ink-600/70 bg-ink-900/40 p-3">
+      <div className="flex items-center justify-between gap-3">
+        <span className="font-mono text-[10px] uppercase tracking-wideish text-slateAccent">{field.label}</span>
+        <span className="flex items-center gap-2">
+          {edited && <span className={badgeCls}>edited</span>}
+          {edited && (
+            <button onClick={onReset} className="font-mono text-[9px] uppercase text-red-400 hover:underline">
+              reset
+            </button>
+          )}
+        </span>
+      </div>
+      {field.multi ? (
+        <textarea
+          rows={3}
+          className={`${inputCls} mt-2`}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      ) : (
+        <input className={`${inputCls} mt-2`} value={value} onChange={(e) => onChange(e.target.value)} />
+      )}
+      <p className="mt-1 font-mono text-[9px] text-muted/70">key: {field.k}</p>
+    </div>
+  )
+}
+
+function ListInput({
+  field,
+  items,
+  edited,
+  onChange,
+  onReset,
+}: {
+  field: WField
+  items: string[]
+  edited: boolean
+  onChange: (items: string[]) => void
+  onReset: () => void
+}) {
+  return (
+    <div className="rounded-md border border-ink-600/70 bg-ink-900/40 p-3">
+      <div className="flex items-center justify-between gap-3">
+        <span className="font-mono text-[10px] uppercase tracking-wideish text-slateAccent">
+          {field.label} — list ({items.length})
+        </span>
+        <span className="flex items-center gap-2">
+          {edited && <span className={badgeCls}>edited</span>}
+          {edited && (
+            <button onClick={onReset} className="font-mono text-[9px] uppercase text-red-400 hover:underline">
+              reset
+            </button>
+          )}
+        </span>
+      </div>
+      <div className="mt-2 space-y-1.5">
+        {items.map((it, i) => (
+          <div key={i} className="flex items-center gap-2">
+            <input
+              className={inputCls}
+              value={it}
+              onChange={(e) => {
+                const next = [...items]
+                next[i] = e.target.value
+                onChange(next)
+              }}
+            />
+            <button
+              className={smallBtn}
+              onClick={() => onChange(items.filter((_, j) => j !== i))}
+              title="remove item"
+            >
+              ✕
+            </button>
+          </div>
+        ))}
+        <button className={smallBtn} onClick={() => onChange([...items, ''])}>
+          + add item
+        </button>
+      </div>
+      <p className="mt-1 font-mono text-[9px] text-muted/70">key: {field.k}</p>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// PICTURES tab
+// ---------------------------------------------------------------------------
+type PicArea = 'home' | 'project' | 'brand' | 'showcase' | 'workflows'
+
+const HOME_EXTRAS: { group: string; items: [string, string][] }[] = [
+  {
+    group: 'Production pipeline strip (home)',
+    items: [
+      ['media/image-system/pipeline/product.jpg', 'stage 01 — product'],
+      ['media/image-system/pipeline/reference.jpg', 'stage 02 — reference'],
+      ['media/image-system/pipeline/generation.jpg', 'stage 03 — generation'],
+      ['media/image-system/pipeline/compositing.jpg', 'stage 04 — compositing'],
+      ['media/image-system/pipeline/lighting.jpg', 'stage 05 — lighting'],
+      ['media/image-system/pipeline/final.jpg', 'stage 06 — final'],
+    ],
+  },
+  {
+    group: 'One product / many assets (home)',
+    items: [
+      ['media/image-system/assets/studio-hero.jpg', 'studio hero 16:9'],
+      ['media/image-system/assets/bedroom-lifestyle.jpg', 'bedroom lifestyle 16:9'],
+      ['media/image-system/assets/wide-room.jpg', 'wide room 16:9'],
+      ['media/image-system/assets/product-page.jpg', 'product page 16:9'],
+      ['media/image-system/assets/detail.jpg', 'close-up detail 4:3'],
+      ['media/image-system/assets/mobile.jpg', 'mobile 4:5'],
+      ['media/image-system/assets/social.jpg', 'social ad 9:16'],
+    ],
+  },
+  {
+    group: 'Showreel (home)',
+    items: [
+      ['media/reel/showreel-2026.mp4', 'showreel video (mp4)'],
+      ['media/reel/showreel-2026-poster.jpg', 'showreel poster'],
+    ],
+  },
+  {
+    group: 'E-commerce concept page (ecommerce-image-system case study)',
+    items: [
+      ['media/ecommerce-image-system/desktop-hero.jpg', 'desktop hero'],
+      ['media/ecommerce-image-system/desktop-lifestyle.jpg', 'desktop lifestyle'],
+      ['media/ecommerce-image-system/desktop-detail.jpg', 'desktop detail'],
+      ['media/ecommerce-image-system/thumb-01.jpg', 'thumb 01'],
+      ['media/ecommerce-image-system/thumb-02.jpg', 'thumb 02'],
+      ['media/ecommerce-image-system/thumb-03.jpg', 'thumb 03'],
+      ['media/ecommerce-image-system/thumb-04.jpg', 'thumb 04'],
+      ['media/ecommerce-image-system/mobile-hero.jpg', 'mobile hero'],
+    ],
+  },
+  {
+    group: 'Site files',
+    items: [
+      ['media/image-system/og.jpg', 'social share image (og.jpg)'],
+      ['media/resume/Syed-Abdul-Wasay-Ali-Resume.pdf', 'resume PDF'],
+    ],
+  },
+]
+
+function PicturesTab() {
+  const { content, refresh } = useRuntime()
+  const [area, setArea] = useState<PicArea>('home')
+  const [projSlug, setProjSlug] = useState(projects[0]?.slug ?? '')
+  const [brandSlug, setBrandSlug] = useState(BRANDS[0]?.slug ?? '')
+  const [brandSection, setBrandSection] = useState<SectionName>('stills')
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [err, setErr] = useState('')
+
+  const notice = async (fn: () => Promise<string | void>) => {
+    setBusy(true)
+    setMsg('')
+    setErr('')
+    try {
+      const m = await fn()
+      await refresh()
+      if (typeof m === 'string') setMsg(m)
+    } catch (e) {
+      setErr(String((e as Error).message || e))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  const replace = (src: string) => (f: File) =>
+    void notice(async () => {
+      const data = await fileToBase64(f)
+      await api('/api/media/replace', { src, file: { name: f.name, data } })
+      return `replaced ${src}`
+    })
+
+  const removedSet = new Set(content?.removedMedia ?? [])
+  const hide = (src: string) => void notice(async () => {
+    await api('/api/media/remove', { src })
+    return 'hidden — the site no longer shows it'
+  })
+  const restore = (src: string) => void notice(async () => {
+    await api('/api/media/remove', { src, restore: true })
+    return 'restored'
+  })
+
+  const addFiles = (collection: string, label: string) => (files: File[]) =>
+    void notice(async () => {
+      const payload = await readFiles(files)
+      const j = await api('/api/media/add', { collection, label, files: payload })
+      return `added ${j.added?.length ?? payload.length} file(s)`
+    })
+
+  const renameAdded = (collection: string, src: string, label: string) =>
+    void notice(async () => {
+      await api('/api/media/edit', { collection, src, patch: { label } })
+      return 'renamed'
+    })
+  const deleteAdded = (collection: string, src: string) =>
+    void notice(async () => {
+      await api('/api/media/edit', { collection, src, patch: { remove: true } })
+      return 'deleted'
+    })
+
+  const project = projects.find((p) => p.slug === projSlug)
+  const brand = BRANDS.find((b) => b.slug === brandSlug)
+  const brandBase =
+    brandSection === 'stills' ? brand?.images : brandSection === 'animatics' ? brand?.animatics : brand?.films
+  const brandUploads = content?.uploads?.[brandSlug]?.[brandSection] ?? []
+  const brandRemoved = new Set(content?.removedItems?.[brandSlug]?.[brandSection] ?? [])
+  const projColl = project ? collKey.projectResults(project.slug) : ''
+  const projAdded = (content?.additions?.[projColl] ?? []) as MediaItem[]
+  const showcaseAdded = (content?.additions?.[collKey.showcase] ?? []) as MediaItem[]
+
+  const areaBtn = (k: PicArea, l: string) => (
+    <button
+      key={k}
+      onClick={() => setArea(k)}
+      className={`rounded-md border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wideish transition-colors ${
+        area === k ? 'border-green bg-green/10 text-green' : 'border-ink-600 text-muted hover:border-green/40 hover:text-paper'
+      }`}
+    >
+      {l}
+    </button>
+  )
+
+  return (
+    <div className="mt-6">
+      <div className="flex flex-wrap gap-2">
+        {areaBtn('home', 'home page')}
+        {areaBtn('project', 'case studies')}
+        {areaBtn('brand', 'brands')}
+        {areaBtn('showcase', 'showcase')}
+        {areaBtn('workflows', 'workflows')}
+      </div>
+      <Notice msg={msg} err={err} />
+
+      {area === 'home' && (
+        <div className="mt-5 space-y-6">
+          <p className="text-[12px] text-muted">
+            Replace any home-page image or video file. Same file name, new bytes — everything else
+            stays. (Handles large files: give it a second.)
+          </p>
+          {HOME_EXTRAS.map((g) => (
+            <div key={g.group}>
+              <p className="eyebrow-green">{g.group}</p>
+              <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                {g.items.map(([src, label]) => (
+                  <SlotCard key={src} label={label} src={src} sub={src} busy={busy} onReplace={replace(src)} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {area === 'project' && (
+        <div className="mt-5 space-y-6">
+          <label className="block max-w-xl">
+            <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">case study</span>
+            <select className={`${selectCls} mt-1.5`} value={projSlug} onChange={(e) => setProjSlug(e.target.value)}>
+              {projects.map((p) => (
+                <option key={p.slug} value={p.slug}>
+                  {p.title.slice(0, 70)}
+                </option>
+              ))}
+            </select>
+          </label>
+          {project && (
+            <>
+              <div>
+                <p className="eyebrow-green">cover & hero</p>
+                <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                  {project.cover && (
+                    <SlotCard label="cover (cards)" src={project.cover} sub={project.cover} busy={busy} onReplace={replace(project.cover)} />
+                  )}
+                  {project.heroSrc && (
+                    <SlotCard label="hero frame" src={project.heroSrc} sub={project.heroSrc} busy={busy} onReplace={replace(project.heroSrc)} />
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <p className="eyebrow-green">results gallery ({project.results.length} + {projAdded.length} added)</p>
+                <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                  {project.results.map((m, i) => {
+                    const src = m.src ?? ''
+                    const rem = removedSet.has(src)
+                    return (
+                      <SlotCard
+                        key={src + i}
+                        label={m.label ?? `result ${i + 1}`}
+                        src={src}
+                        sub={src}
+                        removed={rem}
+                        busy={busy}
+                        onReplace={src ? replace(src) : undefined}
+                        onHide={() => hide(src)}
+                        onRestore={() => restore(src)}
+                      />
+                    )
+                  })}
+                  {projAdded.map((m) => (
+                    <AddedCard
+                      key={m.src}
+                      item={m}
+                      busy={busy}
+                      onReplace={m.src ? replace(m.src) : undefined}
+                      onRename={(label) => renameAdded(projColl, m.src ?? '', label)}
+                      onDelete={() => deleteAdded(projColl, m.src ?? '')}
+                    />
+                  ))}
+                </div>
+                <AddFilesRow label="add pictures to this case study" onFiles={addFiles(projColl, '')} />
+              </div>
+
+              {(project.stages?.length ?? 0) > 0 && (
+                <div>
+                  <p className="eyebrow-green">stages</p>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                    {(project.stages ?? []).map((m, i) =>
+                      m.src ? (
+                        <SlotCard key={m.src + i} label={m.label ?? `stage ${i + 1}`} src={m.src} sub={m.src} busy={busy} onReplace={replace(m.src)} />
+                      ) : null,
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {project.beforeAfter && (
+                <div>
+                  <p className="eyebrow-green">before / after</p>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                    {[project.beforeAfter.before, project.beforeAfter.after].map((m, i) =>
+                      m.src ? (
+                        <SlotCard key={m.src + i} label={i === 0 ? 'before' : 'after'} src={m.src} sub={m.src} busy={busy} onReplace={replace(m.src)} />
+                      ) : null,
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {(project.formats?.length ?? 0) > 0 && (
+                <div>
+                  <p className="eyebrow-green">format frames</p>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                    {(project.formats ?? []).map((m, i) => (
+                      <SlotCard key={m.src + i} label={`${m.label} (${m.ratio})`} src={m.src} sub={m.src} busy={busy} onReplace={replace(m.src)} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {(project.placements?.length ?? 0) > 0 && (
+                <div>
+                  <p className="eyebrow-green">placements</p>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                    {(project.placements ?? []).map((m, i) => (
+                      <SlotCard key={m.src + i} label={m.label} src={m.src} sub={m.src} busy={busy} onReplace={replace(m.src)} />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+      {area === 'brand' && (
+        <div className="mt-5 space-y-6">
+          <div className="grid gap-4 sm:grid-cols-3">
+            <label className="block">
+              <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">brand</span>
+              <select className={`${selectCls} mt-1.5`} value={brandSlug} onChange={(e) => setBrandSlug(e.target.value)}>
+                {BRANDS.map((b) => (
+                  <option key={b.slug} value={b.slug}>
+                    {b.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="block">
+              <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">section</span>
+              <select className={`${selectCls} mt-1.5`} value={brandSection} onChange={(e) => setBrandSection(e.target.value as SectionName)}>
+                <option value="stills">stills</option>
+                <option value="animatics">animatics</option>
+                <option value="films">films</option>
+              </select>
+            </label>
+          </div>
+
+          {brand && brand.logo && (
+            <>
+              <p className="eyebrow-green">logo</p>
+              <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                <SlotCard label={`${brand.name} — logo`} src={brand.logo} sub={brand.logo} busy={busy} onReplace={replace(brand.logo)} />
+              </div>
+            </>
+          )}
+
+          <div>
+            <p className="eyebrow-green">
+              {brand?.name} · {brandSection} — {brandUploads.length} uploaded + {(brandBase ?? []).length} built-in
+            </p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+              {brandUploads.map((m) => (
+                <SlotCard
+                  key={m.src ?? m.label}
+                  label={m.label ?? m.src ?? ''}
+                  src={m.src}
+                  sub={m.src}
+                  busy={busy}
+                  onReplace={m.src ? replace(m.src) : undefined}
+                  onHide={() =>
+                    void notice(async () => {
+                      await api('/api/remove', { brand: brandSlug, section: brandSection, src: m.src ?? m.label ?? '' })
+                      return 'removed upload'
+                    })
+                  }
+                  hideLabel="delete"
+                />
+              ))}
+              {(brandBase ?? []).map((m, i) => {
+                const src = m.src ?? ''
+                const rem = brandRemoved.has(src) || removedSet.has(src)
+                return (
+                  <SlotCard
+                    key={src + i}
+                    label={m.label ?? src}
+                    src={src}
+                    sub={src}
+                    removed={rem}
+                    busy={busy}
+                    onReplace={src ? replace(src) : undefined}
+                    onHide={() =>
+                      void notice(async () => {
+                        await api('/api/remove', { brand: brandSlug, section: brandSection, src })
+                        return 'hidden'
+                      })
+                    }
+                    onRestore={() =>
+                      void notice(async () => {
+                        await api('/api/remove', { brand: brandSlug, section: brandSection, src, restore: true })
+                        await api('/api/media/remove', { src, restore: true })
+                        return 'restored'
+                      })
+                    }
+                  />
+                )
+              })}
+            </div>
+            <AddFilesRow
+              label={`upload new ${brandSection} for ${brand?.name ?? ''}`}
+              onFiles={(files) =>
+                void notice(async () => {
+                  const payload = await readFiles(files)
+                  const j = await api('/api/upload', { brand: brandSlug, section: brandSection, files: payload })
+                  return `uploaded ${j.saved?.length ?? payload.length} file(s)`
+                })
+              }
+            />
+          </div>
+        </div>
+      )}
+
+      {area === 'showcase' && (
+        <div className="mt-5 space-y-6">
+          <div>
+            <p className="eyebrow-green">showcase pieces ({SHOWCASE.length} + {showcaseAdded.length} added)</p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+              {SHOWCASE.map((s) => {
+                const rem = s.src ? removedSet.has(s.src) : false
+                return (
+                  <SlotCard
+                    key={s.id}
+                    label={`${s.id} — ${s.title}`}
+                    src={s.poster ?? s.src}
+                    sub={s.src}
+                    removed={rem}
+                    busy={busy}
+                    onReplace={s.src ? replace(s.src) : undefined}
+                    onHide={s.src ? () => hide(s.src!) : undefined}
+                    onRestore={s.src ? () => restore(s.src!) : undefined}
+                    extra={
+                      s.poster && (
+                        <label className={`${smallBtn} cursor-pointer`}>
+                          poster
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => {
+                              const f = e.target.files?.[0]
+                              e.target.value = ''
+                              if (f) replace(s.poster!)(f)
+                            }}
+                          />
+                        </label>
+                      )
+                    }
+                  />
+                )
+              })}
+              {showcaseAdded.map((m) => (
+                <AddedCard
+                  key={m.src}
+                  item={m}
+                  busy={busy}
+                  onReplace={m.src ? replace(m.src) : undefined}
+                  onRename={(label) => renameAdded(collKey.showcase, m.src ?? '', label)}
+                  onDelete={() => deleteAdded(collKey.showcase, m.src ?? '')}
+                />
+              ))}
+            </div>
+            <AddFilesRow label="add showcase pieces" onFiles={addFiles(collKey.showcase, '')} />
+          </div>
+        </div>
+      )}
+
+      {area === 'workflows' && (
+        <div className="mt-5 space-y-6">
+          <div>
+            <p className="eyebrow-green">workflow runs ({WORKFLOWS.length})</p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+              {WORKFLOWS.map((w) => {
+                const rem = w.src ? removedSet.has(w.src) : false
+                return (
+                  <SlotCard
+                    key={w.id}
+                    label={`${w.id} — ${w.title}`}
+                    src={w.poster ?? w.src}
+                    sub={w.src}
+                    removed={rem}
+                    busy={busy}
+                    onReplace={w.src ? replace(w.src) : undefined}
+                    onHide={w.src ? () => hide(w.src!) : undefined}
+                    onRestore={w.src ? () => restore(w.src!) : undefined}
+                    extra={
+                      <>
+                        {w.poster && (
+                          <label className={`${smallBtn} cursor-pointer`}>
+                            poster
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const f = e.target.files?.[0]
+                                e.target.value = ''
+                                if (f) replace(w.poster!)(f)
+                              }}
+                            />
+                          </label>
+                        )}
+                        {w.output?.src && (
+                          <label className={`${smallBtn} cursor-pointer`}>
+                            output
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={(e) => {
+                                const f = e.target.files?.[0]
+                                e.target.value = ''
+                                if (f) replace(w.output!.src)(f)
+                              }}
+                            />
+                          </label>
+                        )}
+                      </>
+                    }
+                  />
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function AddedCard({
+  item,
+  busy,
+  onReplace,
+  onRename,
+  onDelete,
+}: {
+  item: MediaItem
+  busy: boolean
+  onReplace?: (f: File) => void
+  onRename: (label: string) => void
+  onDelete: () => void
+}) {
+  const [label, setLabel] = useState(item.label ?? '')
+  useEffect(() => setLabel(item.label ?? ''), [item.label])
+  return (
+    <div className="rounded-md border border-green/30 bg-ink-900 p-2">
+      {item.src && !isVideoSrc(item.src) && (
+        <img src={item.src} alt={label} loading="lazy" className="aspect-video w-full rounded-sm bg-ink-950 object-cover" />
+      )}
+      {item.src && isVideoSrc(item.src) && (
+        <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 text-lg text-muted">▶ video</div>
+      )}
+      <input className={`${inputCls} mt-1.5 !py-1 !text-[11px]`} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="caption" />
+      <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+        <button className={smallBtn} disabled={busy} onClick={() => onRename(label)}>
+          save caption
+        </button>
+        {onReplace && (
+          <label className={`${smallBtn} cursor-pointer`}>
+            replace
+            <input
+              type="file"
+              accept="image/*,video/*"
+              className="hidden"
+              onChange={(e) => {
+                const f = e.target.files?.[0]
+                e.target.value = ''
+                if (f) onReplace(f)
+              }}
+            />
+          </label>
+        )}
+        <button className={`${smallBtn} !text-red-400 hover:!border-red-400`} disabled={busy} onClick={onDelete}>
+          ✕ delete
+        </button>
+        <span className={badgeCls}>added</span>
+      </div>
+    </div>
+  )
+}
+
+function AddFilesRow({ label, onFiles }: { label: string; onFiles: (files: File[]) => void }) {
+  return (
+    <label className="mt-3 flex cursor-pointer items-center gap-3 rounded-md border border-dashed border-ink-600 p-3 font-mono text-[11px] uppercase tracking-wideish text-muted hover:border-green/40 hover:text-paper">
+      + {label}
+      <input
+        type="file"
+        multiple
+        accept="image/*,video/*"
+        className="hidden"
+        onChange={(e) => {
+          const files = Array.from(e.target.files ?? [])
+          e.target.value = ''
+          if (files.length) onFiles(files)
+        }}
+      />
     </label>
   )
 }
 
-const selectCls =
-  'w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 font-mono text-[13px] text-paper outline-none focus:border-green'
-const inputCls =
-  'w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 font-mono text-[13px] text-paper outline-none focus:border-green'
-const btnCls =
-  'rounded-md border border-green/40 px-4 py-2 font-mono text-[11px] uppercase tracking-wideish text-green transition-colors hover:border-green hover:bg-green/10 disabled:cursor-not-allowed disabled:opacity-40'
-const chipCls =
-  'inline-block border border-ink-600 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish text-paper/80'
+// ---------------------------------------------------------------------------
+// SECTIONS tab
+// ---------------------------------------------------------------------------
+type Row = { k: string; label: string; on: boolean }
 
-function baseItems(brand: Brand, section: SectionName): MediaItem[] {
-  if (section === 'stills') return brand.images
-  if (section === 'animatics') return brand.animatics
-  if (section === 'films') return brand.films
-  return []
+async function apiOrder(page: 'home' | 'brand' | 'project', order: string[]) {
+  return api('/api/order', { page, order })
 }
 
+function SectionsPanel({
+  page,
+  defs,
+  legacyHidden,
+}: {
+  page: 'home' | 'brand' | 'project'
+  defs: { k: string; label: string }[]
+  legacyHidden?: string[]
+}) {
+  const { content, refresh } = useRuntime()
+  const [rows, setRows] = useState<Row[]>([])
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [err, setErr] = useState('')
+
+  useEffect(() => {
+    const stored = content?.sectionOrder?.[page]
+    if (stored) {
+      const inStored = stored
+        .map((k) => defs.find((d) => d.k === k))
+        .filter((d): d is { k: string; label: string } => Boolean(d))
+      const rest = defs.filter((d) => !stored.includes(d.k))
+      setRows([
+        ...inStored.map((d) => ({ ...d, on: true })),
+        ...rest.map((d) => ({ ...d, on: false })),
+      ])
+    } else {
+      const legacy = legacyHidden ?? []
+      setRows(defs.map((d) => ({ ...d, on: !legacy.includes(d.k) })))
+    }
+  }, [content, page, defs, legacyHidden])
+
+  const move = (i: number, dir: -1 | 1) => {
+    setRows((r) => {
+      const j = i + dir
+      if (j < 0 || j >= r.length) return r
+      const n = [...r]
+      const [it] = n.splice(i, 1)
+      n.splice(j, 0, it)
+      return n
+    })
+  }
+  const toggle = (i: number) =>
+    setRows((r) => r.map((row, j) => (j === i ? { ...row, on: !row.on } : row)))
+  const showAll = () => setRows((r) => r.map((row) => ({ ...row, on: true })))
+
+  const save = async () => {
+    setBusy(true)
+    setMsg('')
+    setErr('')
+    try {
+      await apiOrder(
+        page,
+        rows.filter((r) => r.on).map((r) => r.k),
+      )
+      await refresh()
+      setMsg(`saved — ${rows.filter((r) => r.on).length} section(s) visible, in this order`)
+    } catch (e) {
+      setErr(String((e as Error).message || e))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="panel p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="eyebrow-green">
+          {page === 'home' ? 'home page' : page === 'brand' ? 'brand pages (shared)' : 'case-study pages (shared)'} —
+          order & visibility
+        </p>
+        <div className="flex gap-2">
+          <button className={smallBtn} onClick={showAll}>
+            show all
+          </button>
+          <button className={btnCls} disabled={busy} onClick={() => void save()}>
+            {busy ? 'saving…' : 'save order'}
+          </button>
+        </div>
+      </div>
+      <div className="mt-4 space-y-1.5">
+        {rows.map((r, i) => (
+          <div
+            key={r.k}
+            className={`flex items-center gap-2 rounded-md border px-3 py-2 ${
+              r.on ? 'border-green/40' : 'border-ink-600 opacity-60'
+            }`}
+          >
+            <button className={smallBtn} disabled={i === 0} onClick={() => move(i, -1)}>
+              ↑
+            </button>
+            <button className={smallBtn} disabled={i === rows.length - 1} onClick={() => move(i, 1)}>
+              ↓
+            </button>
+            <button
+              className={smallBtn}
+              onClick={() => toggle(i)}
+              title={r.on ? 'hide section' : 'show section'}
+            >
+              {r.on ? '👁 visible' : '✕ hidden'}
+            </button>
+            <span className={`font-mono text-[12px] ${r.on ? 'text-paper' : 'text-muted line-through'}`}>
+              {r.label}
+            </span>
+            <span className="ml-auto font-mono text-[9px] text-muted/70">{r.k}</span>
+          </div>
+        ))}
+      </div>
+      <Notice msg={msg} err={err} />
+    </div>
+  )
+}
+
+function BrandVisibilityPanel() {
+  const { content, refresh } = useRuntime()
+  const [slug, setSlug] = useState(BRANDS[0]?.slug ?? '')
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [err, setErr] = useState('')
+  const keys: SectionName[] = ['story', 'projects', 'stills', 'animatics', 'films']
+  const hidden = content?.hiddenSections?.[slug] ?? []
+
+  const toggle = async (s: SectionName) => {
+    setBusy(true)
+    setMsg('')
+    setErr('')
+    try {
+      const next = hidden.includes(s) ? hidden.filter((x) => x !== s) : [...hidden, s]
+      await api('/api/sections', { brand: slug, hidden: next })
+      await refresh()
+      setMsg('sections updated')
+    } catch (e) {
+      setErr(String((e as Error).message || e))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="panel p-5">
+      <p className="eyebrow-green">per-brand section visibility</p>
+      <label className="mt-3 block max-w-sm">
+        <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">brand</span>
+        <select className={`${selectCls} mt-1.5`} value={slug} onChange={(e) => setSlug(e.target.value)}>
+          {BRANDS.map((b) => (
+            <option key={b.slug} value={b.slug}>
+              {b.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <div className="mt-4 space-y-2">
+        {keys.map((s) => {
+          const off = hidden.includes(s)
+          return (
+            <button
+              key={s}
+              disabled={busy}
+              onClick={() => void toggle(s)}
+              className={`flex w-full items-center justify-between rounded-md border px-4 py-2.5 font-mono text-[12px] uppercase tracking-wideish transition-colors ${
+                off ? 'border-ink-600 text-muted line-through' : 'border-green/40 text-paper hover:border-green'
+              }`}
+            >
+              <span>{s}</span>
+              <span className="text-[10px]">{off ? 'removed' : 'visible'}</span>
+            </button>
+          )
+        })}
+      </div>
+      <Notice msg={msg} err={err} />
+    </div>
+  )
+}
+
+function SectionsTab() {
+  return (
+    <div className="mt-6 space-y-6">
+      <SectionsPanel page="home" defs={HOME_SECTIONS} legacyHidden={undefined} />
+      <div className="grid gap-6 xl:grid-cols-2">
+        <SectionsPanel page="brand" defs={BRAND_SECTIONS} />
+        <BrandVisibilityPanel />
+      </div>
+      <SectionsPanel page="project" defs={PROJECT_SECTIONS} />
+      <p className="max-w-3xl text-[12px] leading-relaxed text-muted">
+        “Case-study pages (shared)” and “brand pages (shared)” apply to every case study / brand page.
+        The per-brand toggles above switch individual brand sections back on or off (legacy layer,
+        still respected alongside the order).
+      </p>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// CONCEPT images tab (moved from v1 — unchanged behaviour)
+// ---------------------------------------------------------------------------
+function ConceptTab() {
+  const { refresh } = useRuntime()
+  const [cFiles, setCFiles] = useState<File[]>([])
+  const [cCaption, setCCaption] = useState('')
+  const [cDrafts, setCDrafts] = useState<Record<string, string>>({})
+  const [cBusy, setCBusy] = useState(false)
+  const [cMsg, setCMsg] = useState('')
+  const [cErr, setCErr] = useState('')
+  const [cItems, setCItems] = useState<ConceptImage[]>([])
+
+  useEffect(() => {
+    fetch('content.json', { cache: 'no-store' })
+      .then((r) => r.json())
+      .then((c) => setCItems(Array.isArray(c.conceptImages) ? c.conceptImages : []))
+      .catch(() => {})
+  }, [])
+
+  const cPost = async (path: string, payload: unknown) => {
+    const r = await fetch(path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) })
+    const j = await r.json().catch(() => ({}))
+    if (!r.ok) throw new Error(j && j.error ? j.error : 'request failed')
+    if (j && j.content && Array.isArray(j.content.conceptImages)) setCItems(j.content.conceptImages)
+    return j
+  }
+  const cUpload = async () => {
+    if (!cFiles.length) {
+      setCErr('pick at least one image')
+      return
+    }
+    setCBusy(true)
+    setCMsg('')
+    setCErr('')
+    try {
+      const files = await readFiles(cFiles)
+      const j = await cPost('/api/concept/upload', { caption: cCaption, files })
+      setCMsg('uploaded ' + ((j.saved && j.saved.length) || 0) + ' image(s)')
+      setCFiles([])
+      setCCaption('')
+      await refresh()
+    } catch (e) {
+      setCErr(String((e && (e as Error).message) || e))
+    } finally {
+      setCBusy(false)
+    }
+  }
+  const cOp = async (path: string, payload: unknown, okMsg: string) => {
+    setCBusy(true)
+    setCMsg('')
+    setCErr('')
+    try {
+      await cPost(path, payload)
+      setCMsg(okMsg)
+      await refresh()
+    } catch (e) {
+      setCErr(String((e && (e as Error).message) || e))
+    } finally {
+      setCBusy(false)
+    }
+  }
+  const cReplace = async (id: string, f: File | undefined) => {
+    if (!f) return
+    setCBusy(true)
+    setCMsg('')
+    setCErr('')
+    try {
+      await cPost('/api/concept/replace', { id, file: { name: f.name, data: await fileToBase64(f) } })
+      setCMsg('replaced image')
+      await refresh()
+    } catch (e) {
+      setCErr(String((e && (e as Error).message) || e))
+    } finally {
+      setCBusy(false)
+    }
+  }
+
+  return (
+    <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,380px)_1fr]">
+      <div className="rounded-md border border-ink-600 bg-ink-900 p-5">
+        <p className="eyebrow-green">add concept images</p>
+        <p className="mt-2 font-mono text-[11px] text-muted">
+          uploads land in the concept images band on the home page.
+        </p>
+        <label className="mt-4 block font-mono text-[11px] uppercase text-muted">
+          caption (optional, applies to this batch)
+          <input
+            value={cCaption}
+            onChange={(e) => setCCaption(e.target.value)}
+            className="mt-1 w-full rounded-sm border border-ink-600 bg-transparent px-3 py-2 text-[13px] text-paper outline-none focus:border-green"
+            placeholder="e.g. concept frame 01"
+          />
+        </label>
+        <label className="mt-3 block font-mono text-[11px] uppercase text-muted">
+          images (multi-select ok)
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={(e) => setCFiles(Array.from(e.target.files || []))}
+            className="mt-1 w-full text-[12px] text-muted"
+          />
+        </label>
+        <button
+          type="button"
+          onClick={() => void cUpload()}
+          disabled={cBusy}
+          className="mt-4 rounded-sm border border-green bg-green px-4 py-2 font-mono text-[11px] uppercase tracking-wide text-snow disabled:opacity-50"
+        >
+          upload
+        </button>
+        <Notice msg={cMsg} err={cErr} />
+      </div>
+      <div className="rounded-md border border-ink-600 bg-ink-900 p-5">
+        <p className="eyebrow-green">
+          manage · {cItems.length} image{cItems.length === 1 ? '' : 's'}
+        </p>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+          {cItems.map((m, idx) => (
+            <div key={m.id} className="rounded-sm border border-ink-600 p-2">
+              <img src={m.src} alt={m.caption || ''} loading="lazy" className="aspect-video w-full rounded-sm object-cover" />
+              <input
+                value={cDrafts[m.id] ?? m.caption ?? ''}
+                onChange={(e) => setCDrafts({ ...cDrafts, [m.id]: e.target.value })}
+                className="mt-2 w-full rounded-sm border border-ink-600 bg-transparent px-2 py-1.5 text-[12px] text-paper outline-none focus:border-green"
+                placeholder="caption / title"
+              />
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                <button
+                  type="button"
+                  disabled={cBusy || idx === 0}
+                  onClick={() => void cOp('/api/concept/reorder', { id: m.id, dir: 'up' }, 'moved up')}
+                  className={smallBtn}
+                >
+                  up
+                </button>
+                <button
+                  type="button"
+                  disabled={cBusy || idx === cItems.length - 1}
+                  onClick={() => void cOp('/api/concept/reorder', { id: m.id, dir: 'down' }, 'moved down')}
+                  className={smallBtn}
+                >
+                  down
+                </button>
+                <button
+                  type="button"
+                  disabled={cBusy}
+                  onClick={() => void cOp('/api/concept/edit', { id: m.id, caption: cDrafts[m.id] ?? m.caption ?? '' }, 'caption saved')}
+                  className={smallBtn}
+                >
+                  save caption
+                </button>
+                <label className={`${smallBtn} cursor-pointer`}>
+                  replace
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const f = e.target.files && e.target.files[0]
+                      e.target.value = ''
+                      void cReplace(m.id, f || undefined)
+                    }}
+                  />
+                </label>
+                <button
+                  type="button"
+                  disabled={cBusy}
+                  onClick={() => {
+                    if (confirm('remove this image? this deletes the file.'))
+                      void cOp('/api/concept/remove', { id: m.id }, 'image removed')
+                  }}
+                  className={`${smallBtn} !text-red-400 hover:!border-red-400`}
+                >
+                  remove
+                </button>
+              </div>
+            </div>
+          ))}
+          {cItems.length === 0 && (
+            <p className="col-span-full font-mono text-[11px] text-muted">
+              no concept images yet — upload some on the left.
+            </p>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// page shell
+// ---------------------------------------------------------------------------
 export default function AdminPage() {
   const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem(SESSION_KEY) === '1')
   const [pass, setPass] = useState('')
   const [err, setErr] = useState('')
-  const [tab, setTab] = useState<Tab>('upload')
-  const { content, refresh } = useRuntime()
-
-  // upload tab state
-  const [brandSlug, setBrandSlug] = useState(BRANDS[0]?.slug ?? '')
-  const [section, setSection] = useState<SectionName>('stills')
-  const [label, setLabel] = useState('')
-  const [files, setFiles] = useState<File[]>([])
-  const [busy, setBusy] = useState(false)
-  const [status, setStatus] = useState('')
-
-  const brand = BRANDS.find((b) => b.slug === brandSlug)
-
-  // brand sections tab state
-  const [secBrandSlug, setSecBrandSlug] = useState(BRANDS[0]?.slug ?? '')
-  const [itemSection, setItemSection] = useState<SectionName>('stills')
-
-  // site sections tab state
-  const [siteHidden, setSiteHidden] = useState<string[]>([])
+  const [tab, setTab] = useState<Tab>('words')
 
   // is the local admin server reachable? (live gh-pages has no /api)
   const [serverOk, setServerOk] = useState<boolean | null>(null)
@@ -97,81 +1472,6 @@ export default function AdminPage() {
       .then((r) => setServerOk(r.ok))
       .catch(() => setServerOk(false))
   }, [])
-
-  useEffect(() => {
-    if (content?.pageSections) setSiteHidden(content.pageSections)
-  }, [content])
-
-  const hiddenFor = (slug: string) => content?.hiddenSections?.[slug] ?? []
-  const uploadsFor = (slug: string, s: SectionName) => content?.uploads?.[slug]?.[s] ?? []
-  const removedFor = (slug: string, s: SectionName) => new Set(content?.removedItems?.[slug]?.[s] ?? [])
-
-  const effectiveItems = (b: Brand | undefined, s: SectionName): MediaItem[] => {
-    if (!b) return []
-    const removed = removedFor(b.slug, s)
-    return [
-      ...uploadsFor(b.slug, s),
-      ...baseItems(b, s).filter((m) => !removed.has(m.src ?? m.label ?? '')),
-    ]
-  }
-
-  const doApi = async (path: string, body: unknown, okMsg: string) => {
-    setBusy(true)
-    setStatus('')
-    setErr('')
-    try {
-      await api(path, body)
-      await refresh()
-      setStatus(okMsg)
-    } catch (e) {
-      setErr(String((e as Error).message || e))
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  const onUpload = async () => {
-    if (!brand || files.length === 0) {
-      setErr('pick a brand and at least one file')
-      return
-    }
-    setBusy(true)
-    setStatus('')
-    setErr('')
-    try {
-      const payload = []
-      for (const f of files) payload.push({ name: f.name, data: await fileToBase64(f) })
-      const r = await api('/api/upload', {
-        brand: brand.slug,
-        section,
-        label,
-        files: payload,
-      })
-      await refresh()
-      setStatus(`uploaded ${r.saved?.length ?? payload.length} file(s) to ${brand.name} / ${section}`)
-      setFiles([])
-      setLabel('')
-    } catch (e) {
-      setErr(String((e as Error).message || e))
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  const onRemoveItem = async (s: SectionName, m: MediaItem) => {
-    if (!brand) return
-    await doApi(
-      '/api/remove',
-      { brand: brand.slug, section: s, src: m.src ?? m.label ?? '' },
-      `removed item from ${brand.name} / ${s}`
-    )
-  }
-
-  const toggleSiteSection = async (s: string) => {
-    const next = siteHidden.includes(s) ? siteHidden.filter((x) => x !== s) : [...siteHidden, s]
-    setSiteHidden(next)
-    await doApi('/api/page', { hidden: next }, 'site sections updated')
-  }
 
   if (!unlocked) {
     return (
@@ -192,18 +1492,19 @@ export default function AdminPage() {
           <p className="eyebrow-green">admin access</p>
           <h1 className="mt-2 font-display text-2xl font-black uppercase">Content manager</h1>
           <p className="mt-2 text-sm text-muted">
-            Enter the admin passcode to upload media and manage sections.
+            Every word, every picture and every section of the portfolio — editable from here.
           </p>
-          <Field label="passcode">
+          <label className="mt-4 block">
+            <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">passcode</span>
             <input
               type="password"
               value={pass}
               onChange={(e) => setPass(e.target.value)}
-              className={inputCls}
+              className={`${inputCls} mt-1.5`}
               placeholder="••••••••"
               autoFocus
             />
-          </Field>
+          </label>
           {err && <p className="mt-2 font-mono text-[11px] text-red-400">{err}</p>}
           <button type="submit" className={`${btnCls} mt-4`}>
             unlock
@@ -214,38 +1515,37 @@ export default function AdminPage() {
   }
 
   const tabs: { id: Tab; label: string }[] = [
-    { id: 'upload', label: 'upload media' },
-    { id: 'brand-sections', label: 'brand sections' },
-    { id: 'site-sections', label: 'site sections' },
+    { id: 'words', label: 'words' },
+    { id: 'pictures', label: 'pictures' },
+    { id: 'sections', label: 'sections' },
+    { id: 'concept', label: 'concept images' },
   ]
 
   return (
     <main className="container-site pb-16 pt-20">
       <p className="eyebrow-green">admin</p>
       <h1 className="mt-2 font-display text-3xl font-black uppercase">Content manager</h1>
-      <p className="mt-2 max-w-2xl text-sm text-muted">
-        Changes apply instantly on this local site and are saved into the project.
-        To publish them: <span className="font-mono text-[12px] text-paper">npm run build &amp;&amp; npx gh-pages -d dist</span>
+      <p className="mt-2 max-w-3xl text-sm text-muted">
+        Words · pictures · sections — everything on the portfolio edits from here and saves into{' '}
+        <span className="font-mono text-[12px] text-paper">content.json</span> (plus media files).
+        To publish: <span className="font-mono text-[12px] text-paper">npm run build &amp;&amp; npx gh-pages -d dist</span>
       </p>
 
       <div className="mt-6 flex flex-wrap gap-2">
-        {tabs.map((t) => (
+        {tabs.map((tb) => (
           <button
-            key={t.id}
-            onClick={() => setTab(t.id)}
+            key={tb.id}
+            onClick={() => setTab(tb.id)}
             className={`rounded-md border px-4 py-1.5 font-mono text-[11px] uppercase tracking-wideish transition-colors ${
-              tab === t.id
+              tab === tb.id
                 ? 'border-green bg-green/10 text-green'
                 : 'border-ink-600 text-muted hover:border-green/40 hover:text-paper'
             }`}
           >
-            {t.label}
+            {tb.label}
           </button>
         ))}
       </div>
-
-      {status && <p className="mt-4 font-mono text-[12px] text-greenBright">{status}</p>}
-      {err && <p className="mt-4 font-mono text-[12px] text-red-400">error: {err}</p>}
 
       {serverOk === false && (
         <div className="mt-4 rounded-md border border-amber-400/40 bg-amber-400/10 p-4">
@@ -253,221 +1553,18 @@ export default function AdminPage() {
             local admin server offline
           </p>
           <p className="mt-1 max-w-2xl text-[13px] leading-relaxed text-paper/80">
-            Uploads and removal need the local server. Run{' '}
-            <span className="font-mono text-[12px] text-paper">
-              node admin-server.mjs
-            </span>{' '}
-            in <span className="font-mono text-[12px] text-paper">syed-portfolio</span>{' '}
-            and open{' '}
+            Saving needs the local server. Run{' '}
+            <span className="font-mono text-[12px] text-paper">node admin-server.mjs</span> in{' '}
+            <span className="font-mono text-[12px] text-paper">syed-portfolio</span> and open{' '}
             <span className="font-mono text-[12px] text-paper">http://127.0.0.1:4173/#/admin</span>.
           </p>
         </div>
       )}
 
-      {/* ------------------------------------------------ UPLOAD ----- */}
-      {tab === 'upload' && (
-        <div className="mt-8 grid gap-6 lg:grid-cols-[340px_1fr]">
-          <div className="panel space-y-4 p-5">
-            <Field label="brand">
-              <select value={brandSlug} onChange={(e) => setBrandSlug(e.target.value)} className={selectCls}>
-                {BRANDS.map((b) => (
-                  <option key={b.slug} value={b.slug}>
-                    {b.name}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label="section">
-              <select value={section} onChange={(e) => setSection(e.target.value as SectionName)} className={selectCls}>
-                {SECTIONS.map((s) => (
-                  <option key={s.key} value={s.key}>
-                    {s.key} — {s.hint}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label="label (optional caption)">
-              <input value={label} onChange={(e) => setLabel(e.target.value)} className={inputCls} placeholder="e.g. story of us — valentine 10" />
-            </Field>
-            <Field label="files (images + videos, multi)">
-              <input
-                type="file"
-                multiple
-                accept="image/*,video/*"
-                onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
-                className="block w-full text-[12px] text-muted file:mr-3 file:rounded-md file:border file:border-ink-600 file:bg-ink-900 file:px-3 file:py-1.5 file:font-mono file:text-[11px] file:text-paper hover:file:border-green/40"
-              />
-            </Field>
-            {files.length > 0 && (
-              <p className="font-mono text-[11px] text-muted">
-                {files.length} file(s): {files.map((f) => f.name).join(', ').slice(0, 120)}
-              </p>
-            )}
-            <button onClick={onUpload} disabled={busy || serverOk === false} className={btnCls}>
-              {busy ? 'uploading…' : 'upload'}
-            </button>
-          </div>
-
-          <div className="panel p-5">
-            <p className="eyebrow-green">
-              {brand?.name ?? '—'} · {itemSection}
-            </p>
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {SECTIONS.map((s) => (
-                <button
-                  key={s.key}
-                  onClick={() => setItemSection(s.key)}
-                  className={chipCls + (itemSection === s.key ? ' !border-green !text-green' : '')}
-                >
-                  {s.key} ({effectiveItems(brand, s.key).length})
-                </button>
-              ))}
-            </div>
-            <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {effectiveItems(brand, itemSection).map((m, i) => (
-                <div key={(m.src ?? m.label ?? '') + i} className="relative rounded-md border border-ink-600 bg-ink-900 p-2">
-                  {m.src ? (
-                    m.kind === 'video' || /\.(mp4|webm|mov|mkv)$/i.test(m.src) ? (
-                      <div className="flex aspect-video items-center justify-center bg-ink-950 text-lg text-muted">▶</div>
-                    ) : (
-                      <img src={m.src} alt={m.label ?? ''} loading="lazy" className="aspect-video w-full rounded-sm object-cover" />
-                    )
-                  ) : (
-                    <div className="flex aspect-video items-center justify-center bg-ink-950 font-mono text-[10px] text-muted">pending</div>
-                  )}
-                  <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/80">{m.label ?? m.src}</p>
-                  <button
-                    onClick={() => onRemoveItem(itemSection, m)}
-                    className="absolute right-1.5 top-1.5 rounded-sm border border-red-400/40 bg-ink-950/90 px-1.5 py-0.5 font-mono text-[10px] text-red-400 hover:border-red-400"
-                  >
-                    ✕ remove
-                  </button>
-                </div>
-              ))}
-              {effectiveItems(brand, itemSection).length === 0 && (
-                <p className="col-span-full font-mono text-[11px] text-muted">nothing here yet — upload something ☝</p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* -------------------------------------- BRAND SECTIONS ----- */}
-      {tab === 'brand-sections' && (
-        <div className="mt-8 grid gap-6 lg:grid-cols-[300px_1fr]">
-          <div className="panel p-5">
-            <Field label="brand">
-              <select value={secBrandSlug} onChange={(e) => setSecBrandSlug(e.target.value)} className={selectCls}>
-                {BRANDS.map((b) => (
-                  <option key={b.slug} value={b.slug}>
-                    {b.name}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <p className="mt-3 text-[12px] leading-relaxed text-muted">
-              Toggle a section off to remove it from this brand page. Nothing is
-              deleted — flip it back on anytime.
-            </p>
-          </div>
-          <div className="space-y-4">
-            <div className="panel p-5">
-              <p className="eyebrow-green">sections on: {BRANDS.find((b) => b.slug === secBrandSlug)?.name}</p>
-              <div className="mt-3 space-y-2">
-                {BRAND_SECTION_KEYS.map((s) => {
-                  const off = hiddenFor(secBrandSlug).includes(s)
-                  return (
-                    <button
-                      key={s}
-                      onClick={() => {
-                        const list = hiddenFor(secBrandSlug)
-                        const next = off ? list.filter((x) => x !== s) : [...list, s]
-                        void doApi('/api/sections', { brand: secBrandSlug, hidden: next }, 'sections updated')
-                      }}
-                      className={`flex w-full items-center justify-between rounded-md border px-4 py-2.5 font-mono text-[12px] uppercase tracking-wideish transition-colors ${
-                        off
-                          ? 'border-ink-600 text-muted line-through'
-                          : 'border-green/40 text-paper hover:border-green'
-                      }`}
-                    >
-                      <span>{s}</span>
-                      <span className="text-[10px]">{off ? 'removed' : 'visible'}</span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-            <div className="panel p-5">
-              <p className="eyebrow-green">remove individual media items</p>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {SECTIONS.map((s) => (
-                  <button
-                    key={s.key}
-                    onClick={() => setItemSection(s.key)}
-                    className={chipCls + (itemSection === s.key ? ' !border-green !text-green' : '')}
-                  >
-                    {s.key} ({effectiveItems(BRANDS.find((b) => b.slug === secBrandSlug), s.key).length})
-                  </button>
-                ))}
-              </div>
-              <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                {effectiveItems(BRANDS.find((b) => b.slug === secBrandSlug), itemSection).map((m, i) => (
-                  <div key={(m.src ?? m.label ?? '') + i} className="relative rounded-md border border-ink-600 bg-ink-900 p-2">
-                    <p className="line-clamp-1 font-mono text-[10px] text-paper/80">{m.label ?? m.src}</p>
-                    <button
-                      onClick={() => {
-                        const b = BRANDS.find((x) => x.slug === secBrandSlug)
-                        if (b) void onRemoveItemFor(b, itemSection, m)
-                      }}
-                      className="mt-1.5 w-full rounded-sm border border-red-400/40 px-1.5 py-0.5 font-mono text-[10px] text-red-400 hover:border-red-400"
-                    >
-                      ✕ remove
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ---------------------------------------- SITE SECTIONS ----- */}
-      {tab === 'site-sections' && (
-        <div className="mt-8 max-w-xl">
-          <div className="panel p-5">
-            <p className="eyebrow-green">sections on the home page</p>
-            <div className="mt-3 space-y-2">
-              {SITE_SECTIONS.map((s) => {
-                const off = siteHidden.includes(s)
-                return (
-                  <button
-                    key={s}
-                    onClick={() => void toggleSiteSection(s)}
-                    className={`flex w-full items-center justify-between rounded-md border px-4 py-2.5 font-mono text-[12px] uppercase tracking-wideish transition-colors ${
-                      off ? 'border-ink-600 text-muted line-through' : 'border-green/40 text-paper hover:border-green'
-                    }`}
-                  >
-                    <span>{s === 'capabilities' ? 'ai systems' : s}</span>
-                    <span className="text-[10px]">{off ? 'removed' : 'visible'}</span>
-                  </button>
-                )
-              })}
-            </div>
-            <p className="mt-4 text-[12px] leading-relaxed text-muted">
-              Removing a section also hides its nav link. Hero, Brands and Work always stay.
-            </p>
-          </div>
-        </div>
-      )}
+      {tab === 'words' && <WordsTab />}
+      {tab === 'pictures' && <PicturesTab />}
+      {tab === 'sections' && <SectionsTab />}
+      {tab === 'concept' && <ConceptTab />}
     </main>
   )
-}
-
-async function onRemoveItemFor(b: Brand, s: SectionName, m: MediaItem) {
-  // helper bound to the sections tab brand (kept simple: direct api call)
-  await fetch('/api/remove', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ brand: b.slug, section: s, src: m.src ?? m.label ?? '' }),
-  })
 }

@@ -1,4 +1,5 @@
 import Reveal from './Reveal'
+import { useT } from '../data/runtime'
 
 // The five-second pitch band: what an AI-image client should understand
 // the profile to be. Sits right under the logo ticker, above the work.
@@ -36,18 +37,16 @@ const ITEMS = [
 ]
 
 export default function WhatIBuild() {
+  const t = useT()
   return (
     <section className="border-b border-ink-600 py-8 sm:py-11">
       <div className="container-site">
         <div className="max-w-2xl">
-          <p className="eyebrow-green">01 / what i solve</p>
+          <p className="eyebrow-green">{t('whatibuild.tag')}</p>
           <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-            What I Solve
+            {t('whatibuild.title')}
           </h2>
-          <p className="mt-3 text-muted">
-            I build production-ready AI image systems for commercial product and lifestyle
-            advertising — product accuracy, compositing, and repeatable workflows.
-          </p>
+          <p className="mt-3 text-muted">{t('whatibuild.sub')}</p>
         </div>
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -57,8 +56,12 @@ export default function WhatIBuild() {
                 <p className="font-mono text-[11px] uppercase tracking-wideish text-green">
                   {it.num}
                 </p>
-                <h3 className="mt-2 font-display text-base font-bold text-paper">{it.title}</h3>
-                <p className="mt-1.5 text-[13px] leading-relaxed text-muted">{it.desc}</p>
+                <h3 className="mt-2 font-display text-base font-bold text-paper">
+                  {t(`whatibuild.${i + 1}.title`, it.title)}
+                </h3>
+                <p className="mt-1.5 text-[13px] leading-relaxed text-muted">
+                  {t(`whatibuild.${i + 1}.desc`, it.desc)}
+                </p>
               </div>
             </Reveal>
           ))}

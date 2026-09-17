@@ -81,6 +81,7 @@ const readContent = async () => {
 }
 
 const writeContent = async (c) => {
+  c.stamp = Date.now() // cache-bust marker — bumped on every admin write
   const s = JSON.stringify(c, null, 2)
   await writeFile(path.join(PUBLIC, 'content.json'), s)
   await writeFile(path.join(DIST, 'content.json'), s)
@@ -172,6 +173,16 @@ const onApi = async (req, res) => {
       const id = String(body.src || body.label || '')
       if (!slug || !id) return json(res, 400, { error: 'brand and item are required' })
 
+      // restore = put a previously removed base item back
+      if (body.restore) {
+        content.removedItems = content.removedItems || {}
+        content.removedItems[slug] = content.removedItems[slug] || {}
+        const list = content.removedItems[slug][section] || []
+        content.removedItems[slug][section] = list.filter((x) => x !== id)
+        await writeContent(content)
+        return json(res, 200, { ok: true, content })
+      }
+
       // uploaded item? parse its src and delete the files
       const m = id.match(/^media\/brands\/([a-z0-9-]+)\/(stills|animatic|film)\/(.+)$/)
       if (m && content.uploads?.[slug]?.[section]) {
@@ -207,6 +218,150 @@ const onApi = async (req, res) => {
       await writeContent(content)
       return json(res, 200, { ok: true, content })
     }
+
+    // ---- admin v2: words / pictures / sections --------------------------
+
+    // texts — every editable word. { updates: { key: string | string[] | null } }
+    // null deletes the key (revert to the compiled default).
+    if (url.pathname === '/api/text') {
+      const updates = body.updates && typeof body.updates === 'object' ? body.updates : null
+      if (!updates) return json(res, 400, { error: 'updates object is required' })
+      content.texts = content.texts || {}
+      for (const [k, v] of Object.entries(updates)) {
+        const key = String(k).slice(0, 200)
+        if (v === null || v === undefined) {
+          delete content.texts[key]
+          continue
+        }
+        if (typeof v === 'string') {
+          content.texts[key] = v.slice(0, 20000)
+          continue
+        }
+        if (Array.isArray(v)) {
+          content.texts[key] = v.map((x) => String(x).slice(0, 5000)).slice(0, 200)
+          continue
+        }
+        return json(res, 400, { error: 'bad value for ' + key })
+      }
+      await writeContent(content)
+      return json(res, 200, { ok: true, content })
+    }
+
+    // sectionOrder — visible sections + order per page: 'home' | 'brand' | 'project'
+    if (url.pathname === '/api/order') {
+      const page = ['home', 'brand', 'project'].includes(String(body.page))
+        ? String(body.page)
+        : null
+      const order = Array.isArray(body.order)
+        ? body.order.map((x) => String(x).slice(0, 60)).slice(0, 100)
+        : null
+      if (!page || !order) return json(res, 400, { error: 'page + order are required' })
+      content.sectionOrder = content.sectionOrder || {}
+      content.sectionOrder[page] = order
+      await writeContent(content)
+      return json(res, 200, { ok: true, content })
+    }
+
+    // media/replace — overwrite one media file IN PLACE (compiled srcs stay
+    // valid). Keeps the original filename; backs up the previous file once
+    // per replace under .admin-backups/.
+    if (url.pathname === '/api/media/replace') {
+      const src = String(body.src || '').replace(/\\/g, '/')
+      const f = body.file || {}
+      const buf = Buffer.from(String(f.data || ''), 'base64')
+      if (!buf.length) return json(res, 400, { error: 'empty file' })
+      if (!src.startsWith('media/') || src.includes('..')) return json(res, 400, { error: 'bad src' })
+      for (const root of [PUBLIC, DIST]) {
+        const abs = path.normalize(path.join(root, src))
+        if (!abs.startsWith(path.join(root, 'media') + path.sep)) return json(res, 400, { error: 'bad path' })
+        try {
+          const prev = await readFile(abs)
+          const bak = path.join(root, '.admin-backups', src.split('/').join('__') + '.' + Date.now())
+          await mkdir(path.dirname(bak), { recursive: true })
+          await writeFile(bak, prev)
+        } catch {
+          /* no previous file — nothing to back up */
+        }
+        await mkdir(path.dirname(abs), { recursive: true })
+        await writeFile(abs, buf)
+      }
+      return json(res, 200, { ok: true, src, bytes: buf.length })
+    }
+
+    // media/remove — hide a media item everywhere it renders (by src).
+    // { restore: true } puts it back. No files are deleted.
+    if (url.pathname === '/api/media/remove') {
+      const src = String(body.src || '')
+      if (!src) return json(res, 400, { error: 'src is required' })
+      const set = new Set(Array.isArray(content.removedMedia) ? content.removedMedia : [])
+      if (body.restore) set.delete(src)
+      else set.add(src)
+      content.removedMedia = [...set]
+      await writeContent(content)
+      return json(res, 200, { ok: true, content })
+    }
+
+    // media/add — add new pictures to a collection:
+    //   "project:<slug>:results" | "showcase" | "workflows"
+    if (url.pathname === '/api/media/add') {
+      const coll = String(body.collection || '')
+      if (!/^(project:[a-z0-9-]+:results|showcase|workflows)$/.test(coll)) {
+        return json(res, 400, { error: 'bad collection' })
+      }
+      const files = Array.isArray(body.files) ? body.files : []
+      if (!files.length) return json(res, 400, { error: 'no files' })
+      const dirName = coll.replace(/[^a-z0-9-]+/gi, '-').toLowerCase()
+      const saved = []
+      for (const f of files) {
+        const name = 'a' + Date.now().toString(36) + '-' + safeName(f.name || 'file')
+        const buf = Buffer.from(String(f.data || ''), 'base64')
+        if (!buf.length) return json(res, 400, { error: 'empty file: ' + name })
+        const rel = 'media/added/' + dirName + '/' + name
+        for (const root of [PUBLIC, DIST]) {
+          const abs = path.normalize(path.join(root, rel))
+          await mkdir(path.dirname(abs), { recursive: true })
+          await writeFile(abs, buf)
+        }
+        const label =
+          String(body.label || '').trim() ||
+          name.replace(/^a[a-z0-9]+-/, '').replace(/\.[^.]+$/, '').replace(/_/g, ' ')
+        const item = { kind: VIDEO_EXT.test(name) ? 'video' : 'image', label, src: rel }
+        saved.push(item)
+      }
+      content.additions = content.additions || {}
+      content.additions[coll] = [...(content.additions[coll] || []), ...saved]
+      await writeContent(content)
+      return json(res, 200, { ok: true, added: saved, content })
+    }
+
+    // media/edit — rename an added item's label, or remove it entirely
+    if (url.pathname === '/api/media/edit') {
+      const coll = String(body.collection || '')
+      const src = String(body.src || '')
+      const patch = body.patch && typeof body.patch === 'object' ? body.patch : {}
+      const list = content.additions?.[coll]
+      if (!Array.isArray(list)) return json(res, 404, { error: 'collection not found' })
+      const item = list.find((m) => m && m.src === src)
+      if (!item) return json(res, 404, { error: 'item not found' })
+      if (typeof patch.label === 'string') item.label = patch.label.slice(0, 300)
+      if (patch.remove === true) {
+        const m = String(item.src || '').match(/^media\/added\/(.+)$/)
+        if (m) {
+          for (const root of [PUBLIC, DIST]) {
+            const abs = path.normalize(path.join(root, 'media', 'added', m[1]))
+            if (!abs.startsWith(path.join(root, 'media') + path.sep)) continue
+            try {
+              await unlink(abs)
+            } catch {
+              /* already gone */
+            }
+          }
+        }
+        content.additions[coll] = list.filter((x) => x !== item)
+      }
+      await writeContent(content)
+      return json(res, 200, { ok: true, content })
+    }
   } catch (e) {
     return json(res, 500, { error: String(e && e.message || e) })
   }
@@ -226,7 +381,9 @@ const serveStatic = async (req, res) => {
   try {
     const buf = await readFile(abs)
     const type = MIME[path.extname(abs).toLowerCase()] || 'application/octet-stream'
-    res.writeHead(200, { 'Content-Type': type })
+    // no-store locally: replaced media files keep their names, so the browser
+    // must revalidate every request while the admin is working on the site
+    res.writeHead(200, { 'Content-Type': type, 'Cache-Control': 'no-store' })
     res.end(buf)
   } catch {
     // SPA fallback
@@ -241,7 +398,7 @@ const serveStatic = async (req, res) => {
   }
 }
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(__withConceptRoutes((req, res) => {
   const url = new URL(req.url, 'http://x')
   if (url.pathname.startsWith('/api/')) {
     onApi(req, res).catch((e) => {
@@ -257,7 +414,7 @@ const server = http.createServer((req, res) => {
       } catch {}
     })
   }
-})
+}))
 
 server.listen(PORT, HOST, () => {
   console.log('')
@@ -268,3 +425,170 @@ server.listen(PORT, HOST, () => {
   console.log('  publish: npm run build && npx gh-pages -d dist')
   console.log('')
 })
+
+// =================== concept images API (added for the Concept images section) ===================
+function __conceptRoutes(req, res) {
+  return (async () => {
+    const p = String((req.url || '').split('?')[0]);
+    if (!p.startsWith('/api/concept/')) return false;
+    const fs = await import('node:fs/promises');
+    const path = (await import('node:path')).default;
+    const { fileURLToPath } = await import('node:url');
+    const HERE = path.dirname(fileURLToPath(import.meta.url));
+    const PUB = path.join(HERE, 'public');
+    const DIST = path.join(HERE, 'dist');
+    const send = (code, obj) => {
+      res.writeHead(code, { 'content-type': 'application/json' });
+      res.end(JSON.stringify(obj));
+    };
+    const readBody = async () => {
+      const chunks = [];
+      for await (const c of req) chunks.push(c);
+      const raw = Buffer.concat(chunks).toString('utf8');
+      try { return JSON.parse(raw || '{}'); } catch { return {}; }
+    };
+    const safeName = (n) => {
+      let s = String(n || 'file').split(/[\\/]/).pop() || 'file';
+      s = s.replace(/[^a-zA-Z0-9._-]+/g, '_').replace(/_+/g, '_');
+      if (!s || /^\.+$/.test(s) || s.startsWith('.')) s = 'img' + Date.now() + '-' + s;
+      return s.slice(-120);
+    };
+    const makeId = () => 'c_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    const isVideo = (n) => /\.(mp4|webm|mov|m4v)$/i.test(String(n));
+    const putMedia = async (rel, buf) => {
+      for (const root of [PUB, DIST]) {
+        const abs = path.normalize(path.join(root, 'media', rel));
+        if (!abs.startsWith(path.join(root, 'media') + path.sep)) throw new Error('bad path');
+        await fs.mkdir(path.dirname(abs), { recursive: true });
+        await fs.writeFile(abs, buf);
+      }
+      return 'media/' + rel.split(path.sep).join('/');
+    };
+    const delMedia = async (rel) => {
+      for (const root of [PUB, DIST]) {
+        const abs = path.normalize(path.join(root, 'media', rel));
+        if (!abs.startsWith(path.join(root, 'media') + path.sep)) continue;
+        try { await fs.unlink(abs); } catch {}
+      }
+    };
+    const readContent = async () => {
+      for (const f of [path.join(PUB, 'content.json'), path.join(DIST, 'content.json')]) {
+        try { return JSON.parse(await fs.readFile(f, 'utf8')); } catch {}
+      }
+      return {};
+    };
+    const writeContent = async (obj) => {
+      obj.stamp = Date.now()
+      const s = JSON.stringify(obj, null, 2)
+      try { await fs.writeFile(path.join(PUB, 'content.json'), s); } catch {}
+      try { await fs.writeFile(path.join(DIST, 'content.json'), s); } catch {}
+    };
+
+    if (req.method !== 'POST') { send(405, { error: 'POST only' }); return true; }
+    const body = await readBody();
+    const content = await readContent();
+    if (!Array.isArray(content.conceptImages)) content.conceptImages = [];
+
+    if (p === '/api/concept/upload') {
+      const caption = String(body.caption || '').trim().slice(0, 300);
+      const files = Array.isArray(body.files) ? body.files : [];
+      if (!files.length) { send(400, { error: 'no files' }); return true; }
+      const used = new Set(content.conceptImages.map((x) => x && x.src));
+      const saved = [];
+      for (const f of files) {
+        let name = safeName(f && f.name);
+        const buf = Buffer.from(String((f && f.data) || ''), 'base64');
+        if (!buf.length) { send(400, { error: 'empty file: ' + name }); return true; }
+        let src = 'media/concept/' + name;
+        if (used.has(src)) { name = makeId() + '-' + name; src = 'media/concept/' + name; }
+        await putMedia(path.join('concept', name), buf);
+        const item = { id: makeId(), kind: isVideo(name) ? 'video' : 'image', src, caption };
+        used.add(src);
+        content.conceptImages.push(item);
+        saved.push(item);
+      }
+      await writeContent(content);
+      send(200, { ok: true, saved, count: content.conceptImages.length, content });
+      return true;
+    }
+
+    const findItem = (id) => content.conceptImages.find((x) => x && x.id === id);
+
+    if (p === '/api/concept/edit') {
+      const item = findItem(String(body.id || ''));
+      if (!item) { send(400, { error: 'item not found' }); return true; }
+      item.caption = String(body.caption == null ? '' : body.caption).trim().slice(0, 300);
+      await writeContent(content);
+      send(200, { ok: true, content });
+      return true;
+    }
+
+    if (p === '/api/concept/reorder') {
+      const id = String(body.id || '');
+      const dir = String(body.dir || '');
+      const list = content.conceptImages;
+      const i = list.findIndex((x) => x && x.id === id);
+      if (i < 0) { send(400, { error: 'item not found' }); return true; }
+      const j = dir === 'up' ? i - 1 : dir === 'down' ? i + 1 : i;
+      if (j >= 0 && j < list.length && j !== i) {
+        const it = list.splice(i, 1)[0];
+        list.splice(j, 0, it);
+        await writeContent(content);
+      }
+      send(200, { ok: true, content });
+      return true;
+    }
+
+    if (p === '/api/concept/replace') {
+      const item = findItem(String(body.id || ''));
+      if (!item) { send(400, { error: 'item not found' }); return true; }
+      const f = body.file || {};
+      const name = safeName(f.name);
+      const buf = Buffer.from(String(f.data || ''), 'base64');
+      if (!buf.length) { send(400, { error: 'empty file' }); return true; }
+      const m = String(item.src || '').match(/^media\/concept\/(.+)$/);
+      if (m) await delMedia(path.join('concept', m[1]));
+      let finalName = name;
+      let src = 'media/concept/' + finalName;
+      const usedElsewhere = content.conceptImages.some((x) => x !== item && x && x.src === src);
+      if (usedElsewhere) { finalName = makeId() + '-' + finalName; src = 'media/concept/' + finalName; }
+      await putMedia(path.join('concept', finalName), buf);
+      item.src = src;
+      item.kind = isVideo(finalName) ? 'video' : 'image';
+      await writeContent(content);
+      send(200, { ok: true, content });
+      return true;
+    }
+
+    if (p === '/api/concept/remove') {
+      const item = findItem(String(body.id || ''));
+      if (!item) { send(400, { error: 'item not found' }); return true; }
+      const m = String(item.src || '').match(/^media\/concept\/(.+)$/);
+      if (m) await delMedia(path.join('concept', m[1]));
+      content.conceptImages = content.conceptImages.filter((x) => x !== item);
+      await writeContent(content);
+      send(200, { ok: true, content });
+      return true;
+    }
+
+    send(404, { error: 'unknown concept route' });
+    return true;
+  })();
+}
+
+function __withConceptRoutes(next) {
+  return async function conceptWrapped(req, res) {
+    try {
+      if (await __conceptRoutes(req, res)) return;
+    } catch (e) {
+      try {
+        res.writeHead(500, { 'content-type': 'application/json' });
+        res.end(JSON.stringify({ error: String((e && e.message) || e) }));
+      } catch {}
+      return;
+    }
+    return next(req, res);
+  };
+}
+// ================= end concept images API =================
+

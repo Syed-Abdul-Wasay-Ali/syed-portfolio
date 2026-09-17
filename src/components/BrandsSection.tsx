@@ -1,5 +1,6 @@
-import { BRANDS, brandHasContent, orderedBrands } from '../data/brands'
-import { useRuntime } from '../data/runtime'
+import { BRANDS, brandHasContent } from '../data/brands'
+import { useBrandListOV } from '../data/overrides'
+import { useRuntime, useT } from '../data/runtime'
 import BrandTile from './BrandTile'
 import Reveal from './Reveal'
 import { useHoverPreview } from './HoverPreview'
@@ -13,6 +14,9 @@ import { useHoverPreview } from './HoverPreview'
 export default function BrandsSection({ compact = false }: { compact?: boolean }) {
   const { show, hide } = useHoverPreview()
   const { content } = useRuntime()
+  const t = useT()
+  const brands = useBrandListOV()
+
   return (
     <section
       id="brands"
@@ -20,7 +24,7 @@ export default function BrandsSection({ compact = false }: { compact?: boolean }
     >
       <div className="container-site">
         <div className="max-w-3xl">
-          <p className="eyebrow-green">09 / brands</p>
+          <p className="eyebrow-green">{t('brandssec.tag')}</p>
           <h2
             className={
               compact
@@ -28,11 +32,10 @@ export default function BrandsSection({ compact = false }: { compact?: boolean }
                 : 'mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl'
             }
           >
-            21 brands I&apos;ve worked within Ogilvy
+            {t('brandssec.title')}
           </h2>
           <p className={compact ? 'mt-2 text-sm text-muted' : 'mt-4 text-muted'}>
-            Click a logo with media for the stills, animatics and final films. {BRANDS.length} brands
-            and counting.
+            {t('brandssec.sub').replace('{n}', String(BRANDS.length))}
           </p>
         </div>
 
@@ -43,7 +46,7 @@ export default function BrandsSection({ compact = false }: { compact?: boolean }
               : 'mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6 lg:grid-cols-4'
           }
         >
-          {orderedBrands(content).map((b, i) => {
+          {brands.map((b, i) => {
             const linked = brandHasContent(b, content)
             const body = (
               <>

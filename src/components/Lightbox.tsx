@@ -7,11 +7,15 @@ export default function Lightbox({
   index,
   onClose,
   onNav,
+  extra = null,
 }: {
   items: MediaItem[]
   index: number
   onClose: () => void
   onNav: (i: number) => void
+  /** Optional media ATTACHED to the current item — rendered next to it
+   *  (e.g. a workflow screen recording + the output it produced). */
+  extra?: MediaItem | null
 }) {
   const item = items[index]
 
@@ -70,11 +74,33 @@ export default function Lightbox({
         </div>
       </div>
 
-      <div
-        className="flex min-h-0 flex-1 items-center justify-center px-4 pb-4"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <MediaPanel item={item} className="max-h-full max-w-6xl" />
+      <div className="flex min-h-0 flex-1 overflow-y-auto px-4 pb-4" onClick={(e) => e.stopPropagation()}>
+        {extra ? (
+          <div className="m-auto flex w-full max-w-6xl flex-col items-center gap-4 lg:flex-row lg:items-center lg:justify-center lg:gap-6">
+            <div className="w-full lg:w-[58%]">
+              <MediaPanel
+                item={item}
+                className="max-h-[calc(100vh-8rem)] max-h-[calc(100dvh-8rem)] w-full sm:max-h-[55vh] lg:max-h-[78vh]"
+              />
+            </div>
+            <figure className="w-full max-w-md lg:w-[36%]">
+              <MediaPanel
+                item={extra}
+                className="max-h-[50vh] w-full lg:max-h-[70vh]"
+              />
+              <figcaption className="mt-2 text-center font-mono text-[11px] text-snow/60">
+                {extra.label ?? 'output'}
+              </figcaption>
+            </figure>
+          </div>
+        ) : (
+          <div className="m-auto w-full max-w-6xl">
+            <MediaPanel
+              item={item}
+              className="max-h-[calc(100vh-8rem)] max-h-[calc(100dvh-8rem)] w-full"
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex items-center justify-between px-5 py-3">

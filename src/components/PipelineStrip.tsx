@@ -1,4 +1,5 @@
 import Reveal from './Reveal'
+import { useT } from '../data/runtime'
 
 // "From product to production-ready image" — the compact pipeline band that
 // sits directly under the hero. Six stages, each with a small visual from a
@@ -14,23 +15,24 @@ const STAGES = [
 ]
 
 export default function PipelineStrip() {
+  const t = useT()
   return (
     <section className="border-b border-ink-600 py-7 sm:py-9">
       <div className="container-site">
         <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
           <div>
-            <p className="eyebrow-green">the production pipeline</p>
+            <p className="eyebrow-green">{t('pipeline.tag')}</p>
             <h2 className="mt-2 font-display text-2xl font-black uppercase tracking-tight sm:text-3xl">
-              From Product to Production-Ready Image
+              {t('pipeline.title')}
             </h2>
           </div>
           <p className="font-mono text-[10px] uppercase tracking-wideish text-muted">
-            the same route every time — not lucky frames
+            {t('pipeline.aside')}
           </p>
         </div>
 
         <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-greenBright">
-          product → reference → ai generation → compositing → lighting → final asset
+          {t('pipeline.chain')}
         </p>
 
         <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
@@ -50,9 +52,11 @@ export default function PipelineStrip() {
                 </div>
                 <figcaption className="border-t border-ink-600 p-2.5">
                   <p className="font-mono text-[10px] uppercase tracking-wideish text-paper">
-                    {s.label}
+                    {t(`pipeline.${i + 1}.label`, s.label)}
                   </p>
-                  <p className="mt-0.5 text-[11px] leading-snug text-muted">{s.note}</p>
+                  <p className="mt-0.5 text-[11px] leading-snug text-muted">
+                    {t(`pipeline.${i + 1}.note`, s.note)}
+                  </p>
                 </figcaption>
               </figure>
             </Reveal>

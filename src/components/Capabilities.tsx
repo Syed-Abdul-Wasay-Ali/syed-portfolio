@@ -1,4 +1,5 @@
 import Reveal from './Reveal'
+import { useT, useTL } from '../data/runtime'
 
 // The AI systems section: each card is a pipeline that solves a production
 // problem, not a capability list. Written for technical recruiters.
@@ -60,17 +61,16 @@ const SYSTEMS: {
 ]
 
 export default function Capabilities() {
+  const t = useT()
+  const tl = useTL()
   return (
     <section id="capabilities" className="scroll-mt-16 border-y border-ink-950/10 bg-mist py-10 sm:py-12">
       <div className="container-site">
-        <p className="eyebrow-green">06 / ai systems</p>
+        <p className="eyebrow-green">{t('cap.tag')}</p>
         <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-          AI systems I build
+          {t('cap.title')}
         </h2>
-        <p className="mt-3 max-w-2xl text-muted">
-          Not one-off renders: reusable, documented systems that solve a production problem. Brief
-          goes in, finished frames and films come out, on repeat.
-        </p>
+        <p className="mt-3 max-w-2xl text-muted">{t('cap.sub')}</p>
 
         <div className="mt-7 grid gap-5 sm:grid-cols-2">
           {SYSTEMS.map((c, i) => (
@@ -79,13 +79,15 @@ export default function Capabilities() {
                 <p className="font-mono text-[11px] uppercase tracking-wideish text-green">
                   {c.num} / system
                 </p>
-                <h3 className="mt-2 font-display text-lg font-bold text-paper">{c.title}</h3>
+                <h3 className="mt-2 font-display text-lg font-bold text-paper">
+                  {t(`cap.${i + 1}.title`, c.title)}
+                </h3>
                 <p className="mt-2 text-sm text-muted">
                   <span className="text-paper/90">solves: </span>
-                  {c.solves}
+                  {t(`cap.${i + 1}.solves`, c.solves)}
                 </p>
                 <ul className="mt-4 space-y-2 border-t border-ink-600 pt-4">
-                  {c.items.map((item) => (
+                  {tl(`cap.${i + 1}.items`, c.items).map((item) => (
                     <li key={item} className="flex gap-2 text-[13px] leading-snug text-paper/90">
                       <span className="shrink-0 text-green">→</span>
                       <span>{item}</span>
@@ -101,23 +103,23 @@ export default function Capabilities() {
         <Reveal delay={140} className="mt-7">
           <div className="panel p-5">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <p className="font-mono text-[11px] uppercase tracking-wideish text-green">[models]</p>
+              <p className="font-mono text-[11px] uppercase tracking-wideish text-green">{t('cap.m.tag')}</p>
               <p className="font-mono text-[10px] uppercase tracking-wideish text-muted">
-                open-source first · closed-source when the brief demands it
+                {t('cap.m.note')}
               </p>
             </div>
             <div className="mt-4 grid gap-6 sm:grid-cols-2">
               <div>
-                <p className="eyebrow">image generation</p>
+                <p className="eyebrow">{t('cap.m.img')}</p>
                 <p className="mt-3 font-mono text-[10px] uppercase tracking-wideish text-green">
-                  most used
+                  {t('cap.m.most')}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {[
+                  {tl('cap.m.mostList', [
                     'GPT Image 2.5 (closed)',
                     'Nano Banana Pro (closed)',
                     'Seedream 5 Pro (closed)',
-                  ].map((m) => (
+                  ]).map((m) => (
                     <span
                       key={m}
                       className="border border-green bg-green px-2.5 py-0.5 font-mono text-[11px] text-snow"
@@ -127,17 +129,17 @@ export default function Capabilities() {
                   ))}
                 </div>
                 <p className="mt-4 font-mono text-[10px] uppercase tracking-wideish text-muted">
-                  also in the stack
+                  {t('cap.m.also')}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {[
+                  {tl('cap.m.alsoList', [
                     'Krea 2',
                     'Flux · Klein',
                     'Z-Image Turbo',
                     'Ideogram 4',
                     'Midjourney — aesthetic styles',
                     'SDXL / Illustrious family',
-                  ].map((m) => (
+                  ]).map((m) => (
                     <span
                       key={m}
                       className="border border-ink-600 px-2.5 py-0.5 font-mono text-[11px] text-paper/85"
@@ -148,15 +150,15 @@ export default function Capabilities() {
                 </div>
               </div>
               <div>
-                <p className="eyebrow">video generation</p>
+                <p className="eyebrow">{t('cap.m.vid')}</p>
                 <div className="mt-3 flex flex-wrap gap-2">
-                  {[
+                  {tl('cap.m.vidList', [
                     'MiniMax H3 (open)',
                     'LTX / Wan (open)',
                     'Seedance 2.5 (closed)',
                     'ref2v / i2v routes',
                     'LoRA-locked identity',
-                  ].map((m) => (
+                  ]).map((m) => (
                     <span
                       key={m}
                       className="border border-ink-600 px-2.5 py-0.5 font-mono text-[11px] text-paper/85"

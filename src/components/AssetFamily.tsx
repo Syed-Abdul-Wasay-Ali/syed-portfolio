@@ -1,4 +1,5 @@
 import Reveal from './Reveal'
+import { useT } from '../data/runtime'
 
 // "One product, multiple production-ready assets" — one system, seven
 // deliverables, shown at their real aspect ratios so the format thinking is
@@ -14,27 +15,25 @@ const ASSETS = [
 ]
 
 export default function AssetFamily() {
+  const t = useT()
   return (
     <section className="border-b border-ink-600 py-9 sm:py-12">
       <div className="container-site">
         <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
           <div className="max-w-2xl">
-            <p className="eyebrow-green">04 / one system</p>
+            <p className="eyebrow-green">{t('assets.tag')}</p>
             <h2 className="mt-2 font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-              One Product. Multiple Production-Ready Assets.
+              {t('assets.title')}
             </h2>
           </div>
           <a
             href="#/project/commercial-creative-system"
             className="font-mono text-[11px] uppercase tracking-wideish text-greenBright underline-offset-4 hover:underline"
           >
-            how the system is built →
+            {t('assets.link')}
           </a>
         </div>
-        <p className="mt-3 max-w-2xl text-muted">
-          Every asset below left the same pipeline, in the same grade, from the same product
-          lock — hero to social, product page to mobile, each framed for where it ships.
-        </p>
+        <p className="mt-3 max-w-2xl text-muted">{t('assets.sub')}</p>
 
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-6">
           {ASSETS.map((a, i) => (
@@ -49,7 +48,9 @@ export default function AssetFamily() {
                   />
                 </div>
                 <figcaption className="mt-1.5 flex items-baseline justify-between gap-2">
-                  <span className="font-mono text-[10px] uppercase tracking-wideish text-paper">{a.label}</span>
+                  <span className="font-mono text-[10px] uppercase tracking-wideish text-paper">
+                    {t(`assets.${i + 1}.label`, a.label)}
+                  </span>
                   <span className="font-mono text-[10px] text-muted">{a.ratio}</span>
                 </figcaption>
               </figure>

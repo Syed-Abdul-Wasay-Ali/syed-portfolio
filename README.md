@@ -44,6 +44,51 @@ sub-path. `server.py` serves `dist/` for local preview at http://127.0.0.1:4173.
 
 ---
 
+## Admin panel — words / pictures / sections
+
+Edit the entire portfolio (every word, every picture, every section) without
+touching code:
+
+```bash
+node admin-server.mjs          # serves dist/ + the admin API
+# open http://127.0.0.1:4173/#/admin   (passcode lives in src/pages/AdminPage.tsx)
+```
+
+Four tabs:
+
+- **words** — every string on the site: hero, section copy, footer, plus each
+  case study (title, overview, production notes, spec values, captions…) and
+  each brand (name, note, story). Field overrides are stored in
+  `content.json → texts`; the compiled defaults live in `src/data/text.ts`.
+  “reset” returns a field to its default; emptying a field hides that element.
+- **pictures** — replace any image/video in place (same filename; previous
+  file backed up under `.admin-backups/`), hide/restore gallery items, and add
+  new pictures to case studies / showcase / brands. Covers every slot: home
+  bands, case-study covers + results + stages + before/after + formats +
+  placements, brand logos + galleries, showcase, workflows, the résumé PDF and
+  the social share image.
+- **sections** — show/hide + reorder sections on the home page, brand pages
+  and case-study pages (shared order per page type; per-brand toggles kept).
+- **concept images** — the concept gallery (upload, caption, reorder, replace).
+
+All edits save into `public/content.json` plus files under `public/media/`,
+so the built site picks them up with no code changes. Publish with:
+
+```bash
+npm run build && npx gh-pages -d dist
+```
+
+Notes:
+
+- Saving needs the local server — the panel shows a warning banner when it
+  isn’t running (the live gh-pages copy is read-only).
+- After editing `admin-server.mjs`, restart the server process (it keeps the
+  code it booted with).
+- Replaced media keeps its filename; the local server sends `Cache-Control:
+  no-store` so changes appear on reload.
+
+---
+
 ## How to add a project
 
 ### 1. Drop your media in
@@ -126,7 +171,7 @@ rename them). Unfilled entries show an intentional placeholder.
 ## How to add showcase media
 
 Personal concept ads and images live in `src/data/showcase.ts` with a
-filterable section on the home page (03 — showcase).
+filterable section on the home page (02 — showcase).
 
 ### 1. Drop media in
 
@@ -145,7 +190,38 @@ intentional placeholder. `title` shows under the card and in the lightbox.
 
 ---
 
+## How to add workflow demos
+
+ComfyUI workflow screen recordings and their outputs live in
+`src/data/workflows.ts` — their own home section (04 — workflows).
+
+### 1. Drop media in
+
+```
+public/media/workflows/
+├── run.mp4          # workflow screen recordings (.mp4/.webm)
+├── run-poster.jpg   # poster frame for the video
+└── output.jpg       # run outputs (.jpg/.png) — attach to the video item
+```
+
+### 2. Wire items in `src/data/workflows.ts`
+
+Each item: `{ id, title, kind, src, label, note? }`. For videos also set
+`poster` (a frame grab). Compress screen recordings before committing —
+keep `public/media/` web-light (a ~30s 1280px recording lands near 1 MB
+with `-crf 26 -movflags +faststart`, audio kept). Empty `src` renders an
+intentional placeholder.
+
+Outputs are ATTACHED to their video item via `output: { src, label? }` — a
+small thumbnail sits on the tile corner and the lightbox shows the image
+beside the video. Never add a run's output as a separate tile.
+
+---
+
 ## Things to customize
+
+Most copy now edits from the admin panel (see above) — the files below hold
+the compiled defaults that the admin overrides on top of:
 
 - Footer email: `src/components/Footer.tsx` (`hello@syedwasay.dev` is a placeholder)
 - Bio copy: `src/components/About.tsx`, `src/components/Hero.tsx`

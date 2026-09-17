@@ -1,5 +1,6 @@
 // ---------------------------------------------------------------------------
 // Personal showcase — concept ads and personal images.
+// (ComfyUI workflow demos live in their own section — see workflows.ts.)
 //
 // HOW TO ADD MEDIA:
 //   1. Drop files into  public/media/showcase/  (see README.md):

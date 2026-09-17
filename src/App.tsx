@@ -5,9 +5,20 @@ import HomePage from './pages/HomePage'
 import ProjectPage from './pages/ProjectPage'
 import BrandPage from './pages/BrandPage'
 import AdminPage from './pages/AdminPage'
-import { RuntimeProvider } from './data/runtime'
+import { RuntimeProvider, useRuntime, tx } from './data/runtime'
 import { HoverPreviewProvider } from './components/HoverPreview'
 import { initTilt } from './lib/tilt'
+
+const DEFAULT_TITLE = 'Syed Abdul Wasay Ali — AI Creative Manager & AI Image Specialist'
+
+// keeps the browser/tab title in sync with the admin "site title" text key
+function TitleSync() {
+  const { content } = useRuntime()
+  useEffect(() => {
+    document.title = tx(content?.texts, 'site.title', DEFAULT_TITLE)
+  }, [content])
+  return null
+}
 
 function useHashRoute(): string {
   const [hash, setHash] = useState(() => window.location.hash)
@@ -36,6 +47,7 @@ export default function App() {
   return (
     <RuntimeProvider>
       <HoverPreviewProvider>
+        <TitleSync />
         <div className="min-h-screen bg-ink">
           <div>
             <Header />
