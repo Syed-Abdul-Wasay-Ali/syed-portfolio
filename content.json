@@ -74,8 +74,11 @@
     "media/bedroom-lifestyle-comp/stills/01-product-ref.jpg",
     "media/bedroom-lifestyle-comp/stills/03-perspective.jpg",
     "media/reference-controlled-imaging/cover.jpg",
-    "media/reference-controlled-imaging/stills/var-premium.jpg"
+    "media/reference-controlled-imaging/stills/var-premium.jpg",
+    "project:bedroom-lifestyle-comp",
+    "project:sleep-brand-image-system",
+    "project:reference-controlled-imaging"
   ],
-  "stamp": 1789639072184,
+  "stamp": 1789639241352,
   "removedProjects": []
 }
