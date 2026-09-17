@@ -35,6 +35,28 @@
       "caption": "mattress — 03 compositing"
     }
   ],
-  "removedMedia": [],
-  "stamp": 1789635729456
+  "removedMedia": [
+    "media/image-system/pipeline/product.jpg",
+    "media/image-system/pipeline/reference.jpg",
+    "media/image-system/pipeline/generation.jpg",
+    "media/image-system/pipeline/compositing.jpg",
+    "media/image-system/pipeline/final.jpg",
+    "media/image-system/pipeline/lighting.jpg",
+    "media/image-system/assets/studio-hero.jpg",
+    "media/image-system/assets/bedroom-lifestyle.jpg",
+    "media/image-system/assets/wide-room.jpg",
+    "media/image-system/assets/product-page.jpg",
+    "media/image-system/assets/social.jpg",
+    "media/image-system/assets/mobile.jpg",
+    "media/image-system/assets/detail.jpg",
+    "media/ecommerce-image-system/desktop-hero.jpg",
+    "media/ecommerce-image-system/desktop-lifestyle.jpg",
+    "media/ecommerce-image-system/desktop-detail.jpg",
+    "media/ecommerce-image-system/thumb-01.jpg",
+    "media/ecommerce-image-system/mobile-hero.jpg",
+    "media/ecommerce-image-system/thumb-04.jpg",
+    "media/ecommerce-image-system/thumb-03.jpg",
+    "media/ecommerce-image-system/thumb-02.jpg"
+  ],
+  "stamp": 1789636550716
 }
