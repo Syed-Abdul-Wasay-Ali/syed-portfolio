@@ -3,9 +3,9 @@
 //
 //   words     : every editable string on the site (registry groups + each case
 //               study + each brand + showcase/workflow items)
-//   pictures  : every picture/video slot — replace, delete/restore, add;
-//               whole case studies can be removed/restored too; deleted area
-//               lists removed items + a restorable trash; every slot previews
+//   pictures  : every picture/video slot — replace, delete, add; deletes are
+//               final (gone everywhere, no restore); whole case studies can be
+//               deleted too; every slot previews
 //               exactly like the portfolio (video plays in place,
 //               youtube/instagram posts embed, images show uncropped)
 //   sections  : show/hide + reorder sections on home / brand / case-study pages
@@ -148,7 +148,7 @@ function MediaPreview({ item }: { item: MediaItem }) {
 }
 
 // ---------------------------------------------------------------------------
-// pictures: one slot card (replace / hide-restore handler)
+// pictures: one slot card (replace / delete handler)
 // ---------------------------------------------------------------------------
 function SlotCard({
   label,
@@ -158,7 +158,6 @@ function SlotCard({
   busy,
   onReplace,
   onHide,
-  onRestore,
   hideLabel = 'delete',
   extra,
   media,
@@ -170,11 +169,11 @@ function SlotCard({
   busy?: boolean
   onReplace?: (f: File) => void
   onHide?: () => void
-  onRestore?: () => void
   hideLabel?: string
   extra?: React.ReactNode
   media?: MediaItem
 }) {
+  if (removed) return null
   return (
     <div className="rounded-md border border-ink-600 bg-ink-900 p-2">
       <MediaPreview item={media ?? { src, label, kind: isVideoSrc(src ?? '') ? 'video' : 'image' }} />
@@ -196,17 +195,11 @@ function SlotCard({
             />
           </label>
         )}
-        {onHide && !removed && (
+        {onHide && (
           <button type="button" disabled={busy} className={`${smallBtn} !text-red-400 hover:!border-red-400`} onClick={onHide}>
             ✕ {hideLabel}
           </button>
         )}
-        {onRestore && removed && (
-          <button type="button" disabled={busy} className={smallBtn} onClick={onRestore}>
-            ↺ restore
-          </button>
-        )}
-        {removed && <span className="font-mono text-[9px] uppercase text-amber-300">removed from site</span>}
         {extra}
       </div>
     </div>
@@ -552,7 +545,7 @@ function ListInput({
 // ---------------------------------------------------------------------------
 // PICTURES tab
 // ---------------------------------------------------------------------------
-type PicArea = 'home' | 'project' | 'brand' | 'showcase' | 'workflows' | 'deleted'
+type PicArea = 'home' | 'project' | 'brand' | 'showcase' | 'workflows'
 
 const HOME_EXTRAS: { group: string; items: [string, string][] }[] = [
   {
@@ -643,19 +636,11 @@ function PicturesTab() {
   const removedProjects = new Set(projRemovedFrom(content))
   const hide = (src: string) => void notice(async () => {
     await api('/api/media/remove', { src })
-    return 'removed from site — restore it any time from the deleted area'
-  })
-  const restore = (src: string) => void notice(async () => {
-    await api('/api/media/remove', { src, restore: true })
-    return 'restored'
+    return 'deleted — gone from the site'
   })
   const removeProject = (slug: string) => void notice(async () => {
     await apiProjectRemove(slug, false)
-    return 'case study removed from the site — restore it any time from the deleted tab'
-  })
-  const restoreProject = (slug: string) => void notice(async () => {
-    await apiProjectRemove(slug, true)
-    return 'case study restored'
+    return 'case study deleted — gone from the site'
   })
 
   const addFiles = (collection: string, label: string) => (files: File[]) =>
@@ -673,15 +658,18 @@ function PicturesTab() {
   const deleteAdded = (collection: string, src: string) =>
     void notice(async () => {
       await api('/api/media/edit', { collection, src, patch: { remove: true } })
-      return 'moved to deleted — restore it any time'
+      return 'deleted'
     })
 
-  const project = projects.find((p) => p.slug === projSlug)
+  const liveProjects = projects.filter((p) => !removedProjects.has(p.slug))
+  const selSlug = liveProjects.some((p) => p.slug === projSlug) ? projSlug : (liveProjects[0]?.slug ?? '')
+  const project = liveProjects.find((p) => p.slug === selSlug)
   const brand = BRANDS.find((b) => b.slug === brandSlug)
   const brandBase =
     brandSection === 'stills' ? brand?.images : brandSection === 'animatics' ? brand?.animatics : brand?.films
   const brandUploads = content?.uploads?.[brandSlug]?.[brandSection] ?? []
   const brandRemoved = new Set(content?.removedItems?.[brandSlug]?.[brandSection] ?? [])
+  const brandBaseVisible = (brandBase ?? []).filter((m) => !brandRemoved.has(m.src ?? '') && !removedSet.has(m.src ?? ''))
   const projColl = project ? collKey.projectResults(project.slug) : ''
   const projAdded = (content?.additions?.[projColl] ?? []) as MediaItem[]
   const showcaseAdded = (content?.additions?.[collKey.showcase] ?? []) as MediaItem[]
@@ -706,7 +694,6 @@ function PicturesTab() {
         {areaBtn('brand', 'brands')}
         {areaBtn('showcase', 'showcase')}
         {areaBtn('workflows', 'workflows')}
-        {areaBtn('deleted', 'deleted')}
       </div>
       <Notice msg={msg} err={err} />
 
@@ -733,7 +720,7 @@ function PicturesTab() {
                       removed={removedSet.has(src)}
                       onReplace={replace(src)}
                       onHide={() => hide(src)}
-                      onRestore={() => restore(src)}
+                      
                     />
                   ),
                 )}
@@ -747,70 +734,49 @@ function PicturesTab() {
         <div className="mt-5 space-y-6">
           <label className="block max-w-xl">
             <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">case study</span>
-            <select className={`${selectCls} mt-1.5`} value={projSlug} onChange={(e) => setProjSlug(e.target.value)}>
-              {projects.map((p) => (
+            <select
+              className={`${selectCls} mt-1.5`}
+              value={selSlug}
+              onChange={(e) => setProjSlug(e.target.value)}
+            >
+              {liveProjects.map((p) => (
                 <option key={p.slug} value={p.slug}>
-                  {p.title.slice(0, 70)}{removedProjects.has(p.slug) ? ' — removed' : ''}
+                  {p.title.slice(0, 70)}
                 </option>
               ))}
             </select>
           </label>
 
           <div className="rounded-md border border-ink-600 bg-ink-900 p-3">
-            <p className="eyebrow-green">delete a full case study — {removedProjects.size} removed</p>
+            <p className="eyebrow-green">delete a full case study</p>
             <p className="mt-1 text-[12px] text-muted">
-              Takes the whole study off the site — its card, its page and every section. Nothing is
-              lost: “↺ restore” puts it back, and removed studies are also listed in the deleted tab.
+              Takes the whole study off the site — its card, its page and every section. It is gone
+              for good and won't appear here again. Save & publish to push it live.
             </p>
             <div className="mt-2 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
-              {projects.map((p) => {
-                const rem = removedProjects.has(p.slug)
-                return (
-                  <div
-                    key={p.slug}
-                    className={`flex items-center justify-between gap-2 rounded-sm border px-2 py-1 ${
-                      rem ? 'border-red-400/50' : 'border-ink-600'
-                    }`}
+              {liveProjects.map((p) => (
+                <div
+                  key={p.slug}
+                  className="flex items-center justify-between gap-2 rounded-sm border border-ink-600 px-2 py-1"
+                >
+                  <span title={p.title} className="min-w-0 truncate font-mono text-[10px] text-paper/80">
+                    {p.title}
+                  </span>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    className={`flex-none ${smallBtn} !text-red-400 hover:!border-red-400`}
+                    onClick={() => removeProject(p.slug)}
                   >
-                    <span
-                      title={p.title}
-                      className={`min-w-0 truncate font-mono text-[10px] ${
-                        rem ? 'text-red-400' : 'text-paper/80'
-                      }`}
-                    >
-                      {p.title}
-                    </span>
-                    <button
-                      type="button"
-                      disabled={busy}
-                      className={`flex-none ${rem ? smallBtn : `${smallBtn} !text-red-400 hover:!border-red-400`}`}
-                      onClick={() => (rem ? restoreProject(p.slug) : removeProject(p.slug))}
-                    >
-                      {rem ? '↺ restore' : '✕ delete'}
-                    </button>
-                  </div>
-                )
-              })}
+                    ✕ delete
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
 
           {project && (
             <>
-              {removedProjects.has(project.slug) && (
-                <div className="flex flex-wrap items-center gap-2 rounded-md border border-red-400/40 bg-red-400/5 p-3">
-                  <p className="font-mono text-[11px] uppercase tracking-wideish text-red-400">
-                    this case study is removed from the site
-                  </p>
-                  <button
-                    type="button"
-                    disabled={busy}
-                    className={smallBtn}
-                    onClick={() => restoreProject(project.slug)}
-                  >
-                    ↺ restore to site
-                  </button>
-                </div>
-              )}
               <div>
                 <p className="eyebrow-green">cover & hero</p>
                 <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
@@ -823,7 +789,7 @@ function PicturesTab() {
                       removed={removedSet.has(project.cover)}
                       onReplace={replace(project.cover)}
                       onHide={() => hide(project.cover!)}
-                      onRestore={() => restore(project.cover!)}
+                      
                     />
                   )}
                   {project.heroSrc && (
@@ -835,14 +801,14 @@ function PicturesTab() {
                       removed={removedSet.has(project.heroSrc)}
                       onReplace={replace(project.heroSrc)}
                       onHide={() => hide(project.heroSrc!)}
-                      onRestore={() => restore(project.heroSrc!)}
+                      
                     />
                   )}
                 </div>
               </div>
 
               <div>
-                <p className="eyebrow-green">results gallery ({project.results.length} + {projAdded.length} added)</p>
+                <p className="eyebrow-green">results gallery ({project.results.filter((m) => !(m.src && removedSet.has(m.src))).length} + {projAdded.length} added)</p>
                 <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
                   {project.results.map((m, i) => {
                     const src = m.src ?? ''
@@ -858,7 +824,7 @@ function PicturesTab() {
                         busy={busy}
                         onReplace={src ? replace(src) : undefined}
                         onHide={() => hide(src)}
-                        onRestore={() => restore(src)}
+                        
                       />
                     )
                   })}
@@ -893,7 +859,7 @@ function PicturesTab() {
                           removed={removedSet.has(src)}
                           onReplace={replace(src)}
                           onHide={() => hide(src)}
-                          onRestore={() => restore(src)}
+                          
                         />
                       ) : null
                     })}
@@ -918,7 +884,7 @@ function PicturesTab() {
                           removed={removedSet.has(src)}
                           onReplace={replace(src)}
                           onHide={() => hide(src)}
-                          onRestore={() => restore(src)}
+                          
                         />
                       ) : null
                     })}
@@ -942,7 +908,7 @@ function PicturesTab() {
                           removed={removedSet.has(src)}
                           onReplace={replace(src)}
                           onHide={() => hide(src)}
-                          onRestore={() => restore(src)}
+                          
                         />
                       ) : null
                     })}
@@ -966,7 +932,7 @@ function PicturesTab() {
                           removed={removedSet.has(src)}
                           onReplace={replace(src)}
                           onHide={() => hide(src)}
-                          onRestore={() => restore(src)}
+                          
                         />
                       ) : null
                     })}
@@ -1013,7 +979,7 @@ function PicturesTab() {
                   removed={removedSet.has(brand.logo)}
                   onReplace={replace(brand.logo)}
                   onHide={() => hide(brand.logo!)}
-                  onRestore={() => restore(brand.logo!)}
+                  
                 />
               </div>
             </>
@@ -1021,7 +987,7 @@ function PicturesTab() {
 
           <div>
             <p className="eyebrow-green">
-              {brand?.name} · {brandSection} — {brandUploads.length} uploaded + {(brandBase ?? []).length} built-in
+              {brand?.name} · {brandSection} — {brandUploads.length} uploaded + {brandBaseVisible.length} built-in
             </p>
             <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
               {brandUploads.map((m) => (
@@ -1036,13 +1002,13 @@ function PicturesTab() {
                   onHide={() =>
                     void notice(async () => {
                       await api('/api/remove', { brand: brandSlug, section: brandSection, src: m.src ?? m.label ?? '' })
-                      return 'moved to deleted — restore it any time'
+                      return 'deleted'
                     })
                   }
                   hideLabel="delete"
                 />
               ))}
-              {(brandBase ?? []).map((m, i) => {
+              {brandBaseVisible.map((m, i) => {
                 const src = m.src ?? ''
                 const rem = brandRemoved.has(src) || removedSet.has(src)
                 return (
@@ -1058,14 +1024,7 @@ function PicturesTab() {
                     onHide={() =>
                       void notice(async () => {
                         await api('/api/remove', { brand: brandSlug, section: brandSection, src })
-                        return 'hidden'
-                      })
-                    }
-                    onRestore={() =>
-                      void notice(async () => {
-                        await api('/api/remove', { brand: brandSlug, section: brandSection, src, restore: true })
-                        await api('/api/media/remove', { src, restore: true })
-                        return 'restored'
+                        return 'deleted'
                       })
                     }
                   />
@@ -1089,7 +1048,7 @@ function PicturesTab() {
       {area === 'showcase' && (
         <div className="mt-5 space-y-6">
           <div>
-            <p className="eyebrow-green">showcase pieces ({SHOWCASE.length} + {showcaseAdded.length} added)</p>
+            <p className="eyebrow-green">showcase pieces ({SHOWCASE.filter((s) => !(s.src && removedSet.has(s.src))).length} + {showcaseAdded.length} added)</p>
             <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
               {SHOWCASE.map((s) => {
                 const rem = s.src ? removedSet.has(s.src) : false
@@ -1104,7 +1063,7 @@ function PicturesTab() {
                     busy={busy}
                     onReplace={s.src ? replace(s.src) : undefined}
                     onHide={s.src ? () => hide(s.src!) : undefined}
-                    onRestore={s.src ? () => restore(s.src!) : undefined}
+                    
                     extra={
                       s.poster && (
                         <label className={`${smallBtn} cursor-pointer`}>
@@ -1144,7 +1103,7 @@ function PicturesTab() {
       {area === 'workflows' && (
         <div className="mt-5 space-y-6">
           <div>
-            <p className="eyebrow-green">workflow runs ({WORKFLOWS.length})</p>
+            <p className="eyebrow-green">workflow runs ({WORKFLOWS.filter((w) => !(w.src && removedSet.has(w.src))).length})</p>
             <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
               {WORKFLOWS.map((w) => {
                 const rem = w.src ? removedSet.has(w.src) : false
@@ -1159,7 +1118,7 @@ function PicturesTab() {
                     busy={busy}
                     onReplace={w.src ? replace(w.src) : undefined}
                     onHide={w.src ? () => hide(w.src!) : undefined}
-                    onRestore={w.src ? () => restore(w.src!) : undefined}
+                    
                     extra={
                       <>
                         {w.poster && (
@@ -1204,7 +1163,6 @@ function PicturesTab() {
         </div>
       )}
 
-      {area === 'deleted' && <DeletedArea />}
     </div>
   )
 }
@@ -1272,245 +1230,6 @@ function AddFilesRow({ label, onFiles }: { label: string; onFiles: (files: File[
         }}
       />
     </label>
-  )
-}
-
-// ---------------------------------------------------------------------------
-// deleted area — removed-from-site items + the restorable trash
-// ---------------------------------------------------------------------------
-type TrashItem = {
-  id: string
-  file: string
-  src: string
-  name: string
-  size: number
-  kind: string
-  at: number
-  meta?: {
-    type?: string
-    brand?: string
-    section?: string
-    collection?: string
-    item?: { label?: string; src?: string }
-  }
-}
-
-function DeletedArea() {
-  const { content, refresh } = useRuntime()
-  const [items, setItems] = useState<TrashItem[] | null>(null)
-  const [busy, setBusy] = useState(false)
-  const [msg, setMsg] = useState('')
-  const [err, setErr] = useState('')
-
-  const load = async () => {
-    try {
-      const r = await fetch('/api/trash', { cache: 'no-store' })
-      const j = await r.json()
-      setItems(Array.isArray(j.items) ? (j.items as TrashItem[]) : [])
-    } catch {
-      setItems([])
-    }
-  }
-  useEffect(() => {
-    void load()
-  }, [])
-
-  const act = async (fn: () => Promise<unknown>, m: string) => {
-    setBusy(true)
-    setMsg('')
-    setErr('')
-    try {
-      await fn()
-      setMsg(m)
-      await refresh()
-      await load()
-    } catch (e) {
-      setErr(String((e as Error).message || e))
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  const restoreTrash = (id: string) =>
-    void act(async () => {
-      await api('/api/trash/restore', { id })
-    }, 'restored — it is back on the site')
-  const purgeTrash = (id: string) =>
-    void act(async () => {
-      await api('/api/trash/purge', { id })
-    }, 'deleted forever')
-  const emptyTrash = () =>
-    void act(async () => {
-      await api('/api/trash/purge', { all: true })
-    }, 'trash emptied')
-  const showAgainMedia = (src: string) =>
-    void act(async () => {
-      await api('/api/media/remove', { src, restore: true })
-    }, 'back on the site')
-  const showAgainBrand = (brand: string, section: string, id: string) =>
-    void act(async () => {
-      await api('/api/remove', { brand, section, src: id, restore: true })
-      await api('/api/media/remove', { src: id, restore: true })
-    }, 'back on the site')
-  const showAgainProject = (slug: string) =>
-    void act(async () => {
-      await apiProjectRemove(slug, true)
-    }, 'case study restored — it is back on the site')
-
-  const fmtSize = (n: number) =>
-    n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : n > 1024 ? Math.round(n / 1024) + ' KB' : n + ' B'
-  const fmtDate = (t: number) => new Date(t).toLocaleString()
-  const metaText = (it: TrashItem) => {
-    const m = it.meta ?? {}
-    if (m.type === 'upload') return `brand upload · ${m.brand ?? ''} ${m.section ?? ''}`
-    if (m.type === 'addition') return `added media · ${m.collection ?? ''}`
-    if (m.type === 'concept') return 'concept images band'
-    return 'media file'
-  }
-
-  const hiddenMedia = (content?.removedMedia ?? []).filter((s) => !s.startsWith('project:'))
-  const hiddenBrand = Object.entries(content?.removedItems ?? {}).flatMap(([brand, secs]) =>
-    Object.entries(secs ?? {}).flatMap(([section, ids]) => (ids ?? []).map((id) => ({ brand, section, id }))),
-  )
-  const hiddenProjects = projRemovedFrom(content)
-  const hiddenCount = hiddenMedia.length + hiddenBrand.length
-
-  return (
-    <div className="mt-5 space-y-8">
-      <div>
-        <div className="flex flex-wrap items-center gap-3">
-          <p className="eyebrow-green">deleted files — {items === null ? '…' : items.length} in the trash</p>
-          {(items?.length ?? 0) > 0 && (
-            <button
-              type="button"
-              disabled={busy}
-              className={`${smallBtn} !text-red-400 hover:!border-red-400`}
-              onClick={() => {
-                if (confirm('delete all trashed files forever?')) emptyTrash()
-              }}
-            >
-              ✕ empty trash
-            </button>
-          )}
-        </div>
-        <p className="mt-2 text-[12px] text-muted">
-          Deleting a file puts it here first. “restore” puts it back exactly where it was (with its
-          caption / brand slot); “delete forever” removes it for good.
-        </p>
-        <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-          {(items ?? []).map((it) => (
-            <div key={it.id} className="rounded-md border border-ink-600 bg-ink-900 p-2">
-              <MediaPreview
-                item={{ src: `/__trash/${it.id}`, kind: it.kind === 'video' ? 'video' : undefined, label: it.name }}
-              />
-              <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{it.name}</p>
-              <p className="line-clamp-1 font-mono text-[9px] text-muted">
-                {metaText(it)} · {fmtSize(it.size)} · {fmtDate(it.at)}
-              </p>
-              <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                <button type="button" disabled={busy} className={smallBtn} onClick={() => restoreTrash(it.id)}>
-                  ↺ restore
-                </button>
-                <button
-                  type="button"
-                  disabled={busy}
-                  className={`${smallBtn} !text-red-400 hover:!border-red-400`}
-                  onClick={() => {
-                    if (confirm('delete this file forever?')) purgeTrash(it.id)
-                  }}
-                >
-                  ✕ delete forever
-                </button>
-              </div>
-            </div>
-          ))}
-          {items !== null && items.length === 0 && (
-            <p className="col-span-full font-mono text-[11px] text-muted">trash is empty.</p>
-          )}
-        </div>
-      </div>
-
-      <div>
-        <p className="eyebrow-green">removed case studies — {hiddenProjects.length}</p>
-        <p className="mt-2 text-[12px] text-muted">
-          Whole case studies taken off the site — their card, page and every section. “show again”
-          puts them back.
-        </p>
-        <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-          {hiddenProjects.map((slug) => {
-            const p = projects.find((x) => x.slug === slug)
-            return (
-              <div key={slug} className="rounded-md border border-ink-600 bg-ink-900 p-2">
-                <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 px-2 text-center font-mono text-[10px] uppercase tracking-wideish text-muted">
-                  case study · removed
-                </div>
-                <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{p?.title ?? slug}</p>
-                <p className="line-clamp-1 font-mono text-[9px] text-muted">{slug}</p>
-                <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                  <button type="button" disabled={busy} className={smallBtn} onClick={() => showAgainProject(slug)}>
-                    ↺ show again
-                  </button>
-                </div>
-              </div>
-            )
-          })}
-          {hiddenProjects.length === 0 && (
-            <p className="col-span-full font-mono text-[11px] text-muted">no case studies removed.</p>
-          )}
-        </div>
-      </div>
-
-      <div>
-        <p className="eyebrow-green">removed from site — {hiddenCount} item(s)</p>
-        <p className="mt-2 text-[12px] text-muted">
-          Hidden with the delete buttons elsewhere (their files are kept). “show again” puts them
-          back on the site.
-        </p>
-        <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
-          {hiddenMedia.map((src) => (
-            <div key={src} className="rounded-md border border-ink-600 bg-ink-900 p-2">
-              <MediaPreview item={{ src, label: src }} />
-              <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{src}</p>
-              <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                <button type="button" disabled={busy} className={smallBtn} onClick={() => showAgainMedia(src)}>
-                  ↺ show again
-                </button>
-              </div>
-            </div>
-          ))}
-          {hiddenBrand.map((h) => (
-            <div key={`${h.brand}-${h.section}-${h.id}`} className="rounded-md border border-ink-600 bg-ink-900 p-2">
-              {isVideoSrc(h.id) || h.id.startsWith('media/') || /youtu\.be|youtube\.com|instagram\.com/.test(h.id) ? (
-                <MediaPreview item={{ src: h.id, label: h.id }} />
-              ) : (
-                <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 px-2 text-center font-mono text-[10px] text-muted">
-                  {h.id}
-                </div>
-              )}
-              <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{h.id}</p>
-              <p className="line-clamp-1 font-mono text-[9px] text-muted">
-                brand · {h.brand} / {h.section}
-              </p>
-              <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                <button
-                  type="button"
-                  disabled={busy}
-                  className={smallBtn}
-                  onClick={() => showAgainBrand(h.brand, h.section, h.id)}
-                >
-                  ↺ show again
-                </button>
-              </div>
-            </div>
-          ))}
-          {hiddenCount === 0 && (
-            <p className="col-span-full font-mono text-[11px] text-muted">nothing is hidden right now.</p>
-          )}
-        </div>
-      </div>
-
-      <Notice msg={msg} err={err} />
-    </div>
   )
 }
 
