@@ -95,20 +95,22 @@ const readFiles = async (files: File[]) => {
 }
 
 const inputCls =
-  'w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 font-mono text-[13px] text-paper outline-none focus:border-green'
+  'w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 font-mono text-[13px] text-paper outline-none transition-colors focus:border-green'
 const selectCls = inputCls
 const btnCls =
-  'rounded-md border border-green/40 px-4 py-2 font-mono text-[11px] uppercase tracking-wideish text-green transition-colors hover:border-green hover:bg-green/10 disabled:cursor-not-allowed disabled:opacity-40'
+  'rounded-md border border-green/40 px-4 py-2 font-mono text-[11px] uppercase tracking-wideish text-green transition-colors hover:border-green hover:bg-green/10 focus-visible:border-green disabled:cursor-not-allowed disabled:opacity-40'
+const btnSolid =
+  'rounded-md bg-green px-4 py-2 font-mono text-[12px] uppercase tracking-wideish text-paper transition-colors hover:bg-paper hover:text-ink-950 focus-visible:border-green disabled:cursor-not-allowed disabled:opacity-40'
 const smallBtn =
-  'rounded-sm border border-ink-600 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish text-paper/80 hover:border-green disabled:opacity-40'
+  'rounded border border-ink-600 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish text-paper/80 transition-colors hover:border-green hover:text-paper focus-visible:border-green disabled:cursor-not-allowed disabled:opacity-40'
 const badgeCls =
-  'rounded-sm bg-green/15 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-wideish text-greenBright'
+  'rounded-sm bg-green/15 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wideish text-greenBright'
 
 function Notice({ msg, err }: { msg: string; err: string }) {
   return (
     <>
-      {msg && <p className="mt-3 font-mono text-[12px] text-greenBright">{msg}</p>}
-      {err && <p className="mt-3 font-mono text-[12px] text-red-400">error: {err}</p>}
+      {msg && <p className="mt-3 font-mono text-[13px] text-greenBright">{msg}</p>}
+      {err && <p className="mt-3 font-mono text-[13px] text-red-400">error: {err}</p>}
     </>
   )
 }
@@ -122,7 +124,7 @@ function MediaPreview({ item }: { item: MediaItem }) {
   const src = item.src
   if (!src) {
     return (
-      <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 font-mono text-[10px] text-muted">
+      <div className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 font-mono text-[11px] text-muted">
         no file
       </div>
     )
@@ -133,7 +135,7 @@ function MediaPreview({ item }: { item: MediaItem }) {
         href={src}
         target="_blank"
         rel="noreferrer"
-        className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 font-mono text-[10px] text-muted hover:text-paper"
+        className="flex aspect-video w-full items-center justify-center rounded-sm bg-ink-950 font-mono text-[11px] text-muted hover:text-paper"
       >
         📄 open pdf
       </a>
@@ -175,11 +177,11 @@ function SlotCard({
 }) {
   if (removed) return null
   return (
-    <div className="rounded-md border border-ink-600 bg-ink-900 p-2">
+    <div className="rounded-md border border-ink-600 bg-ink-800 p-2.5">
       <MediaPreview item={media ?? { src, label, kind: isVideoSrc(src ?? '') ? 'video' : 'image' }} />
-      <p className="mt-1.5 line-clamp-1 font-mono text-[10px] text-paper/85">{label}</p>
-      {sub && <p className="line-clamp-1 font-mono text-[9px] text-muted">{sub}</p>}
-      <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+      <p title={label} className="mt-2 line-clamp-1 font-mono text-[11px] text-paper/90">{label}</p>
+      {sub && <p title={sub} className="line-clamp-1 font-mono text-[10px] text-muted">{sub}</p>}
+      <div className="mt-2 flex flex-wrap items-center gap-2">
         {onReplace && src && (
           <label className={`${smallBtn} cursor-pointer`}>
             replace
@@ -403,7 +405,7 @@ function WordsTab() {
           <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">search</span>
           <input className={`${inputCls} mt-1.5`} value={q} onChange={(e) => setQ(e.target.value)} placeholder="filter fields…" />
         </label>
-        <p className="mt-3 text-[12px] leading-relaxed text-muted">
+        <p className="mt-3 text-[13px] leading-relaxed text-muted">
           Every field saves as an override on top of the built-in copy. “reset” returns a field to the
           compiled default. Empty a field to hide that element on the site.
         </p>
@@ -413,7 +415,7 @@ function WordsTab() {
         <Notice msg={msg} err={err} />
       </div>
 
-      <div className="grid gap-3">
+      <div className="grid gap-3.5">
         {shown.map((f) =>
           f.list ? (
             <ListInput
@@ -436,7 +438,7 @@ function WordsTab() {
           ),
         )}
         {shown.length === 0 && (
-          <p className="font-mono text-[12px] text-muted">no fields match “{q}”.</p>
+          <p className="font-mono text-[13px] text-muted">no fields match “{q}”.</p>
         )}
       </div>
     </div>
@@ -457,13 +459,13 @@ function TextInput({
   onReset: () => void
 }) {
   return (
-    <div className="rounded-md border border-ink-600/70 bg-ink-900/40 p-3">
+    <div className="rounded-md border border-ink-600 bg-ink-800 p-3.5">
       <div className="flex items-center justify-between gap-3">
-        <span className="font-mono text-[10px] uppercase tracking-wideish text-slateAccent">{field.label}</span>
+        <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">{field.label}</span>
         <span className="flex items-center gap-2">
           {edited && <span className={badgeCls}>edited</span>}
           {edited && (
-            <button onClick={onReset} className="font-mono text-[9px] uppercase text-red-400 hover:underline">
+            <button onClick={onReset} className="font-mono text-[11px] uppercase text-red-400 hover:underline">
               reset
             </button>
           )}
@@ -472,14 +474,15 @@ function TextInput({
       {field.multi ? (
         <textarea
           rows={3}
-          className={`${inputCls} mt-2`}
+          className={`${inputCls} mt-2 leading-relaxed`}
           value={value}
+          placeholder="(empty)"
           onChange={(e) => onChange(e.target.value)}
         />
       ) : (
-        <input className={`${inputCls} mt-2`} value={value} onChange={(e) => onChange(e.target.value)} />
+        <input className={`${inputCls} mt-2`} placeholder="(empty)" value={value} onChange={(e) => onChange(e.target.value)} />
       )}
-      <p className="mt-1 font-mono text-[9px] text-muted/70">key: {field.k}</p>
+      <p className="mt-1.5 font-mono text-[10px] text-muted">key: {field.k}</p>
     </div>
   )
 }
@@ -498,21 +501,21 @@ function ListInput({
   onReset: () => void
 }) {
   return (
-    <div className="rounded-md border border-ink-600/70 bg-ink-900/40 p-3">
+    <div className="rounded-md border border-ink-600 bg-ink-800 p-3.5">
       <div className="flex items-center justify-between gap-3">
-        <span className="font-mono text-[10px] uppercase tracking-wideish text-slateAccent">
+        <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">
           {field.label} — list ({items.length})
         </span>
         <span className="flex items-center gap-2">
           {edited && <span className={badgeCls}>edited</span>}
           {edited && (
-            <button onClick={onReset} className="font-mono text-[9px] uppercase text-red-400 hover:underline">
+            <button onClick={onReset} className="font-mono text-[11px] uppercase text-red-400 hover:underline">
               reset
             </button>
           )}
         </span>
       </div>
-      <div className="mt-2 space-y-1.5">
+      <div className="mt-2.5 space-y-2">
         {items.map((it, i) => (
           <div key={i} className="flex items-center gap-2">
             <input
@@ -537,7 +540,7 @@ function ListInput({
           + add item
         </button>
       </div>
-      <p className="mt-1 font-mono text-[9px] text-muted/70">key: {field.k}</p>
+      <p className="mt-1.5 font-mono text-[10px] text-muted">key: {field.k}</p>
     </div>
   )
 }
@@ -678,8 +681,8 @@ function PicturesTab() {
     <button
       key={k}
       onClick={() => setArea(k)}
-      className={`rounded-md border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wideish transition-colors ${
-        area === k ? 'border-green bg-green/10 text-green' : 'border-ink-600 text-muted hover:border-green/40 hover:text-paper'
+      className={`rounded-md border px-3.5 py-2 font-mono text-[11px] uppercase tracking-wideish transition-colors focus-visible:border-green ${
+        area === k ? 'border-green bg-green/15 text-greenBright' : 'border-ink-600 text-muted hover:border-green/40 hover:text-paper'
       }`}
     >
       {l}
@@ -699,14 +702,14 @@ function PicturesTab() {
 
       {area === 'home' && (
         <div className="mt-5 space-y-6">
-          <p className="text-[12px] text-muted">
+          <p className="text-[13px] leading-relaxed text-muted">
             Replace any home-page image or video file. Same file name, new bytes — everything else
             stays. (Handles large files: give it a second.)
           </p>
           {HOME_EXTRAS.filter((g) => g.items.some(([src]) => !removedSet.has(src))).map((g) => (
             <div key={g.group}>
               <p className="eyebrow-green">{g.group}</p>
-              <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+              <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
                 {g.items.map(([src, label]) =>
                   g.group === 'Site files' ? (
                     <SlotCard key={src} label={label} src={src} sub={src} busy={busy} onReplace={replace(src)} />
@@ -733,7 +736,7 @@ function PicturesTab() {
       {area === 'project' && (
         <div className="mt-5 space-y-6">
           <label className="block max-w-xl">
-            <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">case study</span>
+            <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">editing case study</span>
             <select
               className={`${selectCls} mt-1.5`}
               value={selSlug}
@@ -747,19 +750,19 @@ function PicturesTab() {
             </select>
           </label>
 
-          <div className="rounded-md border border-ink-600 bg-ink-900 p-3">
-            <p className="eyebrow-green">delete a full case study</p>
-            <p className="mt-1 text-[12px] text-muted">
+          <div className="rounded-md border border-red-400/40 bg-ink-950 p-4">
+            <p className="font-mono text-[11px] uppercase tracking-wideish text-red-400">delete a full case study</p>
+            <p className="mt-1.5 text-[12px] leading-relaxed text-muted">
               Takes the whole study off the site — its card, its page and every section. It is gone
               for good and won't appear here again. Save & publish to push it live.
             </p>
-            <div className="mt-2 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
               {liveProjects.map((p) => (
                 <div
                   key={p.slug}
-                  className="flex items-center justify-between gap-2 rounded-sm border border-ink-600 px-2 py-1"
+                  className="flex items-center justify-between gap-2 rounded border border-ink-600 px-2.5 py-2"
                 >
-                  <span title={p.title} className="min-w-0 truncate font-mono text-[10px] text-paper/80">
+                  <span title={p.title} className="min-w-0 truncate font-mono text-[11px] text-paper/85">
                     {p.title}
                   </span>
                   <button
@@ -780,7 +783,7 @@ function PicturesTab() {
               {((project.cover && !removedSet.has(project.cover)) || (project.heroSrc && !removedSet.has(project.heroSrc))) && (
               <div>
                 <p className="eyebrow-green">cover & hero</p>
-                <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
                   {project.cover && (
                     <SlotCard
                       label="cover (cards)"
@@ -811,7 +814,7 @@ function PicturesTab() {
 
               <div>
                 <p className="eyebrow-green">results gallery ({project.results.filter((m) => !(m.src && removedSet.has(m.src))).length} + {projAdded.length} added)</p>
-                <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
                   {project.results.map((m, i) => {
                     const src = m.src ?? ''
                     const rem = removedSet.has(src)
@@ -847,7 +850,7 @@ function PicturesTab() {
               {(project.stages ?? []).filter((m) => !removedSet.has(m.src ?? '')).length > 0 && (
                 <div>
                   <p className="eyebrow-green">stages</p>
-                  <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                  <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
                     {(project.stages ?? []).map((m, i) => {
                       const src = m.src ?? ''
                       return src ? (
@@ -873,7 +876,7 @@ function PicturesTab() {
                 [project.beforeAfter.before, project.beforeAfter.after].filter((m) => !(m.src && removedSet.has(m.src))).length > 0 && (
                 <div>
                   <p className="eyebrow-green">before / after</p>
-                  <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                  <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
                     {[project.beforeAfter.before, project.beforeAfter.after].map((m, i) => {
                       const src = m.src ?? ''
                       return src ? (
@@ -898,7 +901,7 @@ function PicturesTab() {
               {(project.formats ?? []).filter((m) => !removedSet.has(m.src ?? '')).length > 0 && (
                 <div>
                   <p className="eyebrow-green">format frames</p>
-                  <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                  <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
                     {(project.formats ?? []).map((m, i) => {
                       const src = m.src ?? ''
                       return src ? (
@@ -922,7 +925,7 @@ function PicturesTab() {
               {(project.placements ?? []).filter((m) => !removedSet.has(m.src ?? '')).length > 0 && (
                 <div>
                   <p className="eyebrow-green">placements</p>
-                  <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                  <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
                     {(project.placements ?? []).map((m, i) => {
                       const src = m.src ?? ''
                       return src ? (
@@ -992,7 +995,7 @@ function PicturesTab() {
             <p className="eyebrow-green">
               {brand?.name} · {brandSection} — {brandUploads.length} uploaded + {brandBaseVisible.length} built-in
             </p>
-            <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
               {brandUploads.map((m) => (
                 <SlotCard
                   key={m.src ?? m.label}
@@ -1052,7 +1055,7 @@ function PicturesTab() {
         <div className="mt-5 space-y-6">
           <div>
             <p className="eyebrow-green">showcase pieces ({SHOWCASE.filter((s) => !(s.src && removedSet.has(s.src))).length} + {showcaseAdded.length} added)</p>
-            <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
               {SHOWCASE.map((s) => {
                 const rem = s.src ? removedSet.has(s.src) : false
                 return (
@@ -1107,7 +1110,7 @@ function PicturesTab() {
         <div className="mt-5 space-y-6">
           <div>
             <p className="eyebrow-green">workflow runs ({WORKFLOWS.filter((w) => !(w.src && removedSet.has(w.src))).length})</p>
-            <div className="mt-3 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
               {WORKFLOWS.map((w) => {
                 const rem = w.src ? removedSet.has(w.src) : false
                 return (
@@ -1186,10 +1189,10 @@ function AddedCard({
   const [label, setLabel] = useState(item.label ?? '')
   useEffect(() => setLabel(item.label ?? ''), [item.label])
   return (
-    <div className="rounded-md border border-green/30 bg-ink-900 p-2">
+    <div className="rounded-md border border-green/30 bg-ink-800 p-2.5">
       <MediaPreview item={item} />
-      <input className={`${inputCls} mt-1.5 !py-1 !text-[11px]`} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="caption" />
-      <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+      <input className={`${inputCls} mt-2 !py-1 !text-[12px]`} value={label} onChange={(e) => setLabel(e.target.value)} placeholder="caption" />
+      <div className="mt-2 flex flex-wrap items-center gap-2">
         <button className={smallBtn} disabled={busy} onClick={() => onRename(label)}>
           save caption
         </button>
@@ -1219,7 +1222,7 @@ function AddedCard({
 
 function AddFilesRow({ label, onFiles }: { label: string; onFiles: (files: File[]) => void }) {
   return (
-    <label className="mt-3 flex cursor-pointer items-center gap-3 rounded-md border border-dashed border-ink-600 p-3 font-mono text-[11px] uppercase tracking-wideish text-muted hover:border-green/40 hover:text-paper">
+    <label className="mt-3 flex cursor-pointer items-center gap-3 rounded-md border border-dashed border-ink-600 p-3.5 font-mono text-[12px] uppercase tracking-wideish text-muted transition-colors hover:border-green/40 hover:text-paper">
       + {label}
       <input
         type="file"
@@ -1325,11 +1328,11 @@ function SectionsPanel({
           </button>
         </div>
       </div>
-      <div className="mt-4 space-y-1.5">
+      <div className="mt-4 space-y-2">
         {rows.map((r, i) => (
           <div
             key={r.k}
-            className={`flex items-center gap-2 rounded-md border px-3 py-2 ${
+            className={`flex items-center gap-2 rounded-md border px-3 py-2.5 ${
               r.on ? 'border-green/40' : 'border-ink-600 opacity-60'
             }`}
           >
@@ -1346,10 +1349,10 @@ function SectionsPanel({
             >
               {r.on ? '👁 visible' : '✕ hidden'}
             </button>
-            <span className={`font-mono text-[12px] ${r.on ? 'text-paper' : 'text-muted line-through'}`}>
+            <span className={`font-mono text-[13px] ${r.on ? 'text-paper' : 'text-muted line-through'}`}>
               {r.label}
             </span>
-            <span className="ml-auto font-mono text-[9px] text-muted/70">{r.k}</span>
+            <span className="ml-auto font-mono text-[10px] text-muted">{r.k}</span>
           </div>
         ))}
       </div>
@@ -1409,7 +1412,7 @@ function BrandVisibilityPanel() {
               }`}
             >
               <span>{s}</span>
-              <span className="text-[10px]">{off ? 'removed' : 'visible'}</span>
+              <span className="text-[11px]">{off ? 'removed' : 'visible'}</span>
             </button>
           )
         })}
@@ -1428,7 +1431,7 @@ function SectionsTab() {
         <BrandVisibilityPanel />
       </div>
       <SectionsPanel page="project" defs={PROJECT_SECTIONS} />
-      <p className="max-w-3xl text-[12px] leading-relaxed text-muted">
+      <p className="max-w-3xl text-[13px] leading-relaxed text-muted">
         “Case-study pages (shared)” and “brand pages (shared)” apply to every case study / brand page.
         The per-brand toggles above switch individual brand sections back on or off (legacy layer,
         still respected alongside the order).
@@ -1517,55 +1520,60 @@ function ConceptTab() {
 
   return (
     <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,380px)_1fr]">
-      <div className="rounded-md border border-ink-600 bg-ink-900 p-5">
+      <div className="rounded-md border border-ink-600 bg-ink-800 p-5">
         <p className="eyebrow-green">add concept images</p>
-        <p className="mt-2 font-mono text-[11px] text-muted">
+        <p className="mt-2 font-mono text-[12px] text-muted">
           uploads land in the concept images band on the home page.
         </p>
-        <label className="mt-4 block font-mono text-[11px] uppercase text-muted">
+        <label className="mt-4 block font-mono text-[11px] uppercase tracking-wideish text-slateAccent">
           caption (optional, applies to this batch)
           <input
             value={cCaption}
             onChange={(e) => setCCaption(e.target.value)}
-            className="mt-1 w-full rounded-sm border border-ink-600 bg-transparent px-3 py-2 text-[13px] text-paper outline-none focus:border-green"
+            className="mt-1.5 w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 font-mono text-[13px] text-paper outline-none transition-colors focus:border-green"
             placeholder="e.g. concept frame 01"
           />
         </label>
-        <label className="mt-3 block font-mono text-[11px] uppercase text-muted">
-          images (multi-select ok)
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={(e) => setCFiles(Array.from(e.target.files || []))}
-            className="mt-1 w-full text-[12px] text-muted"
-          />
-        </label>
+        <div className="mt-3">
+          <span className="block font-mono text-[11px] uppercase tracking-wideish text-slateAccent">
+            images (multi-select ok)
+          </span>
+          <label className="mt-1.5 flex cursor-pointer items-center gap-3 rounded-md border border-dashed border-ink-600 p-3.5 font-mono text-[12px] uppercase tracking-wideish text-muted transition-colors hover:border-green/40 hover:text-paper">
+            + choose files{cFiles.length ? ` — ${cFiles.length} selected` : ''}
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={(e) => setCFiles(Array.from(e.target.files || []))}
+              className="hidden"
+            />
+          </label>
+        </div>
         <button
           type="button"
           onClick={() => void cUpload()}
           disabled={cBusy}
-          className="mt-4 rounded-sm border border-green bg-green px-4 py-2 font-mono text-[11px] uppercase tracking-wide text-snow disabled:opacity-50"
+          className={`${btnSolid} mt-4`}
         >
           upload
         </button>
         <Notice msg={cMsg} err={cErr} />
       </div>
-      <div className="rounded-md border border-ink-600 bg-ink-900 p-5">
+      <div className="rounded-md border border-ink-600 bg-ink-800 p-5">
         <p className="eyebrow-green">
           manage · {cItems.length} image{cItems.length === 1 ? '' : 's'}
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {cItems.map((m, idx) => (
-            <div key={m.id} className="rounded-sm border border-ink-600 p-2">
+            <div key={m.id} className="rounded-md border border-ink-600 bg-ink-800 p-2.5">
               <MediaPreview item={{ src: m.src, label: m.caption || '', kind: m.kind }} />
               <input
                 value={cDrafts[m.id] ?? m.caption ?? ''}
                 onChange={(e) => setCDrafts({ ...cDrafts, [m.id]: e.target.value })}
-                className="mt-2 w-full rounded-sm border border-ink-600 bg-transparent px-2 py-1.5 text-[12px] text-paper outline-none focus:border-green"
+                className="mt-2 w-full rounded-md border border-ink-600 bg-ink-950 px-2.5 py-1.5 font-mono text-[12px] text-paper outline-none transition-colors focus:border-green"
                 placeholder="caption / title"
               />
-              <div className="mt-2 flex flex-wrap gap-1.5">
+              <div className="mt-2 flex flex-wrap gap-2">
                 <button
                   type="button"
                   disabled={cBusy || idx === 0}
@@ -1618,7 +1626,7 @@ function ConceptTab() {
             </div>
           ))}
           {cItems.length === 0 && (
-            <p className="col-span-full font-mono text-[11px] text-muted">
+            <p className="col-span-full font-mono text-[12px] text-muted">
               no concept images yet — upload some on the left.
             </p>
           )}
@@ -1719,7 +1727,7 @@ function PublishBar() {
           type="button"
           onClick={publish}
           disabled={busy || running || !!st?.missing}
-          className={`${btnCls} ${busy || running || st?.missing ? 'cursor-not-allowed opacity-50' : ''}`}
+          className={`${btnSolid} ${busy || running || st?.missing ? 'cursor-not-allowed opacity-50' : ''}`}
         >
           {running ? (phase === 'publishing' ? 'publishing…' : 'building…') : busy ? 'starting…' : 'save & publish'}
         </button>
@@ -1800,8 +1808,8 @@ export default function AdminPage() {
               </button>
             </div>
           </label>
-          {err && <p className="mt-2 font-mono text-[11px] text-red-400">{err}</p>}
-          <button type="submit" className={`${btnCls} mt-4`}>
+          {err && <p className="mt-2 font-mono text-[12px] text-red-400">{err}</p>}
+          <button type="submit" className={`${btnSolid} mt-5 w-full`}>
             unlock
           </button>
         </form>
@@ -1834,9 +1842,9 @@ export default function AdminPage() {
           <button
             key={tb.id}
             onClick={() => setTab(tb.id)}
-            className={`rounded-md border px-4 py-1.5 font-mono text-[11px] uppercase tracking-wideish transition-colors ${
+            className={`rounded-md border px-4 py-2 font-mono text-[11px] uppercase tracking-wideish transition-colors focus-visible:border-green ${
               tab === tb.id
-                ? 'border-green bg-green/10 text-green'
+                ? 'border-green bg-green/15 text-greenBright'
                 : 'border-ink-600 text-muted hover:border-green/40 hover:text-paper'
             }`}
           >
