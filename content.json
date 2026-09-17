@@ -34,5 +34,9 @@
       "src": "media/concept/mattress_study_03_compositing_hd.jpg",
       "caption": "mattress — 03 compositing"
     }
-  ]
+  ],
+  "texts": {
+    "nav.concepts": "Concepts ✓"
+  },
+  "stamp": 1789632433552
 }
