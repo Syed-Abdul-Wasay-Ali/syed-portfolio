@@ -21,6 +21,12 @@
       "kind": "image",
       "src": "media/concept/workflow_concept_to_composite_hd.png",
       "caption": "workflow — concept to composite (flux-2-klein-9b)"
+    },
+    {
+      "id": "c_mu84i4p3li8cf",
+      "kind": "image",
+      "src": "media/concept/workflow_qwen_2511_multiangle_hd.png",
+      "caption": "workflow — multi-angle camera control (qwen-edit-2511)"
     }
   ],
   "removedMedia": [
@@ -68,7 +74,7 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789803102450,
+  "stamp": 1789806373959,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
