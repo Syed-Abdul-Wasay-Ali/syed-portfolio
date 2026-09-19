@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from 'react'
+import type { MouseEvent as ReactMouseEvent } from 'react'
 import type { MediaItem } from '../data/projects'
 import MediaPanel from './MediaPanel'
 
@@ -24,6 +25,14 @@ export default function Lightbox({
     [index, items.length, onNav],
   )
   const next = useCallback(() => onNav((index + 1) % items.length), [index, items.length, onNav])
+
+  // Click anywhere in the viewing area (image included) collapses the viewer.
+  // Only real controls keep it open: buttons, links, videos, embeds, inputs.
+  const areaClick = (e: ReactMouseEvent) => {
+    e.stopPropagation()
+    const el = e.target as HTMLElement
+    if (!el.closest('button, a, video, iframe, input, select, textarea, label')) onClose()
+  }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -69,14 +78,14 @@ export default function Lightbox({
             onClick={(e) => { e.stopPropagation(); onClose() }}
             className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
           >
-            esc / close
+            close ✕
           </button>
         </div>
       </div>
 
       <div className="flex min-h-0 flex-1 overflow-y-auto px-4 pb-4" onClick={onClose}>
         {extra ? (
-          <div className="m-auto flex w-full max-w-6xl flex-col items-center gap-4 lg:flex-row lg:items-center lg:justify-center lg:gap-6" onClick={(e) => e.stopPropagation()}>
+          <div className="m-auto flex w-full max-w-6xl flex-col items-center gap-4 lg:flex-row lg:items-center lg:justify-center lg:gap-6" onClick={areaClick}>
             <div className="w-full lg:w-[58%]">
               <MediaPanel
                 item={item}
@@ -94,7 +103,7 @@ export default function Lightbox({
             </figure>
           </div>
         ) : (
-          <div className="m-auto w-full max-w-6xl" onClick={(e) => e.stopPropagation()}>
+          <div className="m-auto w-full max-w-6xl" onClick={areaClick}>
             <MediaPanel
               item={item}
               className="max-h-[calc(100vh-8rem)] max-h-[calc(100dvh-8rem)] w-full"
