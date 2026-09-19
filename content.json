@@ -27,6 +27,12 @@
       "kind": "image",
       "src": "media/concept/workflow_qwen_2511_multiangle_hd.png",
       "caption": "workflow — multi-angle camera control (qwen-edit-2511)"
+    },
+    {
+      "id": "c_mu85smno0zk1o",
+      "kind": "image",
+      "src": "media/concept/workflow_sofa_color_change_hd.png",
+      "caption": "workflow — sofa color change (qwen-edit-2511)"
     }
   ],
   "removedMedia": [
@@ -74,7 +80,7 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789806373959,
+  "stamp": 1789808543412,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
