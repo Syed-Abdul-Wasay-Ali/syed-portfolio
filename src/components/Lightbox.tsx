@@ -66,7 +66,7 @@ export default function Lightbox({
             </a>
           )}
           <button
-            onClick={onClose}
+            onClick={(e) => { e.stopPropagation(); onClose() }}
             className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
           >
             esc / close
@@ -74,9 +74,9 @@ export default function Lightbox({
         </div>
       </div>
 
-      <div className="flex min-h-0 flex-1 overflow-y-auto px-4 pb-4" onClick={(e) => e.stopPropagation()}>
+      <div className="flex min-h-0 flex-1 overflow-y-auto px-4 pb-4" onClick={onClose}>
         {extra ? (
-          <div className="m-auto flex w-full max-w-6xl flex-col items-center gap-4 lg:flex-row lg:items-center lg:justify-center lg:gap-6">
+          <div className="m-auto flex w-full max-w-6xl flex-col items-center gap-4 lg:flex-row lg:items-center lg:justify-center lg:gap-6" onClick={(e) => e.stopPropagation()}>
             <div className="w-full lg:w-[58%]">
               <MediaPanel
                 item={item}
@@ -94,7 +94,7 @@ export default function Lightbox({
             </figure>
           </div>
         ) : (
-          <div className="m-auto w-full max-w-6xl">
+          <div className="m-auto w-full max-w-6xl" onClick={(e) => e.stopPropagation()}>
             <MediaPanel
               item={item}
               className="max-h-[calc(100vh-8rem)] max-h-[calc(100dvh-8rem)] w-full"
@@ -105,14 +105,14 @@ export default function Lightbox({
 
       <div className="flex items-center justify-between px-5 py-3">
         <button
-          onClick={prev}
+          onClick={(e) => { e.stopPropagation(); prev() }}
           className="border border-snow/30 px-4 py-1.5 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
         >
           ← prev
         </button>
         <span className="font-mono text-[11px] text-snow/60">arrow keys to browse</span>
         <button
-          onClick={next}
+          onClick={(e) => { e.stopPropagation(); next() }}
           className="border border-snow/30 px-4 py-1.5 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
         >
           next →
