@@ -38,7 +38,7 @@ export default function ConceptImagesSection() {
           <p className="mt-3 text-muted">{t('concept.sub')}</p>
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className={`mt-6 grid gap-4 sm:grid-cols-2${shown.length >= 4 ? ' lg:grid-cols-4' : ''}`}>
           {shown.map((item, i) => (
             <Reveal key={item.id} delay={(i % 4) * 70}>
               <button
@@ -48,7 +48,7 @@ export default function ConceptImagesSection() {
                 data-tilt-max="8"
               >
                 <div className="relative">
-                  <MediaPanel item={item} className="aspect-[4/3] !object-cover" />
+                  <MediaPanel item={item} />
                 </div>
                 {item.title && (
                   <div className="border-t border-ink-600 p-3.5">
