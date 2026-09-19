@@ -33,6 +33,12 @@
       "kind": "image",
       "src": "media/concept/mattress_study_03_compositing_hd.jpg",
       "caption": "mattress — 03 compositing"
+    },
+    {
+      "id": "c_mu81xvqfd0azs",
+      "kind": "image",
+      "src": "media/concept/workflow_concept_to_composite_hd.png",
+      "caption": "workflow — concept to composite (flux-2-klein-9b)"
     }
   ],
   "removedMedia": [
@@ -80,6 +86,9 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789642556007,
-  "removedProjects": []
+  "stamp": 1789802069991,
+  "removedProjects": [
+    "commercial-creative-system",
+    "mattress-hero-studio"
+  ]
 }
