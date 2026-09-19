@@ -17,24 +17,6 @@
   },
   "conceptImages": [
     {
-      "id": "c_mu32kay9nnvbl",
-      "kind": "image",
-      "src": "media/concept/mattress_study_01_product_hd.jpg",
-      "caption": "mattress — 01 product shot"
-    },
-    {
-      "id": "c_mu32kaykx2flg",
-      "kind": "image",
-      "src": "media/concept/mattress_study_02_environment_hd.jpg",
-      "caption": "mattress — 02 environment"
-    },
-    {
-      "id": "c_mu32kayt2cjz2",
-      "kind": "image",
-      "src": "media/concept/mattress_study_03_compositing_hd.jpg",
-      "caption": "mattress — 03 compositing"
-    },
-    {
       "id": "c_mu81xvqfd0azs",
       "kind": "image",
       "src": "media/concept/workflow_concept_to_composite_hd.png",
@@ -86,7 +68,7 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789802069991,
+  "stamp": 1789803102450,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
