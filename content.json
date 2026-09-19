@@ -33,6 +33,12 @@
       "kind": "image",
       "src": "media/concept/workflow_sofa_color_change_hd.png",
       "caption": "workflow — sofa color change (qwen-edit-2511)"
+    },
+    {
+      "id": "c_mu8exngygx2jh",
+      "kind": "image",
+      "src": "media/concept/workflow_lighting_control_hd.png",
+      "caption": "workflow — lighting control (qwen-edit-2511 + lighting lora)"
     }
   ],
   "removedMedia": [
@@ -80,7 +86,7 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789808543412,
+  "stamp": 1789823894290,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
