@@ -183,7 +183,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'assets',
     label: 'Home — one system (assets)',
     fields: [
-      { k: 'assets.tag', label: 'eyebrow', def: '04 / one system' },
+      { k: 'assets.tag', label: 'eyebrow', def: '05 / one system' },
       { k: 'assets.title', label: 'title', def: 'One Product. Multiple Production-Ready Assets.' },
       { k: 'assets.link', label: 'link text', def: 'how the system is built →' },
       { k: 'assets.sub', label: 'intro', multi: true, def: 'Every asset below left the same pipeline, in the same grade, from the same product lock — hero to social, product page to mobile, each framed for where it ships.' },
@@ -213,7 +213,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'capabilities',
     label: 'Home — ai systems',
     fields: [
-      { k: 'cap.tag', label: 'eyebrow', def: '05 / ai systems' },
+      { k: 'cap.tag', label: 'eyebrow', def: '06 / ai systems' },
       { k: 'cap.title', label: 'title', def: 'AI systems I build' },
       { k: 'cap.sub', label: 'intro', multi: true, def: 'Not one-off renders: reusable, documented systems that solve a production problem. Brief goes in, finished frames and films come out, on repeat.' },
       { k: 'cap.1.title', label: 'system 01 — title', def: 'Character Consistency Pipeline' },
@@ -243,7 +243,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'workflows',
     label: 'Home — workflows',
     fields: [
-      { k: 'wf.tag', label: 'eyebrow', def: '06 / ai production workflow' },
+      { k: 'wf.tag', label: 'eyebrow', def: '07 / ai production workflow' },
       { k: 'wf.title', label: 'title', def: 'AI Production Workflow' },
       { k: 'wf.sub', label: 'intro', multi: true, def: 'A repeatable route, not trial-and-error prompting: references and controls go in, commercial frames come out — and the same route reruns for the next product, room or format.' },
       { k: 'wf.routeLabel', label: 'route — card label', def: 'the route' },
@@ -271,7 +271,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'craft',
     label: 'Home — craft',
     fields: [
-      { k: 'craft.tag', label: 'eyebrow', def: '07 / craft' },
+      { k: 'craft.tag', label: 'eyebrow', def: '08 / craft' },
       { k: 'craft.title', label: 'title', def: 'Where AI Meets Image Craft' },
       { k: 'craft.sub', label: 'intro', multi: true, def: 'A model gets you close. These are the controls that make the output a commercial deliverable.' },
       { k: 'craft.p1.term', label: 'row 1 — term', def: 'Product Fidelity' },
@@ -292,7 +292,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'brandssec',
     label: 'Home — brands strip',
     fields: [
-      { k: 'brandssec.tag', label: 'eyebrow', def: '08 / brands' },
+      { k: 'brandssec.tag', label: 'eyebrow', def: '09 / brands' },
       { k: 'brandssec.title', label: 'title', def: "21 brands I've worked within Ogilvy" },
       { k: 'brandssec.sub', label: 'intro — {n} = brand count', multi: true, def: 'Click a logo with media for the stills, animatics and final films. {n} brands and counting.' },
     ],
@@ -301,7 +301,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'about',
     label: 'Home — about',
     fields: [
-      { k: 'about.tag', label: 'eyebrow', def: '09 / about' },
+      { k: 'about.tag', label: 'eyebrow', def: '10 / about' },
       { k: 'about.title1', label: 'title line 1', def: 'The operator' },
       { k: 'about.title2', label: 'title line 2', def: 'behind the graph' },
       { k: 'about.p1', label: 'paragraph 1', multi: true, def: 'I work at the intersection of creative direction, AI image generation and production workflows. My work focuses on using generative AI to create controlled, photorealistic visual assets for commercial applications — real products placed into generated environments without losing fidelity, edited and composited to a deliverable.' },
@@ -339,7 +339,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'contact',
     label: 'Home — contact band',
     fields: [
-      { k: 'contact.tag', label: 'eyebrow', def: '10 / contact' },
+      { k: 'contact.tag', label: 'eyebrow', def: '11 / contact' },
       { k: 'contact.title', label: 'title', def: 'Let’s build the next visual system.' },
       { k: 'contact.sub', label: 'intro', multi: true, def: 'Available for AI image generation, product visualization, commercial creative and AI production workflow projects.' },
       { k: 'contact.email', label: 'email button', def: 'email me' },

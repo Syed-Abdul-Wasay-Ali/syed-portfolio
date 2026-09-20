@@ -181,7 +181,7 @@ export default function Hero() {
             className="k-fade mt-6 flex flex-wrap items-center gap-4"
             style={{ animationDelay: '560ms' }}
           >
-            <a href="#showcase" className="btn-green">
+            <a href="#work" className="btn-green">
               {t('hero.ctaWork')}
             </a>
             <a href={resumeUrl} target="_blank" rel="noreferrer" className="btn-ghost">
