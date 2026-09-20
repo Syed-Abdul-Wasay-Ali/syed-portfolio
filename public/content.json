@@ -51,6 +51,12 @@
       "kind": "image",
       "src": "media/concept/workflow_flux2_klein_upscale_ttp_hd.png",
       "caption": "workflow — upscaling (flux.2 klein · TTP 2×2 tiling)"
+    },
+    {
+      "id": "c_mu98wk1t7tfzq",
+      "kind": "image",
+      "src": "media/concept/workflow_flux2_klein_upscale_4k_hd.png",
+      "caption": "workflow — upscaling to 4K (flux.2 klein · TTP 2×2 tiling)"
     }
   ],
   "removedMedia": [
@@ -98,7 +104,7 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789873157724,
+  "stamp": 1789874231681,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
