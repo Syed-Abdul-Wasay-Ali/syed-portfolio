@@ -52,7 +52,7 @@ export default function Lightbox({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex animate-fadeIn flex-col bg-charcoal/97"
+      className="fixed inset-0 z-50 flex animate-fadeIn flex-col bg-charcoal/95"
       role="dialog"
       aria-modal="true"
       aria-label={item.label ?? 'Media viewer'}
