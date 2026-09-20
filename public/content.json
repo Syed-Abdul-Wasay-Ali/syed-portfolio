@@ -63,6 +63,20 @@
       "kind": "image",
       "src": "media/concept/workflow_product_to_person_hd.png",
       "caption": "Product to person — same shoes onto the woman character · flux.2 klein edit"
+    },
+    {
+      "id": "c_mu9xnisrd035z",
+      "kind": "image",
+      "src": "media/concept/photoshoot_tote_lifestyle_hd.png",
+      "caption": "Lifestyle set — one tote, six cafe scenes",
+      "group": "photos"
+    },
+    {
+      "id": "c_mu9xnitfase1n",
+      "kind": "image",
+      "src": "media/concept/photoshoot_sleepwear_set_hd.png",
+      "caption": "Sleepwear set — six poses, studio to bed",
+      "group": "photos"
     }
   ],
   "removedMedia": [
@@ -111,7 +125,7 @@
     "project:ecommerce-image-system",
     "media/reel/showreel-2026.mp4"
   ],
-  "stamp": 1789912002945,
+  "stamp": 1789915800579,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"

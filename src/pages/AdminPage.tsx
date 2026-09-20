@@ -1447,6 +1447,7 @@ function ConceptTab() {
   const { refresh } = useRuntime()
   const [cFiles, setCFiles] = useState<File[]>([])
   const [cCaption, setCCaption] = useState('')
+  const [cGroup, setCGroup] = useState<'main' | 'photos'>('main')
   const [cDrafts, setCDrafts] = useState<Record<string, string>>({})
   const [cBusy, setCBusy] = useState(false)
   const [cMsg, setCMsg] = useState('')
@@ -1477,7 +1478,7 @@ function ConceptTab() {
     setCErr('')
     try {
       const files = await readFiles(cFiles)
-      const j = await cPost('/api/concept/upload', { caption: cCaption, files })
+      const j = await cPost('/api/concept/upload', { caption: cCaption, files, group: cGroup === 'photos' ? 'photos' : undefined })
       setCMsg('uploaded ' + ((j.saved && j.saved.length) || 0) + ' image(s)')
       setCFiles([])
       setCCaption('')
@@ -1523,8 +1524,19 @@ function ConceptTab() {
       <div className="rounded-md border border-ink-600 bg-ink-800 p-5">
         <p className="eyebrow-green">add workflow images</p>
         <p className="mt-2 font-mono text-[12px] text-muted">
-          uploads land in the AI × E-commerce band on the home page.
+          uploads land in the chosen section on the home page (AI × E-commerce band / photoshoot sub-band).
         </p>
+        <label className="mt-4 block font-mono text-[11px] uppercase tracking-wideish text-slateAccent">
+          section
+          <select
+            value={cGroup}
+            onChange={(e) => setCGroup(e.target.value as 'main' | 'photos')}
+            className="mt-1.5 w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 font-mono text-[13px] text-paper outline-none transition-colors focus:border-green"
+          >
+            <option value="main">AI × E-commerce band</option>
+            <option value="photos">AI Product Photoshoot images</option>
+          </select>
+        </label>
         <label className="mt-4 block font-mono text-[11px] uppercase tracking-wideish text-slateAccent">
           caption (optional, applies to this batch)
           <input
@@ -1567,6 +1579,9 @@ function ConceptTab() {
           {cItems.map((m, idx) => (
             <div key={m.id} className="rounded-md border border-ink-600 bg-ink-800 p-2.5">
               <MediaPreview item={{ src: m.src, label: m.caption || '', kind: m.kind }} />
+              {m.group === 'photos' && (
+                <p className="mt-2 font-mono text-[10px] uppercase tracking-wideish text-greenReadable">photoshoot sub-band</p>
+              )}
               <input
                 value={cDrafts[m.id] ?? m.caption ?? ''}
                 onChange={(e) => setCDrafts({ ...cDrafts, [m.id]: e.target.value })}

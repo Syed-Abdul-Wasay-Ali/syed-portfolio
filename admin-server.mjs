@@ -777,6 +777,7 @@ function __conceptRoutes(req, res) {
 
     if (p === '/api/concept/upload') {
       const caption = String(body.caption || '').trim().slice(0, 300);
+      const group = body.group === 'photos' ? 'photos' : undefined;
       const files = Array.isArray(body.files) ? body.files : [];
       if (!files.length) { send(400, { error: 'no files' }); return true; }
       const used = new Set(content.conceptImages.map((x) => x && x.src));
@@ -788,7 +789,7 @@ function __conceptRoutes(req, res) {
         let src = 'media/concept/' + name;
         if (used.has(src)) { name = makeId() + '-' + name; src = 'media/concept/' + name; }
         await putMedia(path.join('concept', name), buf);
-        const item = { id: makeId(), kind: isVideo(name) ? 'video' : 'image', src, caption };
+        const item = { id: makeId(), kind: isVideo(name) ? 'video' : 'image', src, caption, ...(group ? { group } : {}) };
         used.add(src);
         content.conceptImages.push(item);
         saved.push(item);

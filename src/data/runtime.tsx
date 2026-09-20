@@ -122,4 +122,6 @@ export interface ConceptImage {
   src: string
   kind?: 'image' | 'video'
   caption?: string
+  /** set to 'photos' to render in the AI Product Photoshoot Images sub-band */
+  group?: 'photos'
 }

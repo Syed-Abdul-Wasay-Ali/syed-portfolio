@@ -158,6 +158,9 @@ export const UI_GROUPS: TextGroup[] = [
       { k: 'concept.tag', label: 'eyebrow', def: '01 / ai × e-commerce' },
       { k: 'concept.title', label: 'title', def: 'AI × E-Commerce' },
       { k: 'concept.sub', label: 'intro', multi: true, def: 'The ComfyUI graphs behind the editing work — one reference in, controlled results out: angles, colorways, relight, upscaling. Click any image to inspect.' },
+      { k: 'concept.photos.tag', label: 'photoshoot eyebrow', def: 'product photoshoots' },
+      { k: 'concept.photos.title', label: 'photoshoot title', def: 'AI Product Photoshoot Images' },
+      { k: 'concept.photos.sub', label: 'photoshoot intro', multi: true, def: "Catalogue-ready product sets, generated with AI — one product carried through a whole shoot's frames." },
     ],
   },
   {
