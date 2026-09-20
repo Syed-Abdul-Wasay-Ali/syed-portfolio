@@ -27,23 +27,25 @@ export default {
         snow: '#F7F5ED',
         paper: '#111111',
         muted: '#66645F',
-        // the one accent — electric lime in the "green" slot (class names kept)
+        // the one accent — deep navy in the "green" slot (class names kept)
         green: {
-          DEFAULT: '#C8FF00',
-          bright: '#6E8E00',
-          deep: '#33420A',
+          DEFAULT: '#102A54',
+          bright: '#1F4173',
+          deep: '#0A1C3A',
         },
         // flat aliases used as `text-greenBright` / `text-greenDeep`
-        greenBright: '#6E8E00',
-        greenDeep: '#33420A',
+        greenBright: '#1F4173',
+        greenDeep: '#0A1C3A',
         // readable accent TEXT on light surfaces (AA on canvas/cards)
-        greenReadable: '#4E6B00',
+        greenReadable: '#1B3A6B',
+        // accent on DARK sections — light blue that stays legible on charcoal
+        skyBlue: '#9CC0F0',
         // legacy hover slots — now dark/neutral on light
         neonBlue: '#111111',
         violet: '#8A8375',
         slateAccent: '#665F52',
-        // legacy hot-line slot — lime now
-        acid: '#C8FF00',
+        // legacy hot-line slot — navy now
+        acid: '#102A54',
       },
       fontFamily: {
         // Anton = ultra-condensed grotesque, the title-card face

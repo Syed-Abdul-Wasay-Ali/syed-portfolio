@@ -150,7 +150,7 @@ export default function About() {
                 href={linkedinUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
+                className="inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-skyBlue hover:text-skyBlue"
               >
                 <LinkedInIcon className="h-4 w-4" />
                 {t('about.cur.linkedin')}
@@ -159,7 +159,7 @@ export default function About() {
                 href={githubUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
+                className="inline-flex items-center gap-2 border border-snow/40 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-colors hover:border-skyBlue hover:text-skyBlue"
               >
                 <GitHubIcon className="h-4 w-4" />
                 {t('about.cur.github')}

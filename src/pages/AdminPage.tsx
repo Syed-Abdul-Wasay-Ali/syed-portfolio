@@ -100,7 +100,7 @@ const selectCls = inputCls
 const btnCls =
   'rounded-md border border-green/40 px-4 py-2 font-mono text-[11px] uppercase tracking-wideish text-greenReadable transition-colors hover:border-greenBright hover:bg-green/10 focus-visible:border-green disabled:cursor-not-allowed disabled:opacity-40'
 const btnSolid =
-  'rounded-md bg-green px-4 py-2 font-mono text-[12px] uppercase tracking-wideish text-paper transition-colors hover:bg-paper hover:text-ink-950 focus-visible:border-green disabled:cursor-not-allowed disabled:opacity-40'
+  'rounded-md bg-green px-4 py-2 font-mono text-[12px] uppercase tracking-wideish text-snow transition-colors hover:bg-paper hover:text-ink-950 focus-visible:border-green disabled:cursor-not-allowed disabled:opacity-40'
 const smallBtn =
   'rounded border border-ink-600 px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish text-paper/80 transition-colors hover:border-green hover:text-paper focus-visible:border-green disabled:cursor-not-allowed disabled:opacity-40'
 const badgeCls =

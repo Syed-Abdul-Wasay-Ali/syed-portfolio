@@ -28,7 +28,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             </div>
           )}
           {project.status && (
-            <span className="absolute right-2 top-2 bg-charcoal/90 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-green">
+            <span className="absolute right-2 top-2 bg-charcoal/90 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-skyBlue">
               {project.status}
             </span>
           )}

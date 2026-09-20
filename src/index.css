@@ -16,8 +16,8 @@ body {
 }
 
 ::selection {
-  background: #C8FF00;
-  color: #111111;
+  background: #102A54;
+  color: #F7F5ED;
 }
 
 @layer components {
@@ -30,7 +30,12 @@ body {
   }
 
   .eyebrow-green {
-    @apply inline-block bg-green px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-charcoal;
+    @apply inline-block bg-green px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-snow;
+  }
+
+  /* same chip on dark sections — light blue fill, charcoal type */
+  .eyebrow-on-dark {
+    @apply bg-skyBlue text-charcoal;
   }
 
   .hairline {
@@ -41,23 +46,28 @@ body {
     @apply border border-ink-400 bg-ink-700;
   }
 
-  /* charcoal structural card with a lime frame (dark section) */
+  /* charcoal structural card with a light blue frame (dark section) */
   .panel-dark {
-    @apply border border-green/45 bg-charcoal text-snow;
+    @apply border border-skyBlue/45 bg-charcoal text-snow;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center gap-2 border border-ink-500 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-paper transition-all duration-300 hover:border-green hover:bg-green hover:text-charcoal;
+    @apply inline-flex items-center gap-2 border border-ink-500 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-paper transition-all duration-300 hover:border-green hover:bg-green hover:text-snow;
   }
 
   /* outline button for dark sections (charcoal panels) */
   .btn-ghost-dark {
-    @apply inline-flex items-center gap-2 border border-snow/30 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-all duration-300 hover:border-green hover:text-green;
+    @apply inline-flex items-center gap-2 border border-snow/30 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-all duration-300 hover:border-skyBlue hover:text-skyBlue;
   }
 
-  /* filled lime primary CTA — flips to charcoal on hover (polarity) */
+  /* filled navy primary CTA — flips to charcoal on hover (polarity) */
   .btn-green {
-    @apply inline-flex items-center gap-2 bg-green px-4 py-2 font-mono text-xs uppercase tracking-wideish text-charcoal transition-all duration-300 hover:bg-charcoal hover:text-green;
+    @apply inline-flex items-center gap-2 bg-green px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-all duration-300 hover:bg-charcoal hover:text-skyBlue;
+  }
+
+  /* filled primary CTA on dark sections — light blue fill, charcoal type */
+  .btn-green-dark {
+    @apply inline-flex items-center gap-2 bg-skyBlue px-4 py-2 font-mono text-xs uppercase tracking-wideish text-charcoal transition-all duration-300 hover:bg-charcoal hover:text-skyBlue;
   }
 
   /* corporate company names — bold, brand-colored.
@@ -147,7 +157,7 @@ body {
   bottom: -3px;
   height: 1px;
   width: 100%;
-  background: #C8FF00;
+  background: #102A54;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
@@ -206,7 +216,7 @@ body {
   width: 9px;
   height: 9px;
   border-radius: 9999px;
-  background: #C8FF00;
+  background: #102A54;
   transform: scale(0);
   transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 2;
@@ -257,7 +267,7 @@ body {
 
 /* ---- brand tiles take their own accent on hover ---- */
 .brand-tile {
-  --brand: #C8FF00;
+  --brand: #102A54;
 }
 .brand-tile:hover {
   border-color: var(--brand) !important;
@@ -268,7 +278,7 @@ body {
 
 /* ---- header: solid navy progress + strip ---- */
 .header-progress {
-  background: #C8FF00;
+  background: #102A54;
 }
 
 /* ---- marquee bands (texture strips from the title cards) ---- */
@@ -348,10 +358,10 @@ body {
   border-bottom-width: 1px;
 }
 
-/* ---- red disc element ---- */
+/* ---- accent disc element ---- */
 .disc {
   border-radius: 9999px;
-  background: #C8FF00;
+  background: #102A54;
 }
 
 /* ---- ghosted outline type (resolves against black) ---- */
@@ -394,7 +404,7 @@ body {
   box-shadow:
     0 24px 60px rgba(17, 17, 17, 0.14),
     0 0 0 1px rgba(17, 17, 17, 0.04),
-    0 0 30px rgba(78, 107, 0, 0.10);
+    0 0 30px rgba(16, 42, 84, 0.10);
 }
 
 /* moving light sheen that follows the pointer */

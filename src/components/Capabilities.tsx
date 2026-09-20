@@ -122,7 +122,7 @@ export default function Capabilities() {
                   ]).map((m) => (
                     <span
                       key={m}
-                      className="border border-green bg-green px-2.5 py-0.5 font-mono text-[11px] text-charcoal"
+                      className="border border-green bg-green px-2.5 py-0.5 font-mono text-[11px] text-snow"
                     >
                       {m}
                     </span>

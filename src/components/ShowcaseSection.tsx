@@ -49,7 +49,7 @@ export default function ShowcaseSection() {
                   setLightbox(null)
                 }}
                 className={`px-3 py-1.5 font-mono text-[11px] uppercase tracking-wideish transition-colors ${
-                  filter === tag.key ? 'bg-green text-charcoal' : 'text-muted hover:text-paper'
+                  filter === tag.key ? 'bg-green text-snow' : 'text-muted hover:text-paper'
                 }`}
               >
                 {filterLabel(tag.key, tag.label)}
@@ -72,7 +72,7 @@ export default function ShowcaseSection() {
               >
                 <div className="relative border-b border-ink-600">
                   <MediaPanel item={item} className="aspect-[4/3] !object-cover" />
-                  <span className="absolute left-3 top-3 bg-charcoal/90 px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-green">
+                  <span className="absolute left-3 top-3 bg-charcoal/90 px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-skyBlue">
                     {item.tag === 'concept-ad' ? 'concept ad' : 'image'}
                   </span>
                 </div>

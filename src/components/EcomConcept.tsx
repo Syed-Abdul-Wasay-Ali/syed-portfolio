@@ -34,7 +34,7 @@ export default function EcomConcept() {
   return (
     <div>
       <div className="mb-5 flex flex-wrap items-center gap-3">
-        <span className="bg-green px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-charcoal">
+        <span className="bg-green px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-snow">
           {t('ecom.badge')}
         </span>
         <p className="font-mono text-[11px] uppercase tracking-wideish text-muted">

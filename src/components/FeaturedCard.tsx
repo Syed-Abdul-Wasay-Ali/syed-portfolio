@@ -25,7 +25,7 @@ export default function FeaturedCard({ project, num }: { project: Project; num: 
           </div>
         )}
         <div className="absolute inset-x-0 top-0 flex items-start justify-between p-3">
-          <span className="bg-charcoal/90 px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-green">
+          <span className="bg-charcoal/90 px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-skyBlue">
             case study {num}
           </span>
           {project.status && (

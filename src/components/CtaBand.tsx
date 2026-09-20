@@ -12,16 +12,16 @@ export default function CtaBand() {
     <section className="border-b border-ink-600 py-12 sm:py-16">
       <div className="container-site">
         <div className="panel-dark relative overflow-hidden p-6 sm:p-10">
-          <div aria-hidden="true" className="orb left-[-10%] top-[-40%] h-64 w-64 bg-green/10" />
+          <div aria-hidden="true" className="orb left-[-10%] top-[-40%] h-64 w-64 bg-skyBlue/10" />
           <div className="relative grid gap-8 lg:grid-cols-[1.3fr_1fr] lg:items-center">
             <div>
-              <p className="eyebrow-green">{t('contact.tag')}</p>
+              <p className="eyebrow-green eyebrow-on-dark">{t('contact.tag')}</p>
               <h2 className="mt-2 font-display text-3xl font-black uppercase leading-tight tracking-tight text-snow sm:text-5xl">
                 {t('contact.title')}
               </h2>
               <p className="mt-4 max-w-xl text-snow/70">{t('contact.sub')}</p>
               <div className="mt-6 flex flex-wrap items-center gap-3">
-                <a href={`mailto:${email}`} className="btn-green">
+                <a href={`mailto:${email}`} className="btn-green-dark">
                   {t('contact.email')}
                 </a>
                 <a

@@ -51,7 +51,7 @@ export default function PipelineStrip() {
                     loading="lazy"
                     className="media-asset absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />
-                  <span className="absolute left-2 top-2 bg-charcoal/85 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-green">
+                  <span className="absolute left-2 top-2 bg-charcoal/85 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-skyBlue">
                     {s.num}
                   </span>
                 </div>

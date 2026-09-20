@@ -46,7 +46,7 @@ export default function NodeGraph({
           <path
             key={i}
             d={link(n, NODES[i + 1])}
-            stroke={n.accent ? '#4E6B00' : '#8F897D'}
+            stroke={n.accent ? '#1B3A6B' : '#8F897D'}
             strokeDasharray="4 5"
             className={animated ? 'animate-dash' : undefined}
             opacity="0.85"
@@ -61,11 +61,11 @@ export default function NodeGraph({
             height={26 + n.lines * 12}
             rx="4"
             fill="#F3F1E9"
-            stroke={n.accent ? '#6E8E00' : '#A9A393'}
+            stroke={n.accent ? '#1F4173' : '#A9A393'}
             strokeWidth="1.1"
           />
-          <rect width="118" height="14" rx="4" fill={n.accent ? '#C8FF00' : '#E9E7DE'} />
-          <rect y="7" width="118" height="7" fill={n.accent ? '#C8FF00' : '#E9E7DE'} />
+          <rect width="118" height="14" rx="4" fill={n.accent ? '#102A54' : '#E9E7DE'} />
+          <rect y="7" width="118" height="7" fill={n.accent ? '#102A54' : '#E9E7DE'} />
           <text
             x="6"
             y="10"
@@ -94,7 +94,7 @@ export default function NodeGraph({
                 cy={16 + nn.lines * 6}
                 r="3.5"
                 fill="#F3F1E9"
-                stroke="#4E6B00"
+                stroke="#1B3A6B"
                 strokeWidth="1.2"
                 className={animated ? 'animate-pulseSoft' : undefined}
               />

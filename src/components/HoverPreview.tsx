@@ -102,7 +102,7 @@ export function HoverPreviewProvider({ children }: { children: ReactNode }) {
               </div>
             )}
             {item.badge && (
-              <span className="absolute left-3 top-3 bg-charcoal/90 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-green">
+              <span className="absolute left-3 top-3 bg-charcoal/90 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-skyBlue">
                 {item.badge}
               </span>
             )}

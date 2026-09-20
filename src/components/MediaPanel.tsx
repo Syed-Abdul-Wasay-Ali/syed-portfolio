@@ -27,9 +27,9 @@ export default function MediaPanel({
         <NodeGraph className="max-w-md opacity-95" animated={false} />
         <div className="flex items-center gap-3">
           {isVideo && (
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-green bg-charcoal">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-skyBlue bg-charcoal">
               <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-                <path d="M3 1.5 L10 6 L3 10.5 Z" fill="#C8FF00" />
+                <path d="M3 1.5 L10 6 L3 10.5 Z" fill="#9CC0F0" />
               </svg>
             </span>
           )}

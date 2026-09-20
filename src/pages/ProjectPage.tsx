@@ -343,7 +343,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
 
           <a
             href={`#/project/${nextProject.slug}`}
-            className="panel-dark card-lift group block p-5 hover:border-green"
+            className="panel-dark card-lift group block p-5 hover:border-skyBlue"
           >
             <p className="font-mono text-[11px] uppercase tracking-wideish text-snow/60">
               {t('pui.next')}
