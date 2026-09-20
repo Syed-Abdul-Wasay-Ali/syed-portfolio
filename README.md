@@ -225,7 +225,7 @@ beside the video. Never add a run's output as a separate tile.
 Most copy now edits from the admin panel (see above) — the files below hold
 the compiled defaults that the admin overrides on top of:
 
-- Footer email: `src/components/Footer.tsx` (`hello@syedwasay.dev` is a placeholder)
+- Footer email: `src/data/social.ts` (`EMAIL`); admin-editable default mirrored in `src/data/text.ts` (`social.email`)
 - Bio copy: `src/components/About.tsx`, `src/components/Hero.tsx`
 - Capabilities: `src/components/Capabilities.tsx`
 - Demo case studies in `src/data/projects.ts` are sample text — replace with

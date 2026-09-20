@@ -53,7 +53,7 @@ export const UI_GROUPS: TextGroup[] = [
       { k: 'site.title', label: 'browser title', def: 'Syed Abdul Wasay Ali — AI Creative Manager & AI Image Specialist' },
       { k: 'social.linkedin', label: 'linkedin url', def: 'https://www.linkedin.com/in/syed-abdul-wasay-ali-084a88179/' },
       { k: 'social.github', label: 'github url', def: 'https://github.com/Syed-Abdul-Wasay-Ali' },
-      { k: 'social.email', label: 'email', def: 'hello@syedwasay.dev' },
+      { k: 'social.email', label: 'email', def: 'syedabdulwasayali@gmail.com' },
       { k: 'social.resume', label: 'resume file', def: 'media/resume/Syed-Abdul-Wasay-Ali-Resume.pdf' },
     ],
   },
