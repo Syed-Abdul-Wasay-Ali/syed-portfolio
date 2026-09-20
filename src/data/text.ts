@@ -328,7 +328,7 @@ export const UI_GROUPS: TextGroup[] = [
       { k: 'about.t2.location', label: 'role 2 — location', def: 'Delhi, India. (Remote)' },
       { k: 'about.t2.dates', label: 'role 2 — dates', def: 'Sep 2023 — Feb 2025' },
       { k: 'about.t2.note', label: 'role 2 — note', multi: true, def: 'Led AI art direction and production: custom LoRAs, image & video generation systems, mocap pipelines.' },
-      { k: 'about.t2.bullets', label: 'role 2 — bullets', list: ['Led AI image production as head AI artist for client campaign work.', 'Ran hands-on experiments across every major model wave since 2023.', 'Built reusable generation workflows and trained early custom LoRAs.'] },
+      { k: 'about.t2.bullets', label: 'role 2 — bullets', list: ['Led AI image production as head AI artist — story-driven, cinematic scenes with multiple characters.', 'Ran hands-on experiments across every major model wave since 2023.', 'Built reusable generation workflows and trained early custom LoRAs.'] },
       { k: 'about.cur.label', label: 'currently — label', def: 'currently' },
       { k: 'about.cur.text', label: 'currently — text', multi: true, def: 'Building AI-native production pipelines at Ogilvy: open-source first, documented always. Open to talking workflow design, automation, and AI production systems.' },
       { k: 'about.cur.linkedin', label: 'currently — linkedin button', def: 'connect on linkedin' },

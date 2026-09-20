@@ -25,7 +25,7 @@ const TIMELINE = [
     dates: 'Sep 2023 — Feb 2025',
     note: 'Led AI art direction and production: custom LoRAs, image & video generation systems, mocap pipelines.',
     bullets: [
-      'Led AI image production as head AI artist for client campaign work.',
+      'Led AI image production as head AI artist — story-driven, cinematic scenes with multiple characters.',
       'Ran hands-on experiments across every major model wave since 2023.',
       'Built reusable generation workflows and trained early custom LoRAs.',
     ],
