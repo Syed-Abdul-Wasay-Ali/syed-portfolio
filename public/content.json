@@ -39,6 +39,12 @@
       "kind": "image",
       "src": "media/concept/workflow_lighting_control_hd.png",
       "caption": "workflow — lighting control (qwen-edit-2511 + lighting lora)"
+    },
+    {
+      "id": "c_mu941iuy5hsg6",
+      "kind": "image",
+      "src": "media/concept/workflow_character_sheet_hd.png",
+      "caption": "workflow — character sheet (qwen-edit-2511)"
     }
   ],
   "removedMedia": [
@@ -86,7 +92,7 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789823894290,
+  "stamp": 1789866065338,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
