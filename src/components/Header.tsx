@@ -4,7 +4,7 @@ import GitHubIcon from './GitHubIcon'
 import { LINKEDIN_URL, GITHUB_URL, RESUME_URL } from '../data/social'
 import { useRuntime, useT } from '../data/runtime'
 
-// Nav order mirrors the home page section order (comfyui workflows first, brands last).
+// Nav order mirrors the home page section order (AI × E-commerce band first, brands last).
 // `section` maps to the home section key used by the admin's section manager.
 const LINKS = [
   { href: '#concept-images', section: 'concept-images', labelKey: 'nav.concepts', label: 'Editing' },

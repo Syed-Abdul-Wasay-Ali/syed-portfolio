@@ -1523,7 +1523,7 @@ function ConceptTab() {
       <div className="rounded-md border border-ink-600 bg-ink-800 p-5">
         <p className="eyebrow-green">add workflow images</p>
         <p className="mt-2 font-mono text-[12px] text-muted">
-          uploads land in the comfyui workflows band on the home page.
+          uploads land in the AI × E-commerce band on the home page.
         </p>
         <label className="mt-4 block font-mono text-[11px] uppercase tracking-wideish text-slateAccent">
           caption (optional, applies to this batch)
@@ -1821,7 +1821,7 @@ export default function AdminPage() {
     { id: 'words', label: 'words' },
     { id: 'pictures', label: 'pictures' },
     { id: 'sections', label: 'sections' },
-    { id: 'concept', label: 'comfyui workflows' },
+    { id: 'concept', label: 'AI × E-commerce' },
   ]
 
   return (
