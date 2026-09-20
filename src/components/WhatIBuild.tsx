@@ -39,7 +39,7 @@ const ITEMS = [
 export default function WhatIBuild() {
   const t = useT()
   return (
-    <section className="border-b border-ink-600 py-7 sm:py-9">
+    <section className="border-b border-ink-600 py-6 sm:py-8">
       <div className="container-site">
         <div className="max-w-2xl">
           <p className="eyebrow-green">{t('whatibuild.tag')}</p>
@@ -49,10 +49,10 @@ export default function WhatIBuild() {
           <p className="mt-2 text-muted">{t('whatibuild.sub')}</p>
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-4 grid gap-x-6 gap-y-5 sm:grid-cols-2 lg:grid-cols-3">
           {ITEMS.map((it, i) => (
-            <Reveal key={it.num} delay={i * 70} className="h-full">
-              <div className="panel h-full p-3">
+            <Reveal key={it.num} delay={i * 70}>
+              <div className="border-t border-ink-600 pt-2">
                 <div className="flex items-baseline gap-2">
                   <span className="font-mono text-[11px] leading-none tracking-wideish text-greenReadable">
                     {it.num}
