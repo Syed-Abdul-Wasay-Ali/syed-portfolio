@@ -1,5 +1,5 @@
 {
-  "pageSections": [],
+  "pageSections": ["workgrid"],
   "removedItems": {
     "cadbury-dairy-milk": {
       "stills": [
@@ -102,10 +102,9 @@
     "project:bedroom-lifestyle-comp",
     "project:sleep-brand-image-system",
     "project:reference-controlled-imaging",
-    "project:ecommerce-image-system",
-    "media/showcase/ads/bedroom-mcp-astra-seedance25.mp4"
+    "project:ecommerce-image-system"
   ],
-  "stamp": 1789895049050,
+  "stamp": 1789897931120,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
