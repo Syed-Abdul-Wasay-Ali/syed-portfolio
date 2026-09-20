@@ -155,7 +155,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'concept',
     label: 'Home — comfyui workflows',
     fields: [
-      { k: 'concept.tag', label: 'eyebrow', def: '02 / comfyui workflows' },
+      { k: 'concept.tag', label: 'eyebrow', def: '03 / comfyui workflows' },
       { k: 'concept.title', label: 'title', def: 'ComfyUI image editing workflows' },
       { k: 'concept.sub', label: 'intro', multi: true, def: 'ComfyUI workflow breakdowns — the real graphs, models and settings behind the image editing work. Click any image to inspect.' },
     ],
@@ -164,7 +164,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'work',
     label: 'Home — case studies band',
     fields: [
-      { k: 'work.tag', label: 'eyebrow', def: '03 / case studies' },
+      { k: 'work.tag', label: 'eyebrow', def: '04 / case studies' },
       { k: 'work.title', label: 'title', def: 'Case studies' },
       { k: 'work.lane1.title', label: 'lane 1 — title', def: 'Concept case studies' },
       { k: 'work.lane1.blurb', label: 'lane 1 — blurb', multi: true, def: 'Self-set briefs taken end-to-end — five production studies on the commercial imaging system, plus concept films — all on the same pipelines as client work.' },
@@ -183,7 +183,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'assets',
     label: 'Home — one system (assets)',
     fields: [
-      { k: 'assets.tag', label: 'eyebrow', def: '04 / one system' },
+      { k: 'assets.tag', label: 'eyebrow', def: '05 / one system' },
       { k: 'assets.title', label: 'title', def: 'One Product. Multiple Production-Ready Assets.' },
       { k: 'assets.link', label: 'link text', def: 'how the system is built →' },
       { k: 'assets.sub', label: 'intro', multi: true, def: 'Every asset below left the same pipeline, in the same grade, from the same product lock — hero to social, product page to mobile, each framed for where it ships.' },
@@ -200,7 +200,7 @@ export const UI_GROUPS: TextGroup[] = [
     id: 'showcase',
     label: 'Home — showcase band',
     fields: [
-      { k: 'showcase.tag', label: 'eyebrow', def: '05 / showcase' },
+      { k: 'showcase.tag', label: 'eyebrow', def: '02 / showcase' },
       { k: 'showcase.title', label: 'title', def: 'Concept ads & personal work' },
       { k: 'showcase.sub', label: 'intro', multi: true, def: 'Spec work, campaign concepts and experiments — AI-made, no client brief required. Click any piece to inspect.' },
       { k: 'showcase.f.all', label: 'filter — all', def: 'All' },
@@ -483,10 +483,10 @@ export const HOME_SECTIONS: { k: string; label: string }[] = [
   { k: 'pipeline', label: 'Production pipeline strip' },
   { k: 'marquee', label: 'Brand logo ticker' },
   { k: 'whatibuild', label: 'What I solve' },
+  { k: 'showcase', label: 'Showcase' },
   { k: 'concept-images', label: 'Concept images' },
   { k: 'workgrid', label: 'Case studies (work grid)' },
   { k: 'assets', label: 'One system — assets' },
-  { k: 'showcase', label: 'Showcase' },
   { k: 'capabilities', label: 'AI systems' },
   { k: 'workflows', label: 'Workflows' },
   { k: 'craft', label: 'Craft' },

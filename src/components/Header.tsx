@@ -4,12 +4,12 @@ import GitHubIcon from './GitHubIcon'
 import { LINKEDIN_URL, GITHUB_URL, RESUME_URL } from '../data/social'
 import { useRuntime, useT } from '../data/runtime'
 
-// Nav order mirrors the home page section order (concept images first, brands last).
+// Nav order mirrors the home page section order (showcase first, brands last).
 // `section` maps to the home section key used by the admin's section manager.
 const LINKS = [
+  { href: '#showcase', section: 'showcase', labelKey: 'nav.showcase', label: 'Showcase' },
   { href: '#concept-images', section: 'concept-images', labelKey: 'nav.concepts', label: 'Editing' },
   { href: '#work', section: 'workgrid', labelKey: 'nav.work', label: 'Work' },
-  { href: '#showcase', section: 'showcase', labelKey: 'nav.showcase', label: 'Showcase' },
   { href: '#capabilities', section: 'capabilities', labelKey: 'nav.systems', label: 'Systems' },
   { href: '#workflows', section: 'workflows', labelKey: 'nav.workflows', label: 'Workflows' },
   { href: '#brands', section: 'brands', labelKey: 'nav.brands', label: 'Brands' },

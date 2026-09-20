@@ -18,8 +18,8 @@ import { brandHasContent } from '../data/brands'
 import type { ReactNode } from 'react'
 
 // Home order (default): hero → the production pipeline strip → logo ticker →
-// what-i-solve → concept images → case studies → one product / many assets →
-// showcase → systems → workflow + stack → craft → brands → about → contact.
+// what-i-solve → showcase → concept images → case studies → one product / many
+// assets → systems → workflow + stack → craft → brands → about → contact.
 //
 // The admin "sections" tab controls visibility AND order: when
 // content.sectionOrder.home exists it is authoritative (only listed sections
@@ -54,10 +54,10 @@ export default function HomePage() {
       ),
     },
     { k: 'whatibuild', node: <WhatIBuild key="whatibuild" /> },
+    { k: 'showcase', node: <ShowcaseSection key="showcase" /> },
     { k: 'concept-images', node: <ConceptImagesSection key="concept-images" /> },
     { k: 'workgrid', node: <WorkGrid key="workgrid" /> },
     { k: 'assets', node: <AssetFamily key="assets" /> },
-    { k: 'showcase', node: <ShowcaseSection key="showcase" /> },
     { k: 'capabilities', node: <Capabilities key="capabilities" /> },
     { k: 'workflows', node: <WorkflowsSection key="workflows" /> },
     { k: 'craft', node: <CraftSection key="craft" /> },
