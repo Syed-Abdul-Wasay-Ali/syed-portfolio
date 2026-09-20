@@ -1,5 +1,5 @@
 {
-  "pageSections": ["workgrid"],
+  "pageSections": [],
   "removedItems": {
     "cadbury-dairy-milk": {
       "stills": [
@@ -104,7 +104,7 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789897931120,
+  "stamp": 1789900008136,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
