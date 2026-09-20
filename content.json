@@ -77,6 +77,34 @@
       "src": "media/concept/photoshoot_sleepwear_set_hd.png",
       "caption": "Sleepwear set — six poses, studio to bed",
       "group": "photos"
+    },
+    {
+      "id": "c_mu9y3sh2mo8gg",
+      "kind": "image",
+      "src": "media/concept/photoshoot_fitness_bottle_hd.png",
+      "caption": "Gym still — matte bottle and dumbbells, low-key light",
+      "group": "photos"
+    },
+    {
+      "id": "c_mu9y3sjrt4tx4",
+      "kind": "image",
+      "src": "media/concept/photoshoot_cream_jar_hd.png",
+      "caption": "Skincare still — levitating jar and aloe, pastel pink",
+      "group": "photos"
+    },
+    {
+      "id": "c_mu9y3smt366he",
+      "kind": "image",
+      "src": "media/concept/photoshoot_perfume_gift_hd.png",
+      "caption": "Fragrance still — boxed bottle, teal ribbon, moody light",
+      "group": "photos"
+    },
+    {
+      "id": "c_mu9y3spifh1hz",
+      "kind": "image",
+      "src": "media/concept/photoshoot_duffel_hero_hd.png",
+      "caption": "Bag hero — canvas weekender, hard window light",
+      "group": "photos"
     }
   ],
   "removedMedia": [
@@ -125,7 +153,7 @@
     "project:ecommerce-image-system",
     "media/reel/showreel-2026.mp4"
   ],
-  "stamp": 1789915800579,
+  "stamp": 1789916559894,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
