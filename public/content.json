@@ -45,6 +45,12 @@
       "kind": "image",
       "src": "media/concept/workflow_character_sheet_hd.png",
       "caption": "workflow — character sheet (qwen-edit-2511)"
+    },
+    {
+      "id": "c_mu989jdonyh8p",
+      "kind": "image",
+      "src": "media/concept/workflow_flux2_klein_upscale_ttp_hd.png",
+      "caption": "workflow — upscaling (flux.2 klein · TTP 2×2 tiling)"
     }
   ],
   "removedMedia": [
@@ -92,7 +98,7 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789871532478,
+  "stamp": 1789873157724,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
