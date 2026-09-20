@@ -58,12 +58,11 @@ export default function Hero() {
       {/* circular video + dashed construction ring — the title-card motif */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute right-[3%] top-[12%] hidden lg:block"
-        style={{ width: 320, height: 320 }}
+        className="pointer-events-none absolute right-[3%] top-[12%] hidden aspect-square w-[clamp(340px,34vw,500px)] lg:block"
       >
         <div className="spin-slow absolute inset-0 rounded-full border border-dashed border-paper/20" />
         <div
-          className="k-scale absolute inset-[24%] overflow-hidden rounded-full bg-ink-600"
+          className="k-scale absolute inset-[5%] overflow-hidden rounded-full bg-ink-600"
           style={{ animationDelay: '250ms' }}
         >
           <video
