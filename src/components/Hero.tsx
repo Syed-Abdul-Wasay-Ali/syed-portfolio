@@ -1,14 +1,47 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import NodeGraph from './NodeGraph'
 import LinkedInIcon from './LinkedInIcon'
 import { LINKEDIN_URL, EMAIL, RESUME_URL } from '../data/social'
 import { useProjectsKept } from '../data/overrides'
 import { useT } from '../data/runtime'
 
+// hero disc playlist — all concept-ad videos, one by one, looping (square 780 encodes)
+const HERO_VIDEOS = [
+  'media/reel/hero-disc.mp4', // happydent white gum
+  'media/reel/hero-disc-lipgloss.mp4', // lip gloss concept ad
+  'media/reel/hero-disc-7up.mp4', // 7up concept ad
+  'media/reel/hero-disc-bedroom.mp4', // bedroom — blender via mcp vs seedance 2.5
+  'media/reel/hero-disc-neon.mp4', // neon chase — blender clay vs seedance 2.5
+]
+
 export default function Hero() {
   const titleRef = useRef<HTMLDivElement | null>(null)
   const t = useT()
   const kept = useProjectsKept()
+
+  // hero disc playlist — every concept-ad video glides through the circle, one after another, then loops
+  const [disc, setDisc] = useState(0)
+  const discVideos = useRef<(HTMLVideoElement | null)[]>([])
+  const nextDisc = useCallback(() => {
+    setDisc((i) => (i + 1) % HERO_VIDEOS.length)
+  }, [])
+
+  // exactly one disc video active: play the current, pause the rest (swaps cross-fade via CSS)
+  useEffect(() => {
+    discVideos.current.forEach((v, i) => {
+      if (!v) return
+      if (i === disc) {
+        try {
+          if (v.ended) v.currentTime = 0
+        } catch {
+          /* not seekable yet — play() restarts ended media anyway */
+        }
+        void v.play().catch(() => {})
+      } else {
+        v.pause()
+      }
+    })
+  }, [disc])
 
   // scroll push-in: the name scales toward the camera as you scroll (title-card move)
   useEffect(() => {
@@ -65,16 +98,25 @@ export default function Hero() {
           className="k-scale absolute inset-[5%] overflow-hidden rounded-full bg-ink-600"
           style={{ animationDelay: '250ms' }}
         >
-          <video
-            className="h-full w-full object-cover motion-reduce:hidden"
-            src="media/reel/hero-disc.mp4"
-            poster="media/reel/hero-disc-poster.jpg"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-          />
+          {HERO_VIDEOS.map((src, i) => (
+            <video
+              key={src}
+              ref={(el) => {
+                discVideos.current[i] = el
+              }}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out motion-reduce:hidden ${
+                i === disc ? 'opacity-100' : 'opacity-0'
+              }`}
+              src={src}
+              poster={i === 0 ? 'media/reel/hero-disc-poster.jpg' : undefined}
+              autoPlay={i === 0}
+              muted
+              playsInline
+              preload={i === disc || i === (disc + 1) % HERO_VIDEOS.length ? 'auto' : 'metadata'}
+              onEnded={nextDisc}
+              onError={i === disc ? nextDisc : undefined}
+            />
+          ))}
           <div className="disc absolute inset-0 hidden motion-reduce:block" />
         </div>
       </div>
