@@ -52,14 +52,16 @@ export default function WhatIBuild() {
         <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {ITEMS.map((it, i) => (
             <Reveal key={it.num} delay={i * 70} className="h-full">
-              <div className="panel h-full p-4">
-                <p className="font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
-                  {it.num}
-                </p>
-                <h3 className="mt-1.5 font-display text-base font-bold text-paper">
-                  {t(`whatibuild.${i + 1}.title`, it.title)}
-                </h3>
-                <p className="mt-1 text-[13px] leading-snug text-muted">
+              <div className="panel h-full p-3">
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono text-[11px] leading-none tracking-wideish text-greenReadable">
+                    {it.num}
+                  </span>
+                  <h3 className="font-display text-sm font-bold text-paper">
+                    {t(`whatibuild.${i + 1}.title`, it.title)}
+                  </h3>
+                </div>
+                <p className="mt-1 text-[12px] leading-snug text-muted">
                   {t(`whatibuild.${i + 1}.desc`, it.desc)}
                 </p>
               </div>
