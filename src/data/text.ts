@@ -153,10 +153,10 @@ export const UI_GROUPS: TextGroup[] = [
   },
   {
     id: 'concept',
-    label: 'Home — comfyui workflows',
+    label: 'Home — AI × E-commerce',
     fields: [
-      { k: 'concept.tag', label: 'eyebrow', def: '01 / product editing' },
-      { k: 'concept.title', label: 'title', def: 'Product editing, multi-angle & upscaling' },
+      { k: 'concept.tag', label: 'eyebrow', def: '01 / ai × e-commerce' },
+      { k: 'concept.title', label: 'title', def: 'AI × E-Commerce' },
       { k: 'concept.sub', label: 'intro', multi: true, def: 'The ComfyUI graphs behind the editing work — one reference in, controlled results out: angles, colorways, relight, upscaling. Click any image to inspect.' },
     ],
   },
