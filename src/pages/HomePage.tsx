@@ -53,9 +53,9 @@ export default function HomePage() {
         />
       ),
     },
-    { k: 'whatibuild', node: <WhatIBuild key="whatibuild" /> },
-    { k: 'showcase', node: <ShowcaseSection key="showcase" /> },
     { k: 'concept-images', node: <ConceptImagesSection key="concept-images" /> },
+    { k: 'showcase', node: <ShowcaseSection key="showcase" /> },
+    { k: 'whatibuild', node: <WhatIBuild key="whatibuild" /> },
     { k: 'workgrid', node: <WorkGrid key="workgrid" /> },
     { k: 'assets', node: <AssetFamily key="assets" /> },
     { k: 'capabilities', node: <Capabilities key="capabilities" /> },

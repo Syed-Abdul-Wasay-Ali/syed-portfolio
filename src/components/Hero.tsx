@@ -55,14 +55,29 @@ export default function Hero() {
       {/* soft light sweep */}
       <div aria-hidden="true" className="scanline" />
 
-      {/* red disc + dashed construction ring — the title-card motif */}
+      {/* circular video + dashed construction ring — the title-card motif */}
       <div
         aria-hidden="true"
-        className="spin-slow pointer-events-none absolute right-[3%] top-[12%] hidden lg:block"
+        className="pointer-events-none absolute right-[3%] top-[12%] hidden lg:block"
         style={{ width: 320, height: 320 }}
       >
-        <div className="absolute inset-0 rounded-full border border-dashed border-paper/20" />
-        <div className="disc k-scale absolute inset-[24%]" style={{ animationDelay: '250ms' }} />
+        <div className="spin-slow absolute inset-0 rounded-full border border-dashed border-paper/20" />
+        <div
+          className="k-scale absolute inset-[24%] overflow-hidden rounded-full bg-ink-600"
+          style={{ animationDelay: '250ms' }}
+        >
+          <video
+            className="h-full w-full object-cover motion-reduce:hidden"
+            src="media/reel/hero-disc.mp4"
+            poster="media/reel/hero-disc-poster.jpg"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+          />
+          <div className="disc absolute inset-0 hidden motion-reduce:block" />
+        </div>
       </div>
 
       {/* HUD corner brackets */}
