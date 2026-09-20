@@ -92,9 +92,21 @@
     "project:reference-controlled-imaging",
     "project:ecommerce-image-system"
   ],
-  "stamp": 1789866065338,
+  "stamp": 1789871532478,
   "removedProjects": [
     "commercial-creative-system",
     "mattress-hero-studio"
-  ]
+  ],
+  "additions": {
+    "showcase": [
+      {
+        "kind": "video",
+        "label": "lip gloss · concept ad",
+        "src": "media/added/showcase/amu97apbp-product-shot-concept-ad.mp4",
+        "tag": "concept-ad",
+        "note": "Product-shot beauty concept: model open, macro application, glossy finish.",
+        "poster": "media/added/showcase/amu97apbp-product-shot-concept-ad-poster.jpg"
+      }
+    ]
+  }
 }
