@@ -57,7 +57,7 @@ export default function Header() {
   }, [])
 
   return (
-    <header className="site-header fixed inset-x-0 top-0 z-40 border-b border-green/25 bg-ink-950/85 backdrop-blur">
+    <header className="site-header fixed inset-x-0 top-0 z-40 border-b border-green/30 bg-canvas/85 backdrop-blur">
       {/* magenta strip */}
       <div aria-hidden="true" className="header-strip absolute inset-x-0 top-0 h-[3px] bg-green" />
       <div className="container-site flex h-14 items-center justify-between">
@@ -147,7 +147,7 @@ export default function Header() {
       {open && (
         <nav
           id="mobile-nav"
-          className="border-t border-green/20 bg-ink-950/95 backdrop-blur md:hidden"
+          className="border-t border-green/20 bg-canvas/95 backdrop-blur md:hidden"
         >
           <div className="container-site flex flex-col py-3">
             {links.map((l) => (

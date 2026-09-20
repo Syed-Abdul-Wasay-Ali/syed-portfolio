@@ -266,7 +266,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
             className={`border px-2.5 py-1 font-mono text-[11px] uppercase tracking-wideish ${
               project.company === 'Ogilvy'
                 ? 'co-ogilvy border-[#ff3b4e]'
-                : 'co-cleandirty border-[#C9C2B6]'
+                : 'co-cleandirty border-[#6B6355]'
             }`}
           >
             {project.company}
@@ -343,7 +343,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
 
           <a
             href={`#/project/${nextProject.slug}`}
-            className="panel-dark card-lift group block p-5 hover:border-greenBright"
+            className="panel-dark card-lift group block p-5 hover:border-green"
           >
             <p className="font-mono text-[11px] uppercase tracking-wideish text-snow/60">
               {t('pui.next')}

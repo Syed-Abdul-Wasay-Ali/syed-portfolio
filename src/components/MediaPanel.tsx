@@ -27,9 +27,9 @@ export default function MediaPanel({
         <NodeGraph className="max-w-md opacity-95" animated={false} />
         <div className="flex items-center gap-3">
           {isVideo && (
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-green bg-ink-950">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-green bg-charcoal">
               <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
-                <path d="M3 1.5 L10 6 L3 10.5 Z" fill="#1F3A93" />
+                <path d="M3 1.5 L10 6 L3 10.5 Z" fill="#C8FF00" />
               </svg>
             </span>
           )}
@@ -48,7 +48,7 @@ export default function MediaPanel({
   if (yt) {
     return (
       <div
-        className={`media-asset relative aspect-video w-full overflow-hidden bg-ink-950 ${className}`}
+        className={`media-asset relative aspect-video w-full overflow-hidden bg-charcoal ${className}`}
       >
         <iframe
           src={`https://www.youtube.com/embed/${yt}?rel=0&modestbranding=1`}
@@ -67,7 +67,7 @@ export default function MediaPanel({
   if (ig) {
     return (
       <div
-        className={`media-asset relative mx-auto w-full max-w-[420px] overflow-hidden bg-ink-950 ${className}`}
+        className={`media-asset relative mx-auto w-full max-w-[420px] overflow-hidden bg-charcoal ${className}`}
         style={{ aspectRatio: '9 / 16' }}
       >
         <iframe
@@ -92,7 +92,7 @@ export default function MediaPanel({
         poster={item.poster}
         controls
         playsInline
-        className={`media-asset w-full bg-ink-950 ${className}`}
+        className={`media-asset w-full bg-charcoal ${className}`}
       />
     )
   }

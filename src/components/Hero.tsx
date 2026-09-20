@@ -43,6 +43,21 @@ export default function Hero() {
     })
   }, [disc])
 
+  // iOS low-power mode / autoplay policies can leave the muted disc paused —
+  // retry once on the first user gesture (no UI, silent).
+  useEffect(() => {
+    const retry = () => {
+      const v = discVideos.current[disc]
+      if (v && v.paused) void v.play().catch(() => {})
+    }
+    window.addEventListener('pointerdown', retry, { once: true, passive: true })
+    window.addEventListener('touchstart', retry, { once: true, passive: true })
+    return () => {
+      window.removeEventListener('pointerdown', retry)
+      window.removeEventListener('touchstart', retry)
+    }
+  }, [disc])
+
   // scroll push-in: the name scales toward the camera as you scroll (title-card move)
   useEffect(() => {
     const el = titleRef.current
@@ -82,44 +97,11 @@ export default function Hero() {
       <div aria-hidden="true" className="orb left-[-12%] top-[-25%] h-80 w-80 bg-green/10" />
       <div
         aria-hidden="true"
-        className="orb right-[-8%] top-[35%] h-96 w-96 bg-paper/[0.04]"
+        className="orb right-[-8%] top-[35%] h-96 w-96 bg-green/[0.07]"
         style={{ animationDelay: '2.6s' }}
       />
       {/* soft light sweep */}
       <div aria-hidden="true" className="scanline" />
-
-      {/* circular video + dashed construction ring — the title-card motif */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute right-[3%] top-[12%] hidden aspect-square w-[clamp(340px,34vw,500px)] lg:block"
-      >
-        <div className="spin-slow absolute inset-0 rounded-full border border-dashed border-paper/20" />
-        <div
-          className="k-scale absolute inset-[5%] overflow-hidden rounded-full bg-ink-600"
-          style={{ animationDelay: '250ms' }}
-        >
-          {HERO_VIDEOS.map((src, i) => (
-            <video
-              key={src}
-              ref={(el) => {
-                discVideos.current[i] = el
-              }}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out motion-reduce:hidden ${
-                i === disc ? 'opacity-100' : 'opacity-0'
-              }`}
-              src={src}
-              poster={i === 0 ? 'media/reel/hero-disc-poster.jpg' : undefined}
-              autoPlay={i === 0}
-              muted
-              playsInline
-              preload={i === disc || i === (disc + 1) % HERO_VIDEOS.length ? 'auto' : 'metadata'}
-              onEnded={nextDisc}
-              onError={i === disc ? nextDisc : undefined}
-            />
-          ))}
-          <div className="disc absolute inset-0 hidden motion-reduce:block" />
-        </div>
-      </div>
 
       {/* HUD corner brackets */}
       <div aria-hidden="true" className="corner corner-bl" />
@@ -242,6 +224,39 @@ export default function Hero() {
           </p>
         </div>
       </div>
+      {/* circular video + dashed construction ring — the title-card motif */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none relative mx-auto mt-10 aspect-square w-[min(78vw,340px)] lg:absolute lg:right-[3%] lg:top-[12%] lg:mx-0 lg:mt-0 lg:w-[clamp(340px,34vw,500px)]"
+      >
+        <div className="spin-slow absolute inset-0 rounded-full border border-dashed border-paper/20" />
+        <div
+          className="k-scale absolute inset-[5%] overflow-hidden rounded-full bg-ink-600"
+          style={{ animationDelay: '250ms' }}
+        >
+          {HERO_VIDEOS.map((src, i) => (
+            <video
+              key={src}
+              ref={(el) => {
+                discVideos.current[i] = el
+              }}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out motion-reduce:hidden ${
+                i === disc ? 'opacity-100' : 'opacity-0'
+              }`}
+              src={src}
+              poster={i === 0 ? 'media/reel/hero-disc-poster.jpg' : undefined}
+              autoPlay={i === 0}
+              muted
+              playsInline
+              preload={i === disc || i === (disc + 1) % HERO_VIDEOS.length ? 'auto' : 'metadata'}
+              onEnded={nextDisc}
+              onError={i === disc ? nextDisc : undefined}
+            />
+          ))}
+          <div className="disc absolute inset-0 hidden motion-reduce:block" />
+        </div>
+      </div>
+
     </section>
   )
 }

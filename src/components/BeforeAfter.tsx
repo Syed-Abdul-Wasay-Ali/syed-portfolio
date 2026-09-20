@@ -33,7 +33,7 @@ export default function BeforeAfter({
                   loading="lazy"
                   className="media-asset absolute inset-0 h-full w-full object-cover"
                 />
-                <span className="absolute left-2.5 top-2.5 bg-ink-950/90 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-paper">
+                <span className="absolute left-2.5 top-2.5 bg-charcoal/90 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-snow">
                   {tag}
                 </span>
               </div>

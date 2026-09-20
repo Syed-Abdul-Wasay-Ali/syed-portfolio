@@ -32,7 +32,7 @@ export interface WorkflowItem extends MediaItem {
 export const WORKFLOWS: WorkflowItem[] = [
   {
     id: 'wf3',
-    title: 'comfyui relight workflow · flux.2 klein',
+    title: 'Relight & composite — drop a subject into any scene · flux.2 klein',
     kind: 'video',
     poster: 'media/workflows/flux2-klein-relight-poster.jpg',
     label: 'comfyui relight workflow · screen recording + output (flux.2 klein)',
@@ -45,7 +45,7 @@ export const WORKFLOWS: WorkflowItem[] = [
   },
   {
     id: 'wf2',
-    title: 'comfyui image-edit workflow · qwen-image-edit 2511',
+    title: 'Instruction edit — multi-reference product edits · qwen edit 2511',
     kind: 'video',
     poster: 'media/workflows/qwen-image-edit-2511-poster.jpg',
     label: 'comfyui image-edit workflow · screen recording (qwen-image-edit 2511)',
@@ -54,7 +54,7 @@ export const WORKFLOWS: WorkflowItem[] = [
   },
   {
     id: 'wf1',
-    title: 'comfyui clothes-swap workflow · qwen-image-edit',
+    title: 'Lookbook generation — clothes swap on a reference · qwen edit',
     kind: 'video',
     poster: 'media/workflows/comfyui-clothes-swap-poster.jpg',
     label: 'comfyui clothes-swap workflow · screen recording + output',

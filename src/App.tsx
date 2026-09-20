@@ -48,7 +48,7 @@ export default function App() {
     <RuntimeProvider>
       <HoverPreviewProvider>
         <TitleSync />
-        <div className="min-h-screen bg-ink">
+        <div className="min-h-screen bg-canvas">
           <div>
             <Header />
             {isAdmin ? (

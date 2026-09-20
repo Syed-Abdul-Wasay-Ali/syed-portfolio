@@ -20,43 +20,43 @@
       "id": "c_mu81xvqfd0azs",
       "kind": "image",
       "src": "media/concept/workflow_concept_to_composite_hd.png",
-      "caption": "workflow — concept to composite (flux-2-klein-9b)"
+      "caption": "Concept to composite — start to final frame · flux.2 klein"
     },
     {
       "id": "c_mu84i4p3li8cf",
       "kind": "image",
       "src": "media/concept/workflow_qwen_2511_multiangle_hd.png",
-      "caption": "workflow — multi-angle camera control (qwen-edit-2511)"
+      "caption": "Multi-angle control — one reference, many angles · qwen edit 2511"
     },
     {
       "id": "c_mu85smno0zk1o",
       "kind": "image",
       "src": "media/concept/workflow_sofa_color_change_hd.png",
-      "caption": "workflow — sofa color change (qwen-edit-2511)"
+      "caption": "Colorway change — sofa edit in place · qwen edit 2511"
     },
     {
       "id": "c_mu8exngygx2jh",
       "kind": "image",
       "src": "media/concept/workflow_lighting_control_hd.png",
-      "caption": "workflow — lighting control (qwen-edit-2511 + lighting lora)"
+      "caption": "Lighting control — relight, same product · qwen edit 2511 + lighting LoRA"
     },
     {
       "id": "c_mu941iuy5hsg6",
       "kind": "image",
       "src": "media/concept/workflow_character_sheet_hd.png",
-      "caption": "workflow — character sheet (qwen-edit-2511)"
+      "caption": "Character sheet — one persona, every frame · qwen edit 2511"
     },
     {
       "id": "c_mu989jdonyh8p",
       "kind": "image",
       "src": "media/concept/workflow_flux2_klein_upscale_ttp_hd.png",
-      "caption": "workflow — upscaling (flux.2 klein · TTP 2×2 tiling)"
+      "caption": "2× tile upscale — resolution, not artifacts · flux.2 klein TTP"
     },
     {
       "id": "c_mu98wk1t7tfzq",
       "kind": "image",
       "src": "media/concept/workflow_flux2_klein_upscale_4k_hd.png",
-      "caption": "workflow — upscaling to 4K (flux.2 klein · TTP 2×2 tiling)"
+      "caption": "Upscale to 4K — low-res in, production out · flux.2 klein TTP"
     }
   ],
   "removedMedia": [

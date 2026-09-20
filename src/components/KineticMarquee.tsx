@@ -57,7 +57,7 @@ export default function KineticMarquee({
                   href={to}
                   tabIndex={decorative ? -1 : undefined}
                   title={label}
-                  className="mx-2 block shrink-0 bg-paper px-3 py-1.5 transition-transform duration-200 hover:scale-105"
+                  className="mx-2 block shrink-0 border border-ink-500 bg-white px-3 py-1.5 transition-transform duration-200 hover:scale-105"
                 >
                   <img
                     src={chip}
@@ -68,7 +68,7 @@ export default function KineticMarquee({
                   />
                 </a>
               ) : (
-                <span title={label} className="mx-2 block shrink-0 bg-paper px-3 py-1.5">
+                <span title={label} className="mx-2 block shrink-0 border border-ink-500 bg-white px-3 py-1.5">
                   <img
                     src={chip}
                     alt={label}
@@ -85,7 +85,7 @@ export default function KineticMarquee({
                 className={
                   red
                     ? 'whitespace-nowrap px-6 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-paper transition-colors hover:bg-paper hover:text-ink-950'
-                    : 'text-outline whitespace-nowrap px-8 font-display text-[clamp(2.2rem,5vw,4rem)] uppercase leading-none tracking-tight transition-colors hover:text-paper'
+                    : 'text-outline whitespace-nowrap px-8 font-display text-[clamp(2.2rem,5vw,4rem)] uppercase leading-none tracking-tight transition-colors hover:text-snow'
                 }
               >
                 {label}
@@ -122,7 +122,7 @@ export default function KineticMarquee({
   )
 
   return (
-    <div className={red ? 'marquee py-2' : 'marquee border-b border-ink-600 bg-ink-950 py-6'}>
+    <div className={red ? 'marquee py-2' : 'marquee border-b border-snow/10 bg-charcoal py-6'}>
       {twoRows ? (
         <div className="flex flex-col gap-2">
           {splitRows(items, 2).map((list, r) => track(list, r))}

@@ -4,41 +4,46 @@ export default {
   theme: {
     extend: {
       colors: {
-        // near-black inks — the canvas is a title card now
+        // Sept 2026 — warm light editorial theme: off-white canvas + charcoal
+        // + ONE electric lime. The ink scale now feeds LIGHT warm surfaces
+        // (cards / hairlines); dark moments live in `charcoal`.
         ink: {
-          DEFAULT: '#050505',
-          950: '#070706',
-          900: '#0C0C0B',
-          800: '#111110',
-          700: '#171716',
-          600: '#232320',
-          500: '#2C2C29',
-          400: '#34342F',
+          DEFAULT: '#111111',
+          950: '#E9E7DE',
+          900: '#E5E3D9',
+          800: '#E2DFD5',
+          700: '#EAE9E3',
+          600: '#D2CDBF',
+          500: '#C4BEB0',
+          400: '#D8D3C5',
         },
-        // canvas (pure black page)
-        canvas: '#050505',
-        mist: '#0A0A09',
-        // warm off-white text (paper cards)
-        snow: '#FAF8F3',
-        paper: '#F2EFE8',
-        muted: '#96918A',
-        // the one accent — deep navy (“green” slot keeps class names working)
+        // canvas (warm off-white page)
+        canvas: '#F5F4EF',
+        // subtle alt surface (slightly deeper warm)
+        mist: '#EFECE4',
+        // dark sections (footer, contact band, media chips/scrims)
+        charcoal: '#111111',
+        // warm light type on dark; paper = primary dark text on light
+        snow: '#F7F5ED',
+        paper: '#111111',
+        muted: '#66645F',
+        // the one accent — electric lime in the "green" slot (class names kept)
         green: {
-          DEFAULT: '#1F3A93',
-          bright: '#4C6FDE',
-          deep: '#0B1846',
+          DEFAULT: '#C8FF00',
+          bright: '#6E8E00',
+          deep: '#33420A',
         },
         // flat aliases used as `text-greenBright` / `text-greenDeep`
-        greenBright: '#4C6FDE',
-        greenDeep: '#0B1846',
-        // readable accent TEXT on the dark canvas (AA on ink-950..ink-700)
-        greenReadable: '#5F80E4',
-        // legacy hover slots — now warm neutrals (white hover / taupe metadata)
-        neonBlue: '#F2EFE8',
-        violet: '#B9AFA3',
-        slateAccent: '#B9AFA3',
-        // legacy hot-line slot — navy now
-        acid: '#1F3A93',
+        greenBright: '#6E8E00',
+        greenDeep: '#33420A',
+        // readable accent TEXT on light surfaces (AA on canvas/cards)
+        greenReadable: '#4E6B00',
+        // legacy hover slots — now dark/neutral on light
+        neonBlue: '#111111',
+        violet: '#8A8375',
+        slateAccent: '#665F52',
+        // legacy hot-line slot — lime now
+        acid: '#C8FF00',
       },
       fontFamily: {
         // Anton = ultra-condensed grotesque, the title-card face

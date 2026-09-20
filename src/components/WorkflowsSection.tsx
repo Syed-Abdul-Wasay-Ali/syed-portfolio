@@ -131,7 +131,7 @@ export default function WorkflowsSection() {
               >
                 <div className="relative border-b border-ink-600">
                   <MediaPanel item={item} className="aspect-[16/10] !object-cover" />
-                  <span className="absolute left-3 top-3 bg-ink-950/90 px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
+                  <span className="absolute left-3 top-3 bg-charcoal/90 px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-green">
                     {item.kind === 'video'
                       ? item.output
                         ? t('wf.badge.runOutput')
@@ -141,10 +141,10 @@ export default function WorkflowsSection() {
                   {item.output && (
                     <span
                       title={item.output.label ?? 'output'}
-                      className="absolute bottom-3 right-3 block h-14 w-14 overflow-hidden border border-snow/40 bg-ink-950 shadow-lg sm:h-16 sm:w-16"
+                      className="absolute bottom-3 right-3 block h-14 w-14 overflow-hidden border border-snow/40 bg-charcoal shadow-lg sm:h-16 sm:w-16"
                     >
                       <img src={item.output.src} alt="" className="h-full w-full object-cover" />
-                      <span className="absolute inset-x-0 bottom-0 bg-ink-950/85 text-center font-mono text-[10px] uppercase tracking-wideish text-greenReadable">
+                      <span className="absolute inset-x-0 bottom-0 bg-charcoal/85 text-center font-mono text-[10px] uppercase tracking-wideish text-green">
                         output
                       </span>
                     </span>

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html {
@@ -16,8 +16,8 @@ body {
 }
 
 ::selection {
-  background: rgba(31, 58, 147, 0.92);
-  color: #0B0B0B;
+  background: #C8FF00;
+  color: #111111;
 }
 
 @layer components {
@@ -30,7 +30,7 @@ body {
   }
 
   .eyebrow-green {
-    @apply font-mono text-[11px] uppercase tracking-wideish text-greenReadable;
+    @apply inline-block bg-green px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-charcoal;
   }
 
   .hairline {
@@ -41,18 +41,23 @@ body {
     @apply border border-ink-400 bg-ink-700;
   }
 
-  /* black structural card with red frame */
+  /* charcoal structural card with a lime frame (dark section) */
   .panel-dark {
-    @apply border border-green/45 bg-ink-950 text-snow;
+    @apply border border-green/45 bg-charcoal text-snow;
   }
 
   .btn-ghost {
-    @apply inline-flex items-center gap-2 border border-ink-500 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-paper transition-all duration-300 hover:border-greenBright hover:text-greenReadable;
+    @apply inline-flex items-center gap-2 border border-ink-500 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-paper transition-all duration-300 hover:border-green hover:bg-green hover:text-charcoal;
   }
 
-  /* filled red primary CTA — flips to paper on hover (polarity) */
+  /* outline button for dark sections (charcoal panels) */
+  .btn-ghost-dark {
+    @apply inline-flex items-center gap-2 border border-snow/30 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-all duration-300 hover:border-green hover:text-green;
+  }
+
+  /* filled lime primary CTA — flips to charcoal on hover (polarity) */
   .btn-green {
-    @apply inline-flex items-center gap-2 bg-green px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-all duration-300 hover:bg-paper hover:text-ink-950;
+    @apply inline-flex items-center gap-2 bg-green px-4 py-2 font-mono text-xs uppercase tracking-wideish text-charcoal transition-all duration-300 hover:bg-charcoal hover:text-green;
   }
 
   /* corporate company names — bold, brand-colored.
@@ -63,7 +68,7 @@ body {
     font-weight: 700;
   }
   .co-cleandirty {
-    color: #C9C2B6;
+    color: #6B6355;
     font-weight: 700;
   }
 }
@@ -142,13 +147,13 @@ body {
   bottom: -3px;
   height: 1px;
   width: 100%;
-  background: #5F80E4;
+  background: #C8FF00;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .glitch-link:hover {
-  color: #5F80E4;
+  color: #111111;
 }
 .glitch-link:hover::after {
   transform: scaleX(1);
@@ -181,10 +186,10 @@ body {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .card-lift:hover {
-  border-color: rgba(242, 239, 232, 0.5);
+  border-color: rgba(17, 17, 17, 0.35);
   box-shadow:
-    0 18px 44px rgba(0, 0, 0, 0.5),
-    0 0 0 1px rgba(31, 58, 147, 0.35);
+    0 18px 44px rgba(17, 17, 17, 0.10),
+    0 0 0 1px rgba(17, 17, 17, 0.06);
 }
 
 /* ---- red disc badge that pops in on hover (title-card motif) ---- */
@@ -201,7 +206,7 @@ body {
   width: 9px;
   height: 9px;
   border-radius: 9999px;
-  background: #1F3A93;
+  background: #C8FF00;
   transform: scale(0);
   transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 2;
@@ -222,7 +227,7 @@ body {
   left: 0;
   right: 0;
   height: 120px;
-  background: linear-gradient(180deg, transparent, rgba(242, 239, 232, 0.05), transparent);
+  background: linear-gradient(180deg, transparent, rgba(17, 17, 17, 0.03), transparent);
   animation: scan 9s linear infinite;
   pointer-events: none;
 }
@@ -246,24 +251,24 @@ body {
   will-change: transform;
 }
 .limbo-halo {
-  filter: drop-shadow(0 22px 28px rgba(0, 0, 0, 0.6))
-    drop-shadow(0 4px 18px rgba(31, 58, 147, 0.10));
+  filter: drop-shadow(0 22px 28px rgba(17, 17, 17, 0.18))
+    drop-shadow(0 4px 18px rgba(17, 17, 17, 0.06));
 }
 
 /* ---- brand tiles take their own accent on hover ---- */
 .brand-tile {
-  --brand: #1F3A93;
+  --brand: #C8FF00;
 }
 .brand-tile:hover {
   border-color: var(--brand) !important;
   box-shadow:
     0 0 0 1px var(--brand),
-    0 16px 40px rgba(0, 0, 0, 0.5);
+    0 16px 40px rgba(17, 17, 17, 0.15);
 }
 
 /* ---- header: solid navy progress + strip ---- */
 .header-progress {
-  background: #1F3A93;
+  background: #C8FF00;
 }
 
 /* ---- marquee bands (texture strips from the title cards) ---- */
@@ -302,7 +307,7 @@ body {
   inset: -80px;
   z-index: 60;
   pointer-events: none;
-  opacity: 0.05;
+  opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
   background-size: 240px 240px;
   animation: grain 1.4s steps(6) infinite;
@@ -320,7 +325,7 @@ body {
   inset: 0;
   z-index: 59;
   pointer-events: none;
-  background: radial-gradient(130% 100% at 50% 30%, transparent 55%, rgba(0, 0, 0, 0.5) 100%);
+  background: radial-gradient(130% 100% at 50% 30%, transparent 58%, rgba(17, 17, 17, 0.10) 100%);
 }
 
 /* ---- HUD corner brackets ---- */
@@ -328,7 +333,7 @@ body {
   position: absolute;
   width: 20px;
   height: 20px;
-  border: 0 solid rgba(242, 239, 232, 0.3);
+  border: 0 solid rgba(17, 17, 17, 0.25);
 }
 .corner-bl {
   left: 16px;
@@ -346,13 +351,13 @@ body {
 /* ---- red disc element ---- */
 .disc {
   border-radius: 9999px;
-  background: #1F3A93;
+  background: #C8FF00;
 }
 
 /* ---- ghosted outline type (resolves against black) ---- */
 .text-outline {
   color: transparent;
-  -webkit-text-stroke: 1px rgba(242, 239, 232, 0.28);
+  -webkit-text-stroke: 1px rgba(247, 245, 237, 0.34);
 }
 
 /* ------------------------------------------------------------------ */
@@ -385,11 +390,11 @@ body {
 /* glass hover: soft lift + slight red tint (visionOS panel feel) */
 .tilt-3d:hover,
 .car-item:hover {
-  border-color: rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(17, 17, 17, 0.25) !important;
   box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.6),
-    0 0 0 1px rgba(255, 255, 255, 0.07),
-    0 0 30px rgba(31, 58, 147, 0.14);
+    0 24px 60px rgba(17, 17, 17, 0.14),
+    0 0 0 1px rgba(17, 17, 17, 0.04),
+    0 0 30px rgba(78, 107, 0, 0.10);
 }
 
 /* moving light sheen that follows the pointer */
@@ -401,7 +406,7 @@ body {
   pointer-events: none;
   background: radial-gradient(
     360px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 255, 255, 0.12),
+    rgba(17, 17, 17, 0.05),
     transparent 55%
   );
   opacity: 0;
@@ -476,7 +481,7 @@ body {
 /* Focus visibility */
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid #1F3A93;
+  outline: 2px solid #111111;
   outline-offset: 2px;
 }
 

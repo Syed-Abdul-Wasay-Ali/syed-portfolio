@@ -52,7 +52,7 @@ export default function Lightbox({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex animate-fadeIn flex-col bg-ink-950/97"
+      className="fixed inset-0 z-50 flex animate-fadeIn flex-col bg-charcoal/97"
       role="dialog"
       aria-modal="true"
       aria-label={item.label ?? 'Media viewer'}
@@ -69,14 +69,14 @@ export default function Lightbox({
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
+              className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-green hover:text-green"
             >
               {item.hrefLabel ?? 'open original ↗'}
             </a>
           )}
           <button
             onClick={(e) => { e.stopPropagation(); onClose() }}
-            className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
+            className="border border-snow/30 px-3 py-1 font-mono text-[11px] text-snow transition-colors hover:border-green hover:text-green"
           >
             close ✕
           </button>
@@ -115,14 +115,14 @@ export default function Lightbox({
       <div className="flex items-center justify-between px-5 py-3">
         <button
           onClick={(e) => { e.stopPropagation(); prev() }}
-          className="border border-snow/30 px-4 py-1.5 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
+          className="border border-snow/30 px-4 py-1.5 font-mono text-[11px] text-snow transition-colors hover:border-green hover:text-green"
         >
           ← prev
         </button>
         <span className="font-mono text-[11px] text-snow/60">arrow keys to browse</span>
         <button
           onClick={(e) => { e.stopPropagation(); next() }}
-          className="border border-snow/30 px-4 py-1.5 font-mono text-[11px] text-snow transition-colors hover:border-greenBright hover:text-greenReadable"
+          className="border border-snow/30 px-4 py-1.5 font-mono text-[11px] text-snow transition-colors hover:border-green hover:text-green"
         >
           next →
         </button>

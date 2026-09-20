@@ -79,11 +79,11 @@ export function HoverPreviewProvider({ children }: { children: ReactNode }) {
       {children}
       {item && (
         <div
-          className="hover-pop pointer-events-none fixed z-50 w-[min(420px,calc(100vw-24px))] overflow-hidden rounded-lg border border-ink-500 bg-ink-950/95 shadow-[0_24px_70px_rgba(0,0,0,0.65)] backdrop-blur"
+          className="hover-pop pointer-events-none fixed z-50 w-[min(420px,calc(100vw-24px))] overflow-hidden rounded-lg border border-snow/20 bg-charcoal/95 shadow-[0_24px_70px_rgba(0,0,0,0.65)] backdrop-blur"
           style={{ left: pos.left, top: pos.top }}
           aria-hidden="true"
         >
-          <div className="relative aspect-video overflow-hidden bg-ink-900">
+          <div className="relative aspect-video overflow-hidden bg-charcoal">
             {isVideo(item.media) && item.media?.src ? (
               <video
                 src={item.media.src}
@@ -102,7 +102,7 @@ export function HoverPreviewProvider({ children }: { children: ReactNode }) {
               </div>
             )}
             {item.badge && (
-              <span className="absolute left-3 top-3 bg-ink-950/90 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-greenReadable">
+              <span className="absolute left-3 top-3 bg-charcoal/90 px-2 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-green">
                 {item.badge}
               </span>
             )}

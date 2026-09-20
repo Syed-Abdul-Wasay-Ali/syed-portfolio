@@ -34,7 +34,7 @@ export default function EcomConcept() {
   return (
     <div>
       <div className="mb-5 flex flex-wrap items-center gap-3">
-        <span className="bg-green px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-snow">
+        <span className="bg-green px-2 py-1 font-mono text-[11px] uppercase tracking-wideish text-charcoal">
           {t('ecom.badge')}
         </span>
         <p className="font-mono text-[11px] uppercase tracking-wideish text-muted">
@@ -115,7 +115,7 @@ export default function EcomConcept() {
         {/* mobile product page */}
         <div className="mx-auto w-full max-w-[280px]">
           <div className="rounded-[20px] border border-ink-600 bg-ink-900 p-2">
-            <div className="overflow-hidden rounded-[13px] border border-ink-700 bg-ink-950">
+            <div className="overflow-hidden rounded-[13px] border border-ink-700 bg-charcoal">
               <div className="flex items-center justify-between px-3 py-1.5">
                 <span className="h-1.5 w-8 rounded-full bg-ink-700" />
                 <span className="h-1.5 w-3 rounded-full bg-ink-700" />
