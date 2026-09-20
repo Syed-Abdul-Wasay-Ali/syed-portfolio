@@ -7,7 +7,7 @@ import { useRuntime, useT } from '../data/runtime'
 // Nav order mirrors the home page section order (concept images first, brands last).
 // `section` maps to the home section key used by the admin's section manager.
 const LINKS = [
-  { href: '#concept-images', section: 'concept-images', labelKey: 'nav.concepts', label: 'Concepts' },
+  { href: '#concept-images', section: 'concept-images', labelKey: 'nav.concepts', label: 'Editing' },
   { href: '#work', section: 'workgrid', labelKey: 'nav.work', label: 'Work' },
   { href: '#showcase', section: 'showcase', labelKey: 'nav.showcase', label: 'Showcase' },
   { href: '#capabilities', section: 'capabilities', labelKey: 'nav.systems', label: 'Systems' },
