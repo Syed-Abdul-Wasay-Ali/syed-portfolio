@@ -63,7 +63,7 @@ export const UI_GROUPS: TextGroup[] = [
     fields: [
       { k: 'header.name', label: 'wordmark', def: 'SYED ABDUL WASAY ALI' },
       { k: 'header.tagline', label: 'wordmark tagline', def: 'ai creative · image specialist' },
-      { k: 'nav.concepts', label: 'nav — concepts', def: 'Concepts' },
+      { k: 'nav.concepts', label: 'nav — editing', def: 'Editing' },
       { k: 'nav.work', label: 'nav — work', def: 'Work' },
       { k: 'nav.showcase', label: 'nav — showcase', def: 'Showcase' },
       { k: 'nav.systems', label: 'nav — systems', def: 'Systems' },
@@ -153,11 +153,11 @@ export const UI_GROUPS: TextGroup[] = [
   },
   {
     id: 'concept',
-    label: 'Home — concept images',
+    label: 'Home — comfyui workflows',
     fields: [
-      { k: 'concept.tag', label: 'eyebrow', def: '02 / concept images' },
-      { k: 'concept.title', label: 'title', def: 'Concept images' },
-      { k: 'concept.sub', label: 'intro', multi: true, def: 'Standalone image work — AI-made concept frames and studies. Click any image to inspect.' },
+      { k: 'concept.tag', label: 'eyebrow', def: '02 / comfyui workflows' },
+      { k: 'concept.title', label: 'title', def: 'ComfyUI image editing workflows' },
+      { k: 'concept.sub', label: 'intro', multi: true, def: 'ComfyUI workflow breakdowns — the real graphs, models and settings behind the image editing work. Click any image to inspect.' },
     ],
   },
   {

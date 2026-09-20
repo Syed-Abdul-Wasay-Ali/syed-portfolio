@@ -1521,9 +1521,9 @@ function ConceptTab() {
   return (
     <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,380px)_1fr]">
       <div className="rounded-md border border-ink-600 bg-ink-800 p-5">
-        <p className="eyebrow-green">add concept images</p>
+        <p className="eyebrow-green">add workflow images</p>
         <p className="mt-2 font-mono text-[12px] text-muted">
-          uploads land in the concept images band on the home page.
+          uploads land in the comfyui workflows band on the home page.
         </p>
         <label className="mt-4 block font-mono text-[11px] uppercase tracking-wideish text-slateAccent">
           caption (optional, applies to this batch)
@@ -1531,7 +1531,7 @@ function ConceptTab() {
             value={cCaption}
             onChange={(e) => setCCaption(e.target.value)}
             className="mt-1.5 w-full rounded-md border border-ink-600 bg-ink-900 px-3 py-2 font-mono text-[13px] text-paper outline-none transition-colors focus:border-green"
-            placeholder="e.g. concept frame 01"
+            placeholder="e.g. workflow graphic 01"
           />
         </label>
         <div className="mt-3">
@@ -1627,7 +1627,7 @@ function ConceptTab() {
           ))}
           {cItems.length === 0 && (
             <p className="col-span-full font-mono text-[12px] text-muted">
-              no concept images yet — upload some on the left.
+              no workflow images yet — upload some on the left.
             </p>
           )}
         </div>
@@ -1821,7 +1821,7 @@ export default function AdminPage() {
     { id: 'words', label: 'words' },
     { id: 'pictures', label: 'pictures' },
     { id: 'sections', label: 'sections' },
-    { id: 'concept', label: 'concept images' },
+    { id: 'concept', label: 'comfyui workflows' },
   ]
 
   return (
