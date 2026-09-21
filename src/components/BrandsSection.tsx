@@ -10,7 +10,7 @@ import { useHoverPreview } from './HoverPreview'
 //
 // Order + clickability follow the media: brands with uploaded content
 // (static data or admin uploads) come first and open their brand page;
-// brands without media stay visible as static logos — no dead-end links.
+// brands without media stay visible as static logos, no dead-end links.
 export default function BrandsSection({ compact = false }: { compact?: boolean }) {
   const { show, hide } = useHoverPreview()
   const { content } = useRuntime()
@@ -108,7 +108,7 @@ export default function BrandsSection({ compact = false }: { compact?: boolean }
                     {body}
                   </a>
                 ) : (
-                  // no media uploaded yet — same tile, not clickable, no hover theatre
+                  // no media uploaded yet, same tile, not clickable, no hover theatre
                   <div
                     className="panel relative z-[1] block overflow-hidden"
                     style={{ ['--brand' as never]: b.accent }}

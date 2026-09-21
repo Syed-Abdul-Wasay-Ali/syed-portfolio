@@ -1,19 +1,19 @@
 // ---------------------------------------------------------------------------
-// gen-ats-text.mjs — build-time generator for the portfolio's TEXT layer.
+// gen-ats-text.mjs, build-time generator for the portfolio's TEXT layer.
 //
-// WHY: the site is a React SPA — the served index.html has an empty #root,
+// WHY: the site is a React SPA, the served index.html has an empty #root,
 // so anything that doesn't execute JavaScript (ATS systems, scrapers,
 // preview bots, JS-disabled browsers) sees NO content at all. This script
 // renders the portfolio's real content to plain semantic HTML and embeds it
 // into index.html between the ATS-TEXT markers, inside <section
 // id="portfolio-text">. That block is hidden the moment JS runs
-// (html.js #portfolio-text{display:none}) and visible to everyone else —
+// (html.js #portfolio-text{display:none}) and visible to everyone else,
 // no flash for normal visitors, full text for machines.
 //
 // Runs automatically on every `npm run build` via the "prebuild" script,
 // so it always matches the compiled site data + public/content.json.
 //
-// DO NOT hand-edit the generated block in index.html — it is replaced on
+// DO NOT hand-edit the generated block in index.html, it is replaced on
 // every build. Edit the source data (src/data/*) or this script instead.
 // ---------------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ let content = {}
 try {
   content = JSON.parse(fs.readFileSync(CONTENT, 'utf8'))
 } catch {
-  /* no runtime file — compiled defaults still apply */
+  /* no runtime file, compiled defaults still apply */
 }
 const texts = content.texts || {}
 const removedSet = new Set([...(content.removedMedia || []), ...(content.removedProjects || [])])
@@ -117,7 +117,7 @@ const p = (s) => out.push(s)
 p('<section id="portfolio-text" aria-label="Text version of this portfolio">')
 p(`<h1>${esc(T('site.title'))}</h1>`)
 p(
-  `<p>${esc(T('header.name'))} — ${esc(T('header.tagline'))}. Text version of the interactive portfolio (images &amp; video). Full site: <a href="${esc(SITE_URL)}">${esc(SITE_URL)}</a></p>`
+  `<p>${esc(T('header.name'))}, ${esc(T('header.tagline'))}. Text version of the interactive portfolio (images &amp; video). Full site: <a href="${esc(SITE_URL)}">${esc(SITE_URL)}</a></p>`
 )
 p(
   `<p>${esc(T('hero.introLead'))} Ogilvy ${esc(T('hero.introMid'))} cleanDirty.ai${esc(T('hero.introTail'))}</p>`
@@ -148,7 +148,7 @@ for (let i = 1; i <= 6; i++) {
 if (jobs.length) {
   p(`<h2>${esc(T('about.exp'))}</h2>`)
   for (const j of jobs) {
-    p(`<h3>${esc(j.role)} — ${esc(j.org)}</h3>`)
+    p(`<h3>${esc(j.role)}, ${esc(j.org)}</h3>`)
     p(`<p class="pt-meta">${esc(j.location)} ${esc(j.dates)}</p>`)
     if (j.note) p(`<p>${esc(j.note)}</p>`)
     if (j.bullets.length) p(`<ul>${j.bullets.map((b) => `<li>${esc(b)}</li>`).join('')}</ul>`)
@@ -179,7 +179,7 @@ for (let i = 1; i <= 8; i++) {
 if (solve.length) {
   p(`<h2>${esc(T('whatibuild.title'))}</h2>`)
   p(`<p>${esc(T('whatibuild.sub'))}</p><ul>`)
-  for (const s of solve) p(`<li><strong>${esc(s.title)}</strong> — ${esc(s.desc)}</li>`)
+  for (const s of solve) p(`<li><strong>${esc(s.title)}</strong>, ${esc(s.desc)}</li>`)
   p('</ul>')
 }
 
@@ -193,13 +193,13 @@ for (let i = 1; i <= 8; i++) {
 if (craft.length) {
   p(`<h2>${esc(T('craft.title'))}</h2>`)
   p(`<p>${esc(T('craft.sub'))}</p><ul>`)
-  for (const c of craft) p(`<li><strong>${esc(c.term)}</strong> — ${esc(c.line)}</li>`)
+  for (const c of craft) p(`<li><strong>${esc(c.term)}</strong>, ${esc(c.line)}</li>`)
   p('</ul>')
 }
 
 // case studies
 const kept = D.projectsByDate.filter((pr) => !removedProjects.has(pr.slug))
-p(`<h2>Selected work — case studies (${kept.length})</h2>`)
+p(`<h2>Selected work, case studies (${kept.length})</h2>`)
 for (const pr of kept) {
   p(`<h3>${esc(pr.title)}</h3>`)
   const meta = [pr.role, pr.company, pr.year, pr.status].filter(Boolean).join(' · ')
@@ -221,12 +221,12 @@ for (const pr of kept) {
   if (pr.campaign) p(`<p class="pt-meta">Campaign: <a href="${esc(pr.campaign.url)}">${esc(pr.campaign.label)}</a></p>`)
 }
 
-// concept images (home band) — captions from runtime content
+// concept images (home band), captions from runtime content
 const concept = Array.isArray(content.conceptImages) ? content.conceptImages : []
 const mainCaps = concept.filter((c) => c.group !== 'photos' && c.caption)
 const photoCaps = concept.filter((c) => c.group === 'photos' && c.caption)
 if (mainCaps.length || photoCaps.length) {
-  p('<h2>Concept images — AI × e-commerce</h2>')
+  p('<h2>Concept images, AI × e-commerce</h2>')
   if (mainCaps.length) p(`<ul>${mainCaps.map((c) => `<li>${esc(c.caption)}</li>`).join('')}</ul>`)
   if (photoCaps.length) {
     p('<h3>AI Product Photoshoot Images</h3>')
@@ -240,7 +240,7 @@ if (show.length) {
   p(`<h2>${esc(T('showcase.title'))}</h2>`)
   p(`<p>${esc(T('showcase.sub'))}</p><ul>`)
   for (const it of show) {
-    const line = [it.title || it.label, it.note].filter(Boolean).join(' — ')
+    const line = [it.title || it.label, it.note].filter(Boolean).join(', ')
     if (line) p(`<li>${esc(line)}</li>`)
   }
   p('</ul>')
@@ -250,20 +250,20 @@ if (show.length) {
 if (D.WORKFLOWS.length) {
   p('<h2>ComfyUI workflows</h2><ul>')
   for (const wf of D.WORKFLOWS) {
-    const line = [wf.title, wf.note].filter(Boolean).join(' — ')
+    const line = [wf.title, wf.note].filter(Boolean).join(', ')
     const outNote = wf.output?.label ? ` (output: ${wf.output.label})` : ''
     p(`<li>${esc(line + outNote)}</li>`)
   }
   p('</ul>')
 }
 
-// brands — all names (mirrors the site's brand ticker); notes only where media exists
+// brands, all names (mirrors the site's brand ticker); notes only where media exists
 if (D.BRANDS.length) {
   p(`<h2>${esc(T('brandssec.title'))}</h2>`)
   p(`<p>${esc(T('brandssec.sub').replace('{n}', String(D.BRANDS.length)))}</p><ul>`)
   for (const b of D.BRANDS) {
     const has = (b.images?.length || 0) + (b.animatics?.length || 0) + (b.films?.length || 0) > 0 || (b.projects?.length || 0) > 0
-    p(`<li>${esc(b.name)}${has && b.note ? ' — ' + esc(b.note) : ''}</li>`)
+    p(`<li>${esc(b.name)}${has && b.note ? ', ' + esc(b.note) : ''}</li>`)
   }
   p('</ul>')
 }
@@ -284,7 +284,7 @@ const src = fs.readFileSync(INDEX, 'utf8')
 const i = src.indexOf(START)
 const j = src.indexOf(END)
 if (i < 0 || j < 0) {
-  console.error('[gen-ats-text] markers ' + START + ' / ' + END + ' not found in index.html — aborting')
+  console.error('[gen-ats-text] markers ' + START + ' / ' + END + ' not found in index.html, aborting')
   process.exit(1)
 }
 const next = src.slice(0, i + START.length) + '\n' + fragment + '\n    ' + src.slice(j)
@@ -292,7 +292,7 @@ if (next !== src) fs.writeFileSync(INDEX, next)
 
 const words = fragment.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length
 console.log(
-  `[gen-ats-text] text layer: ${(fragment.length / 1024).toFixed(1)} KB, ~${words} words — ` +
+  `[gen-ats-text] text layer: ${(fragment.length / 1024).toFixed(1)} KB, ~${words} words, ` +
     `${kept.length} case studies, ${concept.length} concept captions, ${show.length} showcase, ` +
     `${D.WORKFLOWS.length} workflows, ${D.BRANDS.length} brands`
 )

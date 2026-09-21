@@ -31,7 +31,7 @@ function mix(hex: string, other: string, t: number) {
   return `rgb(${m(r1, r2)}, ${m(g1, g2)}, ${m(b1, b2)})`
 }
 
-// FULL brand skin: page background, text, header, footer, lightbox — everything
+// FULL brand skin: page background, text, header, footer, lightbox, everything
 // is derived from the brand's accent color so the page reads AS the brand.
 function BrandSkin({ brand }: { brand: Brand }) {
   const c = brand.accent
@@ -302,7 +302,7 @@ export default function BrandPage({ slug }: { slug: string }) {
   const hasProjects = brandProjects.length > 0
 
   // the brand story belongs to ONE project only (the FIRST entry in the
-  // slug list — the original one, e.g. Cadbury Silk's story) — not every
+  // slug list, the original one, e.g. Cadbury Silk's story), not every
   // card on the page. New slugs are appended, so never take [length-1].
   const storyOwner = brand.projects?.[0]
 
@@ -391,7 +391,7 @@ export default function BrandPage({ slug }: { slug: string }) {
     <main className="brand-page pt-14">
       <BrandSkin brand={brand} />
 
-      {/* Brand header — washed in the brand color */}
+      {/* Brand header, washed in the brand color */}
       <div className="brand-wash border-b border-ink-600 pb-8 pt-10">
         <div className="container-site">
           <a

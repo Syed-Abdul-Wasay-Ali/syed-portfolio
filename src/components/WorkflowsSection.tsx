@@ -6,7 +6,7 @@ import MediaPanel from './MediaPanel'
 import Lightbox from './Lightbox'
 import Reveal from './Reveal'
 
-// The production route, stage by stage — then the stack that runs it, grouped
+// The production route, stage by stage, then the stack that runs it, grouped
 // by what each layer enables. Screen recordings of real runs sit underneath.
 const PIPELINE = [
   'reference images',
@@ -23,7 +23,7 @@ const PIPELINE = [
 const STACK = [
   {
     label: 'generation',
-    enables: 'photoreal bases and range — open-source first, closed-source when the brief demands it.',
+    enables: 'photoreal bases and range, open-source first, closed-source when the brief demands it.',
     items: ['Midjourney', 'Stable Diffusion (SDXL / Illustrious)', 'FLUX · Klein', 'Freepik AI', 'Leonardo AI', 'Krea 2'],
   },
   {
@@ -33,7 +33,7 @@ const STACK = [
   },
   {
     label: 'video',
-    enables: 'motion when the brief needs it — stills that become spots.',
+    enables: 'motion when the brief needs it, stills that become spots.',
     items: ['Runway', 'Kling', 'Dream Machine', 'LTX / Wan', 'MiniMax H3 · Seedance 2.5'],
   },
   {
@@ -49,7 +49,7 @@ export default function WorkflowsSection() {
   const tl = useTL()
   const [lightbox, setLightbox] = useState<number | null>(null)
 
-  // Renders nothing until there is real media — no empty grids.
+  // Renders nothing until there is real media, no empty grids.
   if (items.length === 0) return null
 
   const active = lightbox !== null ? items[lightbox] : null

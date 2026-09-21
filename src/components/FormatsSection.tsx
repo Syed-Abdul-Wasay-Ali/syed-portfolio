@@ -2,7 +2,7 @@ import Reveal from './Reveal'
 
 // Format grid (same master across 16:9 / 4:5 / 1:1 / 9:16) + placement row
 // (website hero, product page, social, paid ad, mobile) for the commercial
-// system case study. Frames are minimal CSS mockups — no fake chrome beyond
+// system case study. Frames are minimal CSS mockups, no fake chrome beyond
 // the bare layout idea.
 export interface FormatTile {
   label: string
@@ -29,7 +29,7 @@ export default function FormatsSection({
                 <div className={`relative ${f.box} overflow-hidden border-b border-ink-600`}>
                   <img
                     src={f.src}
-                    alt={`${f.label} — ${f.ratio}`}
+                    alt={`${f.label}, ${f.ratio}`}
                     loading="lazy"
                     className="media-asset absolute inset-0 h-full w-full object-cover"
                   />

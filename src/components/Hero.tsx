@@ -5,13 +5,13 @@ import { LINKEDIN_URL, EMAIL, RESUME_URL } from '../data/social'
 import { useProjectsKept } from '../data/overrides'
 import { useT } from '../data/runtime'
 
-// hero disc playlist — all concept-ad videos, one by one, looping (square 780 encodes)
+// hero disc playlist, all concept-ad videos, one by one, looping (square 780 encodes)
 const HERO_VIDEOS = [
   'media/reel/hero-disc.mp4', // happydent white gum
   'media/reel/hero-disc-lipgloss.mp4', // lip gloss concept ad
   'media/reel/hero-disc-7up.mp4', // 7up concept ad
-  'media/reel/hero-disc-bedroom.mp4', // bedroom — blender via mcp vs seedance 2.5
-  'media/reel/hero-disc-neon.mp4', // neon chase — blender clay vs seedance 2.5
+  'media/reel/hero-disc-bedroom.mp4', // bedroom, blender via mcp vs seedance 2.5
+  'media/reel/hero-disc-neon.mp4', // neon chase, blender clay vs seedance 2.5
 ]
 
 export default function Hero() {
@@ -19,7 +19,7 @@ export default function Hero() {
   const t = useT()
   const kept = useProjectsKept()
 
-  // hero disc playlist — every concept-ad video glides through the circle, one after another, then loops
+  // hero disc playlist, every concept-ad video glides through the circle, one after another, then loops
   const [disc, setDisc] = useState(0)
   const discVideos = useRef<(HTMLVideoElement | null)[]>([])
   const nextDisc = useCallback(() => {
@@ -34,7 +34,7 @@ export default function Hero() {
         try {
           if (v.ended) v.currentTime = 0
         } catch {
-          /* not seekable yet — play() restarts ended media anyway */
+          /* not seekable yet, play() restarts ended media anyway */
         }
         void v.play().catch(() => {})
       } else {
@@ -43,7 +43,7 @@ export default function Hero() {
     })
   }, [disc])
 
-  // iOS low-power mode / autoplay policies can leave the muted disc paused —
+  // iOS low-power mode / autoplay policies can leave the muted disc paused,
   // retry once on the first user gesture (no UI, silent).
   useEffect(() => {
     const retry = () => {
@@ -148,7 +148,7 @@ export default function Hero() {
             {t('hero.introTail')}
           </p>
 
-          {/* log line — the site's signature flourish */}
+          {/* log line, the site's signature flourish */}
           <p
             className="k-fade mt-5 font-mono text-xs text-muted"
             style={{ animationDelay: '480ms' }}
@@ -224,7 +224,7 @@ export default function Hero() {
           </p>
         </div>
       </div>
-      {/* circular video + dashed construction ring — the title-card motif */}
+      {/* circular video + dashed construction ring, the title-card motif */}
       <div
         aria-hidden="true"
         className="pointer-events-none relative mx-auto mt-10 aspect-square w-[min(78vw,340px)] lg:absolute lg:right-[3%] lg:top-[12%] lg:mx-0 lg:mt-0 lg:w-[clamp(340px,34vw,500px)]"

@@ -1,7 +1,7 @@
 import Reveal from './Reveal'
 import { useRuntime, useT } from '../data/runtime'
 
-// "One product, multiple production-ready assets" — one system, seven
+// "One product, multiple production-ready assets", one system, seven
 // deliverables, shown at their real aspect ratios so the format thinking is
 // visible at a glance. Links into the commercial-system case study.
 const ASSETS = [
@@ -50,7 +50,7 @@ export default function AssetFamily() {
                 <div className={`relative w-full overflow-hidden rounded-sm border border-ink-600 ${a.cls.split(' ')[0]}`}>
                   <img
                     src={a.src}
-                    alt={`${a.label} — ${a.ratio}`}
+                    alt={`${a.label}, ${a.ratio}`}
                     loading="lazy"
                     className="media-asset absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                   />

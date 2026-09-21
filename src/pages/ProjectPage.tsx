@@ -59,7 +59,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
 
   const allMedia = project.results
   const hero: (typeof allMedia)[number] | undefined = project.heroSrc
-    ? { kind: 'image', src: project.heroSrc, label: `${project.title} — final frame` }
+    ? { kind: 'image', src: project.heroSrc, label: `${project.title}, final frame` }
     : project.results.find((m) => m.kind === 'video') ?? allMedia[0]
 
   const kept = projectsKept(content)
@@ -295,7 +295,7 @@ export default function ProjectPage({ slug }: { slug: string }) {
           <MediaPanel item={hero} className="max-h-[70vh]" />
         ) : (
           <div className="node-grid flex min-h-[280px] flex-col items-center justify-center gap-5 py-10">
-            <p className="eyebrow">fig. — the production route</p>
+            <p className="eyebrow">fig., the production route</p>
             <NodeGraph />
           </div>
         )}

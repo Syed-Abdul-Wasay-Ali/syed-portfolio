@@ -22,7 +22,7 @@ import { pk, bk, sck, wfk, collKey } from './text'
 type T = Record<string, string | string[]> | undefined
 
 // ---------------------------------------------------------------------------
-// option() — nullable field override: undefined (no override) keeps the
+// option(), nullable field override: undefined (no override) keeps the
 // compiled value (possibly undefined); a string override wins even when ''.
 // ---------------------------------------------------------------------------
 const opt = (texts: T, key: string, cur: string | undefined): string | undefined => {
@@ -240,7 +240,7 @@ export function ovWorkflows(content: RunContent | null, items: WorkflowItem[]): 
 }
 
 // ---------------------------------------------------------------------------
-// Case-study level removal — whole projects taken off the site (overlay only:
+// Case-study level removal, whole projects taken off the site (overlay only:
 // projects.ts keeps every entry, so nothing is ever lost and any study can
 // come back with one click). Two stores are honoured so the panel works on
 // every server build: content.removedProjects (canonical) and removedMedia

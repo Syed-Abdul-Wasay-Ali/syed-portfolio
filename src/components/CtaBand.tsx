@@ -2,7 +2,7 @@ import LinkedInIcon from './LinkedInIcon'
 import { LINKEDIN_URL, EMAIL } from '../data/social'
 import { useT } from '../data/runtime'
 
-// Contact close: one clear ask before the footer — the dark statement panel.
+// Contact close: one clear ask before the footer, the dark statement panel.
 export default function CtaBand() {
   const t = useT()
   const linkedinUrl = t('social.linkedin', LINKEDIN_URL)

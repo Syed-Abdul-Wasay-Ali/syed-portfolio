@@ -1,4 +1,4 @@
-// Mono metadata line — the "workflow header" of a project.
+// Mono metadata line, the "workflow header" of a project.
 // Renders like:  base minimax h3 · route ref2v · sampler dpmpp_sde_gpu
 
 export type Spec = { label: string; value: string }

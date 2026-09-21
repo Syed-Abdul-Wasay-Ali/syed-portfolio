@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Runtime content — the live, editable layer on top of the compiled data.
+// Runtime content, the live, editable layer on top of the compiled data.
 // The admin server (admin-server.mjs) serves content.json; the app fetches it
 // relative to the page so it works locally AND on gh-pages (where the file is
 // simply the last-published snapshot).
@@ -9,12 +9,12 @@
 //                     uploaded items are deleted outright and leave only uploads)
 //   pageSections    : site sections removed from the home page (kept for back-compat;
 //                     sectionOrder supersedes it when present)
-//   texts           : every editable word on the site — keyed strings (and string
+//   texts           : every editable word on the site, keyed strings (and string
 //                     arrays for list fields). t()/tx() resolve override → fallback
 //                     → registry default (src/data/text.ts)
 //   removedMedia    : media srcs hidden everywhere they render (any page)
 //   removedProjects : whole case studies hidden everywhere (home grid, their
-//                     page, brand listings) — overlay only, projects.ts intact
+//                     page, brand listings), overlay only, projects.ts intact
 //   additions       : media added through the admin, per collection key
 //                     ("project:<slug>:results", "showcase", "workflows")
 //   sectionOrder    : visible sections + their order per page ("home" | "brand" | "project")
@@ -67,7 +67,7 @@ export function RuntimeProvider({ children }: { children: ReactNode }) {
       const r = await fetch('content.json', { cache: 'no-store' })
       if (r.ok) setContent((await r.json()) as RunContent)
     } catch {
-      // no runtime file (pure static hosting) — compiled data still applies
+      // no runtime file (pure static hosting), compiled data still applies
     }
   }, [])
 
@@ -84,7 +84,7 @@ export const useRuntime = () => useContext(Ctx)
 // Text resolution.
 // Override (content.texts) wins; otherwise the explicit fallback (compiled
 // data); otherwise the registry default for that key (static UI copy).
-// An explicit empty-string override renders an empty string — components keep
+// An explicit empty-string override renders an empty string, components keep
 // their `{x && ...}` guards so the element disappears.
 // ---------------------------------------------------------------------------
 export const tx = (

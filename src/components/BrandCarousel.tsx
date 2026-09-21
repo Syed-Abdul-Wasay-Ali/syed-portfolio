@@ -110,7 +110,7 @@ export default function BrandCarousel() {
         onPointerUp={endDrag}
         onPointerLeave={endDrag}
         role="region"
-        aria-label="Brands carousel — swipe or drag to browse"
+        aria-label="Brands carousel, swipe or drag to browse"
       >
         <div className="flex gap-5 px-[12vw] py-8">
           {displayBrands.map((b) => (

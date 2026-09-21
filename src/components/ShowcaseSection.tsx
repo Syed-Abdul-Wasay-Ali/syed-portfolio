@@ -18,7 +18,7 @@ export default function ShowcaseSection() {
   const shown: ShowcaseItem[] =
     filter === 'all' ? items : items.filter((s) => s.tag === filter)
 
-  // Showcase renders nothing until there is real media — no empty grids.
+  // Showcase renders nothing until there is real media, no empty grids.
   if (items.length === 0) return null
 
   const filterLabel = (key: 'all' | ShowcaseTag, fallback: string) => {

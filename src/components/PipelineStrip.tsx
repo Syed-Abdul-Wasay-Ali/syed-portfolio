@@ -1,7 +1,7 @@
 import Reveal from './Reveal'
 import { useRuntime, useT } from '../data/runtime'
 
-// "From product to production-ready image" — the compact pipeline band that
+// "From product to production-ready image", the compact pipeline band that
 // sits directly under the hero. Six stages, each with a small visual from a
 // real production run; the chain line keeps the order readable when the tiles
 // wrap on small screens.
@@ -47,7 +47,7 @@ export default function PipelineStrip() {
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <img
                     src={s.src}
-                    alt={`${s.label} stage — ${s.note}`}
+                    alt={`${s.label} stage, ${s.note}`}
                     loading="lazy"
                     className="media-asset absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                   />

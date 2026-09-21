@@ -1,9 +1,9 @@
 // ---------------------------------------------------------------------------
-// Admin panel — full content manager for the portfolio.
+// Admin panel, full content manager for the portfolio.
 //
 //   words     : every editable string on the site (registry groups + each case
 //               study + each brand + showcase/workflow items)
-//   pictures  : every picture/video slot — replace, delete, add; deletes are
+//   pictures  : every picture/video slot, replace, delete, add; deletes are
 //               final (gone everywhere, no restore); whole case studies can be
 //               deleted too; every slot previews
 //               exactly like the portfolio (video plays in place,
@@ -61,7 +61,7 @@ async function api(path: string, body: unknown) {
   return j as { ok?: boolean; saved?: MediaItem[]; added?: MediaItem[]; content?: unknown }
 }
 
-// whole-case-study removal — canonical route, with a fallback for server
+// whole-case-study removal, canonical route, with a fallback for server
 // builds started before /api/project/remove existed (same effect via the
 // media store, id prefixed "project:").
 async function apiProjectRemove(slug: string, restore: boolean) {
@@ -72,7 +72,7 @@ async function apiProjectRemove(slug: string, restore: boolean) {
   }
 }
 
-// case studies removed from the site — canonical list + fallback store
+// case studies removed from the site, canonical list + fallback store
 const projRemovedFrom = (content: RunContent | null): string[] => [
   ...(content?.removedProjects ?? []),
   ...(content?.removedMedia ?? [])
@@ -117,7 +117,7 @@ function Notice({ msg, err }: { msg: string; err: string }) {
 
 const isVideoSrc = (src: string) => /\.(mp4|webm|mov|mkv|m4v)$/i.test(src)
 
-// preview — renders a slot exactly the way the portfolio does: full image,
+// preview, renders a slot exactly the way the portfolio does: full image,
 // playable video, or an embedded youtube / instagram post. Used everywhere an
 // item can be edited or deleted, so you see the real thing before you touch it.
 function MediaPreview({ item }: { item: MediaItem }) {
@@ -233,40 +233,40 @@ const buildProjectFields = (p: Project): WField[] => {
     f('challenge', 'challenge', p.challenge, true),
     f('campaign.label', 'public-release link label', p.campaign?.label ?? ''),
     f('campaign.url', 'public-release url', p.campaign?.url ?? ''),
-    { k: pk(s, 'approach'), label: 'approach — steps', list: p.approach },
-    { k: pk(s, 'stack'), label: 'stack — chips', list: p.stack },
-    { k: pk(s, 'contribution'), label: 'my contribution — chips', list: p.contribution ?? [] },
+    { k: pk(s, 'approach'), label: 'approach, steps', list: p.approach },
+    { k: pk(s, 'stack'), label: 'stack, chips', list: p.stack },
+    { k: pk(s, 'contribution'), label: 'my contribution, chips', list: p.contribution ?? [] },
   ]
   if (p.production) {
     const pr = p.production
     out.push(
-      f('production.objective', 'production — objective', pr.objective, true),
-      f('production.input', 'production — input', pr.input, true),
-      f('production.process', 'production — process', pr.process, true),
-      f('production.control', 'production — control', pr.control, true),
-      f('production.refinement', 'production — refinement', pr.refinement, true),
-      f('production.output', 'production — output', pr.output, true),
+      f('production.objective', 'production, objective', pr.objective, true),
+      f('production.input', 'production, input', pr.input, true),
+      f('production.process', 'production, process', pr.process, true),
+      f('production.control', 'production, control', pr.control, true),
+      f('production.refinement', 'production, refinement', pr.refinement, true),
+      f('production.output', 'production, output', pr.output, true),
     )
   }
   p.workflow.forEach((w, i) => out.push(f(`workflow.${i}.label`, `process step ${i + 1}`, w.label ?? '')))
   p.spec.forEach((row, i) => {
-    out.push(f(`spec.${i}.label`, `spec ${i + 1} — label`, row.label))
-    out.push(f(`spec.${i}.value`, `spec ${i + 1} — value`, row.value))
+    out.push(f(`spec.${i}.label`, `spec ${i + 1}, label`, row.label))
+    out.push(f(`spec.${i}.value`, `spec ${i + 1}, value`, row.value))
   })
-  p.results.forEach((m, i) => out.push(f(`res.${i}.label`, `result ${i + 1} — caption`, m.label ?? '')))
-  ;(p.stages ?? []).forEach((st, i) => out.push(f(`stage.${i}.label`, `stage ${i + 1} — label`, st.label ?? '')))
+  p.results.forEach((m, i) => out.push(f(`res.${i}.label`, `result ${i + 1}, caption`, m.label ?? '')))
+  ;(p.stages ?? []).forEach((st, i) => out.push(f(`stage.${i}.label`, `stage ${i + 1}, label`, st.label ?? '')))
   if (p.beforeAfter) {
-    out.push(f('ba.before.label', 'before — caption', p.beforeAfter.before.label ?? ''))
-    out.push(f('ba.after.label', 'after — caption', p.beforeAfter.after.label ?? ''))
-    out.push({ k: pk(s, 'ba.annotations'), label: 'before/after — annotations', list: p.beforeAfter.annotations ?? [] })
+    out.push(f('ba.before.label', 'before, caption', p.beforeAfter.before.label ?? ''))
+    out.push(f('ba.after.label', 'after, caption', p.beforeAfter.after.label ?? ''))
+    out.push({ k: pk(s, 'ba.annotations'), label: 'before/after, annotations', list: p.beforeAfter.annotations ?? [] })
   }
   ;(p.formats ?? []).forEach((row, i) => {
-    out.push(f(`fmt.${i}.label`, `format ${i + 1} — label`, row.label))
-    if (row.note !== undefined) out.push(f(`fmt.${i}.note`, `format ${i + 1} — note`, row.note))
+    out.push(f(`fmt.${i}.label`, `format ${i + 1}, label`, row.label))
+    if (row.note !== undefined) out.push(f(`fmt.${i}.note`, `format ${i + 1}, note`, row.note))
   })
   ;(p.placements ?? []).forEach((row, i) => {
-    out.push(f(`pl.${i}.label`, `placement ${i + 1} — label`, row.label))
-    if (row.note !== undefined) out.push(f(`pl.${i}.note`, `placement ${i + 1} — note`, row.note))
+    out.push(f(`pl.${i}.label`, `placement ${i + 1}, label`, row.label))
+    if (row.note !== undefined) out.push(f(`pl.${i}.note`, `placement ${i + 1}, note`, row.note))
   })
   return out
 }
@@ -279,12 +279,12 @@ const buildBrandFields = (b: Brand): WField[] => [
 
 const itemFields: WField[] = [
   ...SHOWCASE.flatMap((s): WField[] => [
-    { k: sck(s.id, 'title'), label: `showcase ${s.id} — title`, def: s.title },
-    { k: sck(s.id, 'note'), label: `showcase ${s.id} — note`, def: s.note ?? '', multi: true },
+    { k: sck(s.id, 'title'), label: `showcase ${s.id}, title`, def: s.title },
+    { k: sck(s.id, 'note'), label: `showcase ${s.id}, note`, def: s.note ?? '', multi: true },
   ]),
   ...WORKFLOWS.flatMap((w): WField[] => [
-    { k: wfk(w.id, 'title'), label: `workflow ${w.id} — title`, def: w.title },
-    { k: wfk(w.id, 'note'), label: `workflow ${w.id} — note`, def: w.note ?? '', multi: true },
+    { k: wfk(w.id, 'title'), label: `workflow ${w.id}, title`, def: w.title },
+    { k: wfk(w.id, 'note'), label: `workflow ${w.id}, note`, def: w.note ?? '', multi: true },
   ]),
 ]
 
@@ -384,8 +384,8 @@ function WordsTab() {
   const options: { v: string; l: string }[] = [
     ...UI_GROUPS.map((g) => ({ v: g.id, l: g.label })),
     { v: 'items', l: 'Showcase & workflow items' },
-    ...projects.map((p) => ({ v: 'P.' + p.slug, l: `Case study — ${p.title.slice(0, 58)}` })),
-    ...BRANDS.map((b) => ({ v: 'B.' + b.slug, l: `Brand — ${b.name}` })),
+    ...projects.map((p) => ({ v: 'P.' + p.slug, l: `Case study, ${p.title.slice(0, 58)}` })),
+    ...BRANDS.map((b) => ({ v: 'B.' + b.slug, l: `Brand, ${b.name}` })),
   ]
 
   return (
@@ -504,7 +504,7 @@ function ListInput({
     <div className="rounded-md border border-ink-600 bg-ink-800 p-3.5">
       <div className="flex items-center justify-between gap-3">
         <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">
-          {field.label} — list ({items.length})
+          {field.label}, list ({items.length})
         </span>
         <span className="flex items-center gap-2">
           {edited && <span className={badgeCls}>edited</span>}
@@ -554,12 +554,12 @@ const HOME_EXTRAS: { group: string; items: [string, string][] }[] = [
   {
     group: 'Production pipeline strip (home)',
     items: [
-      ['media/image-system/pipeline/product.jpg', 'stage 01 — product'],
-      ['media/image-system/pipeline/reference.jpg', 'stage 02 — reference'],
-      ['media/image-system/pipeline/generation.jpg', 'stage 03 — generation'],
-      ['media/image-system/pipeline/compositing.jpg', 'stage 04 — compositing'],
-      ['media/image-system/pipeline/lighting.jpg', 'stage 05 — lighting'],
-      ['media/image-system/pipeline/final.jpg', 'stage 06 — final'],
+      ['media/image-system/pipeline/product.jpg', 'stage 01, product'],
+      ['media/image-system/pipeline/reference.jpg', 'stage 02, reference'],
+      ['media/image-system/pipeline/generation.jpg', 'stage 03, generation'],
+      ['media/image-system/pipeline/compositing.jpg', 'stage 04, compositing'],
+      ['media/image-system/pipeline/lighting.jpg', 'stage 05, lighting'],
+      ['media/image-system/pipeline/final.jpg', 'stage 06, final'],
     ],
   },
   {
@@ -639,11 +639,11 @@ function PicturesTab() {
   const removedProjects = new Set(projRemovedFrom(content))
   const hide = (src: string) => void notice(async () => {
     await api('/api/media/remove', { src })
-    return 'deleted — gone from the site'
+    return 'deleted, gone from the site'
   })
   const removeProject = (slug: string) => void notice(async () => {
     await apiProjectRemove(slug, false)
-    return 'case study deleted — gone from the site'
+    return 'case study deleted, gone from the site'
   })
 
   const addFiles = (collection: string, label: string) => (files: File[]) =>
@@ -703,7 +703,7 @@ function PicturesTab() {
       {area === 'home' && (
         <div className="mt-5 space-y-6">
           <p className="text-[13px] leading-relaxed text-muted">
-            Replace any home-page image or video file. Same file name, new bytes — everything else
+            Replace any home-page image or video file. Same file name, new bytes, everything else
             stays. (Handles large files: give it a second.)
           </p>
           {HOME_EXTRAS.filter((g) => g.items.some(([src]) => !removedSet.has(src))).map((g) => (
@@ -753,7 +753,7 @@ function PicturesTab() {
           <div className="rounded-md border border-red-400/40 bg-ink-950 p-4">
             <p className="font-mono text-[11px] uppercase tracking-wideish text-red-400">delete a full case study</p>
             <p className="mt-1.5 text-[12px] leading-relaxed text-muted">
-              Takes the whole study off the site — its card, its page and every section. It is gone
+              Takes the whole study off the site, its card, its page and every section. It is gone
               for good and won't appear here again. Save & publish to push it live.
             </p>
             <div className="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
@@ -978,7 +978,7 @@ function PicturesTab() {
               <p className="eyebrow-green">logo</p>
               <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
                 <SlotCard
-                  label={`${brand.name} — logo`}
+                  label={`${brand.name}, logo`}
                   src={brand.logo}
                   sub={brand.logo}
                   busy={busy}
@@ -993,7 +993,7 @@ function PicturesTab() {
 
           <div>
             <p className="eyebrow-green">
-              {brand?.name} · {brandSection} — {brandUploads.length} uploaded + {brandBaseVisible.length} built-in
+              {brand?.name} · {brandSection}, {brandUploads.length} uploaded + {brandBaseVisible.length} built-in
             </p>
             <div className="mt-3 grid gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
               {brandUploads.map((m) => (
@@ -1061,7 +1061,7 @@ function PicturesTab() {
                 return (
                   <SlotCard
                     key={s.id}
-                    label={`${s.id} — ${s.title}`}
+                    label={`${s.id}, ${s.title}`}
                     src={s.poster ?? s.src}
                     sub={s.src}
                     media={s.src ? s : undefined}
@@ -1116,7 +1116,7 @@ function PicturesTab() {
                 return (
                   <SlotCard
                     key={w.id}
-                    label={`${w.id} — ${w.title}`}
+                    label={`${w.id}, ${w.title}`}
                     src={w.poster ?? w.src}
                     sub={w.src}
                     media={w.src ? w : undefined}
@@ -1304,7 +1304,7 @@ function SectionsPanel({
         rows.filter((r) => r.on).map((r) => r.k),
       )
       await refresh()
-      setMsg(`saved — ${rows.filter((r) => r.on).length} section(s) visible, in this order`)
+      setMsg(`saved, ${rows.filter((r) => r.on).length} section(s) visible, in this order`)
     } catch (e) {
       setErr(String((e as Error).message || e))
     } finally {
@@ -1316,7 +1316,7 @@ function SectionsPanel({
     <div className="panel p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="eyebrow-green">
-          {page === 'home' ? 'home page' : page === 'brand' ? 'brand pages (shared)' : 'case-study pages (shared)'} —
+          {page === 'home' ? 'home page' : page === 'brand' ? 'brand pages (shared)' : 'case-study pages (shared)'},
           order & visibility
         </p>
         <div className="flex gap-2">
@@ -1441,7 +1441,7 @@ function SectionsTab() {
 }
 
 // ---------------------------------------------------------------------------
-// CONCEPT images tab (moved from v1 — unchanged behaviour)
+// CONCEPT images tab (moved from v1, unchanged behaviour)
 // ---------------------------------------------------------------------------
 function ConceptTab() {
   const { refresh } = useRuntime()
@@ -1551,7 +1551,7 @@ function ConceptTab() {
             images (multi-select ok)
           </span>
           <label className="mt-1.5 flex cursor-pointer items-center gap-3 rounded-md border border-dashed border-ink-600 p-3.5 font-mono text-[12px] uppercase tracking-wideish text-muted transition-colors hover:border-green/40 hover:text-paper">
-            + choose files{cFiles.length ? ` — ${cFiles.length} selected` : ''}
+            + choose files{cFiles.length ? `, ${cFiles.length} selected` : ''}
             <input
               type="file"
               accept="image/*"
@@ -1642,7 +1642,7 @@ function ConceptTab() {
           ))}
           {cItems.length === 0 && (
             <p className="col-span-full font-mono text-[12px] text-muted">
-              no workflow images yet — upload some on the left.
+              no workflow images yet, upload some on the left.
             </p>
           )}
         </div>
@@ -1655,7 +1655,7 @@ function ConceptTab() {
 // page shell
 // ---------------------------------------------------------------------------
 // ---------------------------------------------------------------------------
-// save & publish — one button: build the site, push it to GitHub Pages
+// save & publish, one button: build the site, push it to GitHub Pages
 // ---------------------------------------------------------------------------
 type PublishStatus = {
   missing?: boolean
@@ -1687,7 +1687,7 @@ function PublishBar() {
         const j = (await r.json()) as PublishStatus
         if (live) setSt(j)
       } catch {
-        /* server offline — the banner above already explains */
+        /* server offline, the banner above already explains */
       }
     }
     load()
@@ -1724,13 +1724,13 @@ function PublishBar() {
           <p className="mt-1 text-[13px] leading-relaxed text-paper/85">
             {st?.missing ? (
               <>
-                This server is outdated — restart it (<span className="font-mono text-[12px] text-paper">node admin-server.mjs</span>) to get the publish button.
+                This server is outdated, restart it (<span className="font-mono text-[12px] text-paper">node admin-server.mjs</span>) to get the publish button.
               </>
             ) : running ? (
               phase === 'publishing' ? 'Uploading to GitHub…' : 'Building the site…'
             ) : upToDate ? (
               <>
-                Live on GitHub since <span className="text-paper">{lastAt}</span> — you are up to date.
+                Live on GitHub since <span className="text-paper">{lastAt}</span>, you are up to date.
               </>
             ) : (
               'You have changes that are not on the GitHub site yet.'
@@ -1749,7 +1749,7 @@ function PublishBar() {
       </div>
       {running && (
         <p className="mt-3 border-t border-ink-600 pt-3 font-mono text-[11px] leading-relaxed text-muted">
-          takes about a minute — keep the server window open. {(st?.logTail || []).slice(-1)[0] || ''}
+          takes about a minute, keep the server window open. {(st?.logTail || []).slice(-1)[0] || ''}
         </p>
       )}
     </div>
@@ -1790,7 +1790,7 @@ export default function AdminPage() {
           <p className="eyebrow-green">admin access</p>
           <h1 className="mt-2 font-display text-2xl font-black uppercase">Content manager</h1>
           <p className="mt-2 text-sm text-muted">
-            Every word, every picture and every section of the portfolio — editable from here.
+            Every word, every picture and every section of the portfolio, editable from here.
           </p>
           <label className="mt-4 block">
             <span className="font-mono text-[11px] uppercase tracking-wideish text-slateAccent">passcode</span>
@@ -1844,7 +1844,7 @@ export default function AdminPage() {
       <p className="eyebrow-green">admin</p>
       <h1 className="mt-2 font-display text-3xl font-black uppercase">Content manager</h1>
       <p className="mt-2 max-w-3xl text-sm text-muted">
-        Words · pictures · sections — everything on the portfolio edits from here and saves into{' '}
+        Words · pictures · sections, everything on the portfolio edits from here and saves into{' '}
         <span className="font-mono text-[12px] text-paper">content.json</span> (plus media files).
         When you are done, hit <span className="font-mono text-[12px] text-paper">save &amp; publish</span> to push it
         to the live GitHub site.

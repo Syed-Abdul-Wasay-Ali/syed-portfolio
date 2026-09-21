@@ -19,7 +19,7 @@ export default function Footer() {
         speed={44}
         items={[t('footer.m1'), t('footer.m2'), t('footer.m3')]}
       />
-      {/* the end card — charcoal block, warm light type, light blue hovers (dark section) */}
+      {/* the end card, charcoal block, warm light type, light blue hovers (dark section) */}
       <div className="border-t border-snow/10 bg-charcoal text-snow">
         <div className="container-site flex flex-col items-start justify-between gap-6 pt-10 sm:flex-row sm:items-center">
           <div>

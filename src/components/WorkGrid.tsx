@@ -19,7 +19,7 @@ function Lane({
   projects: Project[]
   footer?: ReactNode
 }) {
-  // No empty lanes — a section with nothing to show should not render.
+  // No empty lanes, a section with nothing to show should not render.
   if (projects.length === 0) return null
 
   // Featured case studies render as large image-forward cards; the rest stay

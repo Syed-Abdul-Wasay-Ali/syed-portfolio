@@ -5,7 +5,7 @@ import MediaPanel from './MediaPanel'
 import Lightbox from './Lightbox'
 import Reveal from './Reveal'
 
-// Concept images — a user-managed gallery band on the home page.
+// Concept images, a user-managed gallery band on the home page.
 // Images are uploaded and arranged from the admin panel (#/admin, tab
 // "concept images"); they live in content.json under `conceptImages`
 // (files under public/media/concept/). Entries tagged `group: 'photos'`
@@ -20,7 +20,7 @@ export default function ConceptImagesSection() {
   const [lightbox, setLightbox] = useState<number | null>(null)
   const [lightboxP, setLightboxP] = useState<number | null>(null)
 
-  // Renders nothing until there is real media — no empty grids.
+  // Renders nothing until there is real media, no empty grids.
   if (all.length === 0) return null
 
   const shown = myItems.map((m) => ({

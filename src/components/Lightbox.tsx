@@ -14,7 +14,7 @@ export default function Lightbox({
   index: number
   onClose: () => void
   onNav: (i: number) => void
-  /** Optional media ATTACHED to the current item — rendered next to it
+  /** Optional media ATTACHED to the current item, rendered next to it
    *  (e.g. a workflow screen recording + the output it produced). */
   extra?: MediaItem | null
 }) {
@@ -60,7 +60,7 @@ export default function Lightbox({
     >
       <div className="flex items-center justify-between px-5 py-3">
         <p className="truncate font-mono text-[11px] text-snow/60">
-          {item.label ?? 'asset'} — {index + 1}/{items.length}
+          {item.label ?? 'asset'}, {index + 1}/{items.length}
         </p>
         <div className="flex items-center gap-3">
           {item.href && (

@@ -1,5 +1,5 @@
 // Concept e-commerce page for the e-commerce image-system case study.
-// Clearly labelled as a design study: the layout idea is the point — how the
+// Clearly labelled as a design study: the layout idea is the point, how the
 // generated imagery behaves in a product page and on a phone. Imagery comes
 // from the same pipeline as the rest of the study.
 import { useRuntime, useT } from '../data/runtime'
@@ -17,9 +17,9 @@ const NOTES = [
   { term: 'Focal point', line: 'One decision per frame: where the eye lands first is built into the composition, not left to the crop.' },
   { term: 'Product visibility', line: 'The mattress line stays fully readable at every size the page renders it.' },
   { term: 'Image hierarchy', line: 'Hero sets the world, lifestyle sells the life, detail proves the make.' },
-  { term: 'Aspect ratio', line: 'Each slot gets its native ratio — 16:9 for the banner, 4:5 for mobile, 1:1 for thumbnails.' },
+  { term: 'Aspect ratio', line: 'Each slot gets its native ratio, 16:9 for the banner, 4:5 for mobile, 1:1 for thumbnails.' },
   { term: 'Mobile crop', line: 'The vertical frame is recomposed, not sliced from the desktop composition.' },
-  { term: 'Thumbnail readability', line: 'At 64px the frame still says "mattress in a room" — that is what the crop is tuned for.' },
+  { term: 'Thumbnail readability', line: 'At 64px the frame still says "mattress in a room", that is what the crop is tuned for.' },
 ]
 
 function Bar({ w }: { w: string }) {

@@ -1,13 +1,13 @@
 import Reveal from './Reveal'
 import { useT } from '../data/runtime'
 
-// "Where AI meets image craft" — the six controls that turn a generation into
+// "Where AI meets image craft", the six controls that turn a generation into
 // a deliverable. One line each, no essay.
 const PRINCIPLES = [
   { term: 'Product Fidelity', line: 'Keeping the physical characteristics of the source product intact through generation and compositing.' },
   { term: 'Lighting', line: 'Matching key light direction, softness, intensity and color temperature to the world around the product.' },
   { term: 'Perspective', line: 'Aligning camera height, angle and scale so the product sits in the room instead of on top of it.' },
-  { term: 'Materials', line: 'Reading fabric, wood, stone and glass as physical materials — texture, sheen and micro-detail intact.' },
+  { term: 'Materials', line: 'Reading fabric, wood, stone and glass as physical materials, texture, sheen and micro-detail intact.' },
   { term: 'Composition', line: 'Framing every asset for where it will live: hero, feed, banner, product page, mobile.' },
   { term: 'Consistency', line: 'Holding one product, one look and one grade across an entire set, not just one hero frame.' },
 ]

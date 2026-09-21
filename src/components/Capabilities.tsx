@@ -137,7 +137,7 @@ export default function Capabilities() {
                     'Flux · Klein',
                     'Z-Image Turbo',
                     'Ideogram 4',
-                    'Midjourney — aesthetic styles',
+                    'Midjourney, aesthetic styles',
                     'SDXL / Illustrious family',
                   ]).map((m) => (
                     <span

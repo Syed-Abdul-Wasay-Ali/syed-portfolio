@@ -33,7 +33,7 @@ body {
     @apply inline-block bg-green px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-snow;
   }
 
-  /* same chip on dark sections — light blue fill, charcoal type */
+  /* same chip on dark sections, light blue fill, charcoal type */
   .eyebrow-on-dark {
     @apply bg-skyBlue text-charcoal;
   }
@@ -60,17 +60,17 @@ body {
     @apply inline-flex items-center gap-2 border border-snow/30 px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-all duration-300 hover:border-skyBlue hover:text-skyBlue;
   }
 
-  /* filled navy primary CTA — flips to charcoal on hover (polarity) */
+  /* filled navy primary CTA, flips to charcoal on hover (polarity) */
   .btn-green {
     @apply inline-flex items-center gap-2 bg-green px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-all duration-300 hover:bg-charcoal hover:text-skyBlue;
   }
 
-  /* filled primary CTA on dark sections — light blue fill, charcoal type */
+  /* filled primary CTA on dark sections, light blue fill, charcoal type */
   .btn-green-dark {
     @apply inline-flex items-center gap-2 bg-skyBlue px-4 py-2 font-mono text-xs uppercase tracking-wideish text-charcoal transition-all duration-300 hover:bg-charcoal hover:text-skyBlue;
   }
 
-  /* corporate company names — bold, brand-colored.
+  /* corporate company names, bold, brand-colored.
      Do NOT repaint with site accents: Ogilvy logo/wordmark stays brand red,
      cleanDirty stays neutral. Exempt from accent swaps. */
   .co-ogilvy {
@@ -371,7 +371,7 @@ body {
 }
 
 /* ------------------------------------------------------------------ */
-/* 3D — subtle depth for cards (neutral finish)                        */
+/* 3D, subtle depth for cards (neutral finish)                        */
 /* ------------------------------------------------------------------ */
 
 .perspective-3d {
@@ -427,7 +427,7 @@ body {
   opacity: 1;
 }
 
-/* 3D coverflow carousel — swipe like a phone */
+/* 3D coverflow carousel, swipe like a phone */
 .car-3d {
   perspective: 1100px;
   overflow-x: auto;
@@ -467,7 +467,7 @@ body {
   @apply text-paper;
 }
 
-/* Node-grid backdrop — grid lines REMOVED on request (user: remove the
+/* Node-grid backdrop, grid lines REMOVED on request (user: remove the
    faint grid / graph-paper lines behind panels). Kept as a plain base. */
 .node-grid {
   background-image: none;

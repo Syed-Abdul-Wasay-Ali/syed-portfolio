@@ -1,14 +1,14 @@
 // ---------------------------------------------------------------------------
-// Brand data — one entry per client brand.
+// Brand data, one entry per client brand.
 //
 // HOW TO ADD BRAND MEDIA:
 //   1. Drop files into  public/media/brands/<slug>/  (see README.md):
-//        logo.png|svg|webp        — brand logo (on transparent/white bg)
-//        stills/*.jpg|png         — campaign images
-//        animatic/*.mp4|webm      — animatic videos
-//        film/*.mp4|webm          — final films
+//        logo.png|svg|webp       , brand logo (on transparent/white bg)
+//        stills/*.jpg|png        , campaign images
+//        animatic/*.mp4|webm     , animatic videos
+//        film/*.mp4|webm         , final films
 //   2. Fill `src` on the matching MediaItem below. Leave `src` empty while
-//      media is pending — the site renders an intentional placeholder.
+//      media is pending, the site renders an intentional placeholder.
 // ---------------------------------------------------------------------------
 
 import type { MediaItem } from './projects'
@@ -24,7 +24,7 @@ export interface Brand {
   animatics: MediaItem[]
   films: MediaItem[]
   story?: string
-  // case study slugs under this brand — rendered as Project 1, 2, 3...
+  // case study slugs under this brand, rendered as Project 1, 2, 3...
   // (grows automatically as more project entries are added below)
   projects?: string[]
 }
@@ -47,20 +47,20 @@ export const BRANDS: Brand[] = [
       { kind: 'image', label: 'key visual 05', src: 'media/brands/cadbury-dairy-milk/stills/keyvisual-05.JPG' },
       { kind: 'image', label: 'key visual 06', src: 'media/brands/cadbury-dairy-milk/stills/keyvisual-06.jpeg' },
       { kind: 'image', label: 'key visual 07', src: 'media/brands/cadbury-dairy-milk/stills/keyvisual-07.JPG' },
-      { kind: 'image', label: 'story of us — valentine 01', src: 'media/ogilvy-cadbury-story-of-us-zoya-akhtar/stills/vday_f3016.png' },
-      { kind: 'image', label: 'story of us — valentine 02', src: 'media/ogilvy-cadbury-story-of-us-zoya-akhtar/stills/vday_f1136.png' },
-      { kind: 'image', label: 'story of us — valentine 03', src: 'media/ogilvy-cadbury-story-of-us-zoya-akhtar/stills/vday_f2108.png' },
+      { kind: 'image', label: 'story of us, valentine 01', src: 'media/ogilvy-cadbury-story-of-us-zoya-akhtar/stills/vday_f3016.png' },
+      { kind: 'image', label: 'story of us, valentine 02', src: 'media/ogilvy-cadbury-story-of-us-zoya-akhtar/stills/vday_f1136.png' },
+      { kind: 'image', label: 'story of us, valentine 03', src: 'media/ogilvy-cadbury-story-of-us-zoya-akhtar/stills/vday_f2108.png' },
     ],
     animatics: [],
     films: [
       {
         kind: 'video',
-        label: 'cadbury silk — the story of us (sd 1.5 · 2024)',
+        label: 'cadbury silk, the story of us (sd 1.5 · 2024)',
         src: 'media/brands/cadbury-dairy-milk/film/story-of-us-cadbury-silk.mp4',
       },
       {
         kind: 'video',
-        label: 'cadbury silk — the story of us "now" cut (sd 1.5 · 2024)',
+        label: 'cadbury silk, the story of us "now" cut (sd 1.5 · 2024)',
         src: 'media/brands/cadbury-dairy-milk/film/story-of-us-cadbury-silk-now.mp4',
       },
     ],
@@ -148,7 +148,7 @@ export const BRANDS: Brand[] = [
     films: [
       {
         kind: 'video',
-        label: 'ifb christmas 2025 — because some miracles do happen overnight (youtube)',
+        label: 'ifb christmas 2025, because some miracles do happen overnight (youtube)',
         src: 'https://youtu.be/ZmPFjsUXuCQ',
       },
       {
@@ -365,8 +365,8 @@ export const BRANDS: Brand[] = [
     accent: '#003399',
     logo: 'media/brands/lacta/logo.png',
     images: [
-      { kind: 'image', label: 'christmas tree — 3d scene', src: 'media/brands/lacta/stills/lacta-christmas-tree.JPG' },
-      { kind: 'image', label: 'ai avatar — festive friends (reindeer)', src: 'media/brands/lacta/stills/lacta-avatar-reindeer.png' },
+      { kind: 'image', label: 'christmas tree, 3d scene', src: 'media/brands/lacta/stills/lacta-christmas-tree.JPG' },
+      { kind: 'image', label: 'ai avatar, festive friends (reindeer)', src: 'media/brands/lacta/stills/lacta-avatar-reindeer.png' },
     ],
     animatics: [],
     films: [],
@@ -379,12 +379,12 @@ export const BRANDS: Brand[] = [
     accent: '#C9A227',
     logo: 'media/brands/natural-diamond-promotion-foundation/logo.png',
     images: [
-      { kind: 'image', label: 'golconda era — diamond at twilight', src: 'media/ndpf-history-of-diamonds/stills/ndpf-golconda-diamond-twilight.webp' },
+      { kind: 'image', label: 'golconda era, diamond at twilight', src: 'media/ndpf-history-of-diamonds/stills/ndpf-golconda-diamond-twilight.webp' },
       { kind: 'image', label: 'diamonds on the old trade map', src: 'media/ndpf-history-of-diamonds/stills/ndpf-diamonds-old-trade-map.webp' },
       { kind: 'image', label: 'river panning for alluvial diamonds', src: 'media/ndpf-history-of-diamonds/stills/ndpf-river-panning-alluvial.webp' },
-      { kind: 'image', label: 'history of diamonds in india — timeline section', src: 'media/ndpf-history-of-diamonds/stills/ndpf-history-timeline.jpg' },
-      { kind: 'image', label: 'first discovery & ancient trade — timeline', src: 'media/ndpf-history-of-diamonds/stills/ndpf-timeline-first-discovery-trade.jpg' },
-      { kind: 'image', label: 'golconda era & 1665 — timeline', src: 'media/ndpf-history-of-diamonds/stills/ndpf-timeline-golconda-world-notices.jpg' },
+      { kind: 'image', label: 'history of diamonds in india, timeline section', src: 'media/ndpf-history-of-diamonds/stills/ndpf-history-timeline.jpg' },
+      { kind: 'image', label: 'first discovery & ancient trade, timeline', src: 'media/ndpf-history-of-diamonds/stills/ndpf-timeline-first-discovery-trade.jpg' },
+      { kind: 'image', label: 'golconda era & 1665, timeline', src: 'media/ndpf-history-of-diamonds/stills/ndpf-timeline-golconda-world-notices.jpg' },
     ],
     animatics: [],
     films: [],
@@ -408,7 +408,7 @@ export const brandMedia = (b: Brand): MediaItem[] => [
 
 // ---------------------------------------------------------------------------
 // Content awareness (static data + admin uploads).
-// A brand "has content" when at least one media item resolves to a file —
+// A brand "has content" when at least one media item resolves to a file,
 // compiled in above, or uploaded through the admin layer (content.json
 // `uploads`). Brands without content are shown as static logos: never linked
 // (no dead detail pages) and sorted behind the ones that open.
@@ -426,7 +426,7 @@ export const orderedBrands = (content?: RunContent | null): Brand[] => [
   ...displayBrands.filter((b) => !brandHasContent(b, content)),
 ]
 
-// Only the brands that actually open — used for "next brand" navigation so it
+// Only the brands that actually open, used for "next brand" navigation so it
 // never lands on an empty page.
 export const contentBrands = (content?: RunContent | null): Brand[] =>
   displayBrands.filter((b) => brandHasContent(b, content))

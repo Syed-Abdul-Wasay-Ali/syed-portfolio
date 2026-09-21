@@ -9,7 +9,7 @@ import { RuntimeProvider, useRuntime, tx } from './data/runtime'
 import { HoverPreviewProvider } from './components/HoverPreview'
 import { initTilt } from './lib/tilt'
 
-const DEFAULT_TITLE = 'Syed Abdul Wasay Ali — AI Creative Manager & AI Image Specialist'
+const DEFAULT_TITLE = 'Syed Abdul Wasay Ali · AI Creative Manager & AI Image Specialist'
 
 // keeps the browser/tab title in sync with the admin "site title" text key
 function TitleSync() {
@@ -62,7 +62,7 @@ export default function App() {
             )}
             <Footer />
           </div>
-          {/* global film finish — grain + vignette (title-card look) */}
+          {/* global film finish, grain + vignette (title-card look) */}
           <div aria-hidden="true" className="film-grain" />
           <div aria-hidden="true" className="vignette" />
         </div>

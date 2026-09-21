@@ -141,7 +141,7 @@ export function initTilt(): () => void {
   }
 }
 
-// Lean the page back as you scroll — reads like tilting a phone.
+// Lean the page back as you scroll, reads like tilting a phone.
 export function initPageTilt(): () => void {
   if (reduced()) return () => {}
   let rafScroll = 0

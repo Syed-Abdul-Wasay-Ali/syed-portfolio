@@ -1,4 +1,4 @@
-// Decorative ComfyUI-style mini node graph — the site's signature motif.
+// Decorative ComfyUI-style mini node graph, the site's signature motif.
 // Nodes have a title bar and sockets, connected by animated bezier links.
 // Light-theme edition: paper nodes, olive links, lime accents.
 
@@ -86,7 +86,7 @@ export default function NodeGraph({
               fill="#CDC7B8"
             />
           ))}
-          {/* sockets — pulsing */}
+          {/* sockets, pulsing */}
           {[n].map((nn) => (
             <>
               <circle

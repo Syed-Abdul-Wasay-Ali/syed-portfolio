@@ -1,7 +1,7 @@
 import type { MediaItem } from '../data/projects'
 import Reveal from './Reveal'
 
-// Before / after pair with annotation chips — product reference (or raw
+// Before / after pair with annotation chips, product reference (or raw
 // generation) next to the final commercial frame, with the fidelity checks
 // called out. Side by side rather than a slider: the two frames are different
 // compositions, so the pair reads as evidence, not an overlay.
@@ -29,7 +29,7 @@ export default function BeforeAfter({
               <div className="relative aspect-[4/3] overflow-hidden border-b border-ink-600">
                 <img
                   src={item.src}
-                  alt={`${tag} — ${item.label ?? ''}`}
+                  alt={`${tag}, ${item.label ?? ''}`}
                   loading="lazy"
                   className="media-asset absolute inset-0 h-full w-full object-cover"
                 />

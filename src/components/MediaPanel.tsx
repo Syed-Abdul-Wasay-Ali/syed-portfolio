@@ -2,7 +2,7 @@ import type { MediaItem } from '../data/projects'
 import NodeGraph from './NodeGraph'
 
 // YouTube URLs are embedded as iframes so the video plays straight from
-// YouTube on the site (local dev AND gh-pages — no files needed). Same for
+// YouTube on the site (local dev AND gh-pages, no files needed). Same for
 // Instagram reels/posts via the official /embed/ endpoint.
 const YT_RE = /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]{6,})/
 const ytId = (s: string) => s.match(YT_RE)?.[1]
@@ -38,7 +38,7 @@ export default function MediaPanel({
           </p>
         </div>
         <p className="font-mono text-[11px] text-muted/70">
-          drop file into public/media — src: pending
+          drop file into public/media, src: pending
         </p>
       </div>
     )
