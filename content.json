@@ -7,8 +7,8 @@
         "media/ogilvy-cadbury-story-of-us-zoya-akhtar/stills/vday_f2108.png"
       ],
       "animatics": [
-        "animatic — 15s cut",
-        "animatic — 30s cut"
+        "animatic, 15s cut",
+        "animatic, 30s cut"
       ]
     }
   },
@@ -20,90 +20,90 @@
       "id": "c_mu81xvqfd0azs",
       "kind": "image",
       "src": "media/concept/workflow_concept_to_composite_hd.png",
-      "caption": "Concept to composite — start to final frame · flux.2 klein"
+      "caption": "Concept to composite, start to final frame · flux.2 klein"
     },
     {
       "id": "c_mu84i4p3li8cf",
       "kind": "image",
       "src": "media/concept/workflow_qwen_2511_multiangle_hd.png",
-      "caption": "Multi-angle control — one reference, many angles · qwen edit 2511"
+      "caption": "Multi-angle control, one reference, many angles · qwen edit 2511"
     },
     {
       "id": "c_mu85smno0zk1o",
       "kind": "image",
       "src": "media/concept/workflow_sofa_color_change_hd.png",
-      "caption": "Colorway change — sofa edit in place · qwen edit 2511"
+      "caption": "Colorway change, sofa edit in place · qwen edit 2511"
     },
     {
       "id": "c_mu8exngygx2jh",
       "kind": "image",
       "src": "media/concept/workflow_lighting_control_hd.png",
-      "caption": "Lighting control — relight, same product · qwen edit 2511 + lighting LoRA"
+      "caption": "Lighting control, relight, same product · qwen edit 2511 + lighting LoRA"
     },
     {
       "id": "c_mu941iuy5hsg6",
       "kind": "image",
       "src": "media/concept/workflow_character_sheet_hd.png",
-      "caption": "Character sheet — one persona, every frame · qwen edit 2511"
+      "caption": "Character sheet, one persona, every frame · qwen edit 2511"
     },
     {
       "id": "c_mu989jdonyh8p",
       "kind": "image",
       "src": "media/concept/workflow_flux2_klein_upscale_ttp_hd.png",
-      "caption": "2× tile upscale — resolution, not artifacts · flux.2 klein TTP"
+      "caption": "2× tile upscale, resolution, not artifacts · flux.2 klein TTP"
     },
     {
       "id": "c_mu98wk1t7tfzq",
       "kind": "image",
       "src": "media/concept/workflow_flux2_klein_upscale_4k_hd.png",
-      "caption": "Upscale to 4K — low-res in, production out · flux.2 klein TTP"
+      "caption": "Upscale to 4K, low-res in, production out · flux.2 klein TTP"
     },
     {
       "id": "c_mu9ve4jlsp5jn",
       "kind": "image",
       "src": "media/concept/workflow_product_to_person_hd.png",
-      "caption": "Product to person — same shoes onto the woman character · flux.2 klein edit"
+      "caption": "Product to person, same shoes onto the woman character · flux.2 klein edit"
     },
     {
       "id": "c_mu9xnisrd035z",
       "kind": "image",
       "src": "media/concept/photoshoot_tote_lifestyle_hd.png",
-      "caption": "Lifestyle set — one tote, six cafe scenes",
+      "caption": "Lifestyle set, one tote, six cafe scenes",
       "group": "photos"
     },
     {
       "id": "c_mu9xnitfase1n",
       "kind": "image",
       "src": "media/concept/photoshoot_sleepwear_set_hd.png",
-      "caption": "Sleepwear set — six poses, studio to bed",
+      "caption": "Sleepwear set, six poses, studio to bed",
       "group": "photos"
     },
     {
       "id": "c_mu9y3sh2mo8gg",
       "kind": "image",
       "src": "media/concept/photoshoot_fitness_bottle_hd.png",
-      "caption": "Gym still — matte bottle and dumbbells, low-key light",
+      "caption": "Gym still, matte bottle and dumbbells, low-key light",
       "group": "photos"
     },
     {
       "id": "c_mu9y3sjrt4tx4",
       "kind": "image",
       "src": "media/concept/photoshoot_cream_jar_hd.png",
-      "caption": "Skincare still — levitating jar and aloe, pastel pink",
+      "caption": "Skincare still, levitating jar and aloe, pastel pink",
       "group": "photos"
     },
     {
       "id": "c_mu9y3smt366he",
       "kind": "image",
       "src": "media/concept/photoshoot_perfume_gift_hd.png",
-      "caption": "Fragrance still — boxed bottle, teal ribbon, moody light",
+      "caption": "Fragrance still, boxed bottle, teal ribbon, moody light",
       "group": "photos"
     },
     {
       "id": "c_mu9y3spifh1hz",
       "kind": "image",
       "src": "media/concept/photoshoot_duffel_hero_hd.png",
-      "caption": "Bag hero — canvas weekender, hard window light",
+      "caption": "Bag hero, canvas weekender, hard window light",
       "group": "photos"
     }
   ],
