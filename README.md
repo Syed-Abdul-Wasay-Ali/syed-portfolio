@@ -1,4 +1,4 @@
-# Syed Abdul Wasay Ali — Portfolio
+# Syed Abdul Wasay Ali, Portfolio
 
 A Behance-style portfolio for AI generation work: ComfyUI pipelines, custom LoRAs,
 video workflows, and automation. Dark graphite + amber, monospaced workflow
@@ -44,7 +44,7 @@ sub-path. `server.py` serves `dist/` for local preview at http://127.0.0.1:4173.
 
 ---
 
-## Admin panel — words / pictures / sections
+## Admin panel, words / pictures / sections
 
 Edit the entire portfolio (every word, every picture, every section) without
 touching code:
@@ -56,24 +56,24 @@ node admin-server.mjs          # serves dist/ + the admin API
 
 Four tabs:
 
-- **words** — every string on the site: hero, section copy, footer, plus each
+- **words**, every string on the site: hero, section copy, footer, plus each
   case study (title, overview, production notes, spec values, captions…) and
   each brand (name, note, story). Field overrides are stored in
   `content.json → texts`; the compiled defaults live in `src/data/text.ts`.
   “reset” returns a field to its default; emptying a field hides that element.
-- **pictures** — replace any image/video in place (same filename; previous
+- **pictures**, replace any image/video in place (same filename; previous
   file backed up under `.admin-backups/`), hide/restore gallery items, and add
   new pictures to case studies / showcase / brands. Covers every slot: home
   bands, case-study covers + results + stages + before/after + formats +
   placements, brand logos + galleries, showcase, workflows, the résumé PDF and
   the social share image.
-- **sections** — show/hide + reorder sections on the home page, brand pages
+- **sections**, show/hide + reorder sections on the home page, brand pages
   and case-study pages (shared order per page type; per-brand toggles kept).
-- **concept images** — the concept gallery (upload, caption, reorder, replace).
+- **concept images**, the concept gallery (upload, caption, reorder, replace).
 
 All edits save into `public/content.json` plus files under `public/media/`,
 so the built site picks them up with no code changes. To publish, hit
-**save & publish** at the top of the panel — it builds the site and pushes it
+**save & publish** at the top of the panel, it builds the site and pushes it
 to GitHub Pages (~15 s), and the bar tells you when you're live. Or by hand:
 
 ```bash
@@ -82,7 +82,7 @@ npm run build && npx gh-pages -d dist
 
 Notes:
 
-- Saving needs the local server — the panel shows a warning banner when it
+- Saving needs the local server, the panel shows a warning banner when it
   isn’t running (the live gh-pages copy is read-only).
 - After editing `admin-server.mjs`, restart the server process (it keeps the
   code it booted with).
@@ -115,18 +115,18 @@ Keep filenames short and English. Videos: mp4/webm. Images: jpg/png.
 
 Copy one existing object, change the fields:
 
-- `slug` — url-safe name, matches the media folder
+- `slug`, url-safe name, matches the media folder
 - `title`, `company` (`'cleanDirty.ai'` | `'Ogilvy'`), `role`, `year`
-- `cover` — `/media/<slug>/cover.jpg`
-- `spec` — the mono parameter strip (base model, sampler, steps, …). Real
-  numbers sell the story — this is the site's signature element.
-- `overview` / `challenge` / `approach` — the case-study narrative:
+- `cover`, `/media/<slug>/cover.jpg`
+- `spec`, the mono parameter strip (base model, sampler, steps, …). Real
+  numbers sell the story, this is the site's signature element.
+- `overview` / `challenge` / `approach`, the case-study narrative:
   what shipped, the obstacle, how you got past it (open-source first).
-- `stack` — chips (models, nodes, tools).
-- `workflow` — screenshots: `{ label: 'ref2v main graph', src: '/media/<slug>/workflow/ref2v.png' }`
-- `results` — videos/images: `{ kind: 'video', label: '...', src: '...' }`
+- `stack`, chips (models, nodes, tools).
+- `workflow`, screenshots: `{ label: 'ref2v main graph', src: '/media/<slug>/workflow/ref2v.png' }`
+- `results`, videos/images: `{ kind: 'video', label: '...', src: '...' }`
 
-If you haven't added the media yet, leave `src` out — the site renders an
+If you haven't added the media yet, leave `src` out, the site renders an
 intentional node-graph placeholder with the label, so the layout always looks
 finished.
 
@@ -173,7 +173,7 @@ rename them). Unfilled entries show an intentional placeholder.
 ## How to add showcase media
 
 Personal concept ads and images live in `src/data/showcase.ts` with a
-filterable section on the home page (02 — showcase).
+filterable section on the home page (02, showcase).
 
 ### 1. Drop media in
 
@@ -195,7 +195,7 @@ intentional placeholder. `title` shows under the card and in the lightbox.
 ## How to add workflow demos
 
 ComfyUI workflow screen recordings and their outputs live in
-`src/data/workflows.ts` — their own home section (04 — workflows).
+`src/data/workflows.ts` (their own home section (04) workflows).
 
 ### 1. Drop media in
 
@@ -203,7 +203,7 @@ ComfyUI workflow screen recordings and their outputs live in
 public/media/workflows/
 ├── run.mp4          # workflow screen recordings (.mp4/.webm)
 ├── run-poster.jpg   # poster frame for the video
-└── output.jpg       # run outputs (.jpg/.png) — attach to the video item
+└── output.jpg       # run outputs (.jpg/.png), attach to the video item
 ```
 
 ### 2. Wire items in `src/data/workflows.ts`
@@ -214,7 +214,7 @@ keep `public/media/` web-light (a ~30s 1280px recording lands near 1 MB
 with `-crf 26 -movflags +faststart`, audio kept). Empty `src` renders an
 intentional placeholder.
 
-Outputs are ATTACHED to their video item via `output: { src, label? }` — a
+Outputs are ATTACHED to their video item via `output: { src, label? }`, a
 small thumbnail sits on the tile corner and the lightbox shows the image
 beside the video. Never add a run's output as a separate tile.
 
@@ -222,13 +222,13 @@ beside the video. Never add a run's output as a separate tile.
 
 ## Things to customize
 
-Most copy now edits from the admin panel (see above) — the files below hold
+Most copy now edits from the admin panel (see above), the files below hold
 the compiled defaults that the admin overrides on top of:
 
 - Footer email: `src/data/social.ts` (`EMAIL`); admin-editable default mirrored in `src/data/text.ts` (`social.email`)
 - Bio copy: `src/components/About.tsx`, `src/components/Hero.tsx`
 - Capabilities: `src/components/Capabilities.tsx`
-- Demo case studies in `src/data/projects.ts` are sample text — replace with
+- Demo case studies in `src/data/projects.ts` are sample text, replace with
   the real stories + real parameters for maximum credibility.
 
 ## Design notes
