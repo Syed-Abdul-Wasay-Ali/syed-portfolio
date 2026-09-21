@@ -209,7 +209,7 @@ public/media/workflows/
 ### 2. Wire items in `src/data/workflows.ts`
 
 Each item: `{ id, title, kind, src, label, note? }`. For videos also set
-`poster` (a frame grab). Compress screen recordings before committing —
+`poster` (a frame grab). Compress screen recordings before committing,
 keep `public/media/` web-light (a ~30s 1280px recording lands near 1 MB
 with `-crf 26 -movflags +faststart`, audio kept). Empty `src` renders an
 intentional placeholder.
@@ -239,7 +239,7 @@ the compiled defaults that the admin overrides on top of:
   `#00E5FF`, acid yellow `#FFE45C`. Header: indigo blur bar with a
   3px green top strip, green hairline border and green scroll-progress bar.
 - Type: Archivo (display) / Instrument Sans (body) / IBM Plex Mono (metadata)
-- Every card carries a mono "spec strip" with the real pipeline parameters —
+- Every card carries a mono "spec strip" with the real pipeline parameters,
   that's the signature. Keep it authentic: real model names, real samplers.
 - Motion: hero scanline sweep + floating ambient orbs + staggered entrance,
   scroll-reveal (IntersectionObserver, `.reveal`), card hover glow + cover zoom,
