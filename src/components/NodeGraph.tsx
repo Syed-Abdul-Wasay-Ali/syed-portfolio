@@ -1,6 +1,6 @@
 // Decorative ComfyUI-style mini node graph, the site's signature motif.
 // Nodes have a title bar and sockets, connected by animated bezier links.
-// Light-theme edition: paper nodes, olive links, lime accents.
+// Every colour resolves from the active reader mode (see src/index.css).
 
 interface NodeSpec {
   x: number
@@ -16,6 +16,19 @@ const NODES: NodeSpec[] = [
   { x: 150, y: 96, title: 'sampler', lines: 2 },
   { x: 300, y: 52, title: 'save mp4', lines: 1, accent: true },
 ]
+
+// theme-aware palette (CSS variables, one per reader mode)
+const C = {
+  accent: 'rgb(var(--c-green))',
+  accentBright: 'rgb(var(--c-green-bright))',
+  accentReadable: 'rgb(var(--c-green-readable))',
+  card: 'rgb(var(--c-ink-700))',
+  cardLine: 'rgb(var(--c-ink-500))',
+  headNeutral: 'rgb(var(--c-ink-950))',
+  bars: 'rgb(var(--c-ink-600))',
+  ink: 'rgb(var(--c-paper))',
+  link: 'rgb(var(--c-violet))',
+}
 
 function link(from: NodeSpec, to: NodeSpec) {
   const x1 = from.x + 118
@@ -46,7 +59,7 @@ export default function NodeGraph({
           <path
             key={i}
             d={link(n, NODES[i + 1])}
-            stroke={n.accent ? '#1B3A6B' : '#8F897D'}
+            style={{ stroke: n.accent ? C.accentReadable : C.link }}
             strokeDasharray="4 5"
             className={animated ? 'animate-dash' : undefined}
             opacity="0.85"
@@ -60,18 +73,17 @@ export default function NodeGraph({
             width="118"
             height={26 + n.lines * 12}
             rx="4"
-            fill="#F3F1E9"
-            stroke={n.accent ? '#1F4173' : '#A9A393'}
+            style={{ fill: C.card, stroke: n.accent ? C.accentBright : C.cardLine }}
             strokeWidth="1.1"
           />
-          <rect width="118" height="14" rx="4" fill={n.accent ? '#102A54' : '#E9E7DE'} />
-          <rect y="7" width="118" height="7" fill={n.accent ? '#102A54' : '#E9E7DE'} />
+          <rect width="118" height="14" rx="4" style={{ fill: n.accent ? C.accent : C.headNeutral }} />
+          <rect y="7" width="118" height="7" style={{ fill: n.accent ? C.accent : C.headNeutral }} />
           <text
             x="6"
             y="10"
             fontSize="7.5"
             fontFamily="IBM Plex Mono, monospace"
-            fill="#111111"
+            style={{ fill: C.ink }}
           >
             {n.title}
           </text>
@@ -83,7 +95,7 @@ export default function NodeGraph({
               width={60 + (i % 2) * 24}
               height="5"
               rx="2"
-              fill="#CDC7B8"
+              style={{ fill: C.bars }}
             />
           ))}
           {/* sockets, pulsing */}
@@ -93,8 +105,7 @@ export default function NodeGraph({
                 cx="118"
                 cy={16 + nn.lines * 6}
                 r="3.5"
-                fill="#F3F1E9"
-                stroke="#1B3A6B"
+                style={{ fill: C.card, stroke: C.accentReadable }}
                 strokeWidth="1.2"
                 className={animated ? 'animate-pulseSoft' : undefined}
               />
@@ -102,8 +113,7 @@ export default function NodeGraph({
                 cx="0"
                 cy={16 + nn.lines * 6}
                 r="3.5"
-                fill="#F3F1E9"
-                stroke="#9A9488"
+                style={{ fill: C.card, stroke: C.link }}
                 strokeWidth="1.2"
                 className={animated ? 'animate-pulseSoft' : undefined}
               />

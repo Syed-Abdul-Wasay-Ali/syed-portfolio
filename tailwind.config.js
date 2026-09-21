@@ -1,51 +1,57 @@
 /** @type {import('tailwindcss').Config} */
+// Themed via CSS variables (see src/index.css, :root + [data-theme] blocks).
+// Four reader modes live on <html data-theme="..."> — light (default), dark,
+// sepia, night. Every class below stays identical across modes; the channel
+// triples swap. rgb(var(...) / <alpha-value>) keeps opacity modifiers
+// (bg-canvas/85, border-green/30, bg-charcoal/95, ...) working.
 export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        // Sept 2026 — warm light editorial theme: off-white canvas + charcoal
-        // + ONE electric lime. The ink scale now feeds LIGHT warm surfaces
-        // (cards / hairlines); dark moments live in `charcoal`.
         ink: {
-          DEFAULT: '#111111',
-          950: '#E9E7DE',
-          900: '#E5E3D9',
-          800: '#E2DFD5',
-          700: '#EAE9E3',
-          600: '#D2CDBF',
-          500: '#C4BEB0',
-          400: '#D8D3C5',
+          // bare `ink` keeps its historical near-black text role (now paper)
+          DEFAULT: 'rgb(var(--c-paper) / <alpha-value>)',
+          950: 'rgb(var(--c-ink-950) / <alpha-value>)',
+          900: 'rgb(var(--c-ink-900) / <alpha-value>)',
+          800: 'rgb(var(--c-ink-800) / <alpha-value>)',
+          700: 'rgb(var(--c-ink-700) / <alpha-value>)',
+          600: 'rgb(var(--c-ink-600) / <alpha-value>)',
+          500: 'rgb(var(--c-ink-500) / <alpha-value>)',
+          400: 'rgb(var(--c-ink-400) / <alpha-value>)',
         },
-        // canvas (warm off-white page)
-        canvas: '#F5F4EF',
-        // subtle alt surface (slightly deeper warm)
-        mist: '#EFECE4',
+        // canvas (page background)
+        canvas: 'rgb(var(--c-canvas) / <alpha-value>)',
+        // subtle alt surface
+        mist: 'rgb(var(--c-mist) / <alpha-value>)',
         // dark sections (footer, contact band, media chips/scrims)
-        charcoal: '#111111',
-        // warm light type on dark; paper = primary dark text on light
-        snow: '#F7F5ED',
-        paper: '#111111',
-        muted: '#66645F',
-        // the one accent — deep navy in the "green" slot (class names kept)
+        charcoal: 'rgb(var(--c-charcoal) / <alpha-value>)',
+        // warm light type on dark; paper = primary text on the page surface
+        snow: 'rgb(var(--c-snow) / <alpha-value>)',
+        // logo-plate surface (brand tiles / marquee chips — keeps marks legible)
+        plate: 'rgb(var(--c-plate) / <alpha-value>)',
+        paper: 'rgb(var(--c-paper) / <alpha-value>)',
+        muted: 'rgb(var(--c-muted) / <alpha-value>)',
+        // the one accent family (class names kept across re-themes)
         green: {
-          DEFAULT: '#102A54',
-          bright: '#1F4173',
-          deep: '#0A1C3A',
+          DEFAULT: 'rgb(var(--c-green) / <alpha-value>)',
+          bright: 'rgb(var(--c-green-bright) / <alpha-value>)',
+          deep: 'rgb(var(--c-green-deep) / <alpha-value>)',
         },
         // flat aliases used as `text-greenBright` / `text-greenDeep`
-        greenBright: '#1F4173',
-        greenDeep: '#0A1C3A',
-        // readable accent TEXT on light surfaces (AA on canvas/cards)
-        greenReadable: '#1B3A6B',
-        // accent on DARK sections — light blue that stays legible on charcoal
-        skyBlue: '#9CC0F0',
-        // legacy hover slots — now dark/neutral on light
-        neonBlue: '#111111',
-        violet: '#8A8375',
-        slateAccent: '#665F52',
-        // legacy hot-line slot — navy now
-        acid: '#102A54',
+        greenBright: 'rgb(var(--c-green-bright) / <alpha-value>)',
+        greenDeep: 'rgb(var(--c-green-deep) / <alpha-value>)',
+        // readable accent TEXT on light surfaces (AA)
+        greenReadable: 'rgb(var(--c-green-readable) / <alpha-value>)',
+        // accent on DARK sections — stays legible on charcoal
+        skyBlue: 'rgb(var(--c-sky) / <alpha-value>)',
+        // type colour ON a filled accent chip/button (flips per mode)
+        onAccent: 'rgb(var(--c-on-accent) / <alpha-value>)',
+        // legacy slots
+        neonBlue: 'rgb(var(--c-neon) / <alpha-value>)',
+        violet: 'rgb(var(--c-violet) / <alpha-value>)',
+        slateAccent: 'rgb(var(--c-slate) / <alpha-value>)',
+        acid: 'rgb(var(--c-acid) / <alpha-value>)',
       },
       fontFamily: {
         // Anton = ultra-condensed grotesque, the title-card face

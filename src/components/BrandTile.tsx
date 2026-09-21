@@ -17,7 +17,7 @@ export default function BrandTile({
   if (logo) {
     return (
       <div
-        className={`flex items-center justify-center overflow-hidden bg-white ${pad} ${className}`}
+        className={`flex items-center justify-center overflow-hidden bg-plate ${pad} ${className}`}
       >
         <img
           src={logo}

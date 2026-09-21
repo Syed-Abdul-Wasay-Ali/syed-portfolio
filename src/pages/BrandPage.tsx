@@ -187,7 +187,7 @@ function BrandProjectCard({
             {project.role} · {project.year}
           </p>
           {story && (
-            <p className="mt-4 max-w-3xl border-l-2 border-green/50 pl-4 text-[13px] font-bold leading-relaxed text-[#94A8EE]">
+            <p className="mt-4 max-w-3xl border-l-2 border-green/50 pl-4 text-[13px] font-bold leading-relaxed text-skyBlue">
               {story}
             </p>
           )}
@@ -330,7 +330,7 @@ export default function BrandPage({ slug }: { slug: string }) {
     if (k === 'story') {
       sectionNodes.push(
         <Section key="story" tag={`${pad(0)} / story`} title={t('bui.story.title')} delay={0}>
-          <p className="max-w-3xl border-l-2 border-green/50 pl-4 text-[13px] font-bold leading-relaxed text-[#94A8EE]">
+          <p className="max-w-3xl border-l-2 border-green/50 pl-4 text-[13px] font-bold leading-relaxed text-skyBlue">
             {brand.story}
           </p>
         </Section>

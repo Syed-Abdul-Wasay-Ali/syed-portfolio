@@ -2,8 +2,150 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+/* ------------------------------------------------------------------ */
+/* READER MODES: light (default) / dark / sepia / night                */
+/* Channel triples per mode — tailwind.config.js maps every token to   */
+/* rgb(var(--c-xxx) / <alpha-value>), so utilities and opacity         */
+/* modifiers follow the active mode. Switcher: header ThemeSelect.     */
+/* ------------------------------------------------------------------ */
+:root,
+[data-theme='light'] {
   color-scheme: light;
+  --c-canvas: 245 244 239;
+  --c-mist: 239 236 228;
+  --c-plate: 255 255 255;
+  --c-charcoal: 17 17 17;
+  --c-snow: 247 245 237;
+  --c-paper: 17 17 17;
+  --c-muted: 102 100 95;
+  --c-green: 16 42 84;
+  --c-green-bright: 31 65 115;
+  --c-green-deep: 10 28 58;
+  --c-green-readable: 27 58 107;
+  --c-sky: 156 192 240;
+  --c-on-accent: 247 245 237;
+  --c-violet: 138 131 117;
+  --c-slate: 102 95 82;
+  --c-neon: 17 17 17;
+  --c-acid: 16 42 84;
+  --c-ink-950: 233 231 222;
+  --c-ink-900: 229 227 217;
+  --c-ink-800: 226 223 213;
+  --c-ink-700: 234 233 227;
+  --c-ink-600: 210 205 191;
+  --c-ink-500: 196 190 176;
+  --c-ink-400: 216 211 197;
+  --c-shadow: 17 17 17;
+  --c-hud: 17 17 17;
+  --c-overlay: 17 17 17;
+  --c-hoverline: 17 17 17;
+  --c-glow: 16 42 84;
+  --c-co-cd: 107 99 85;
+}
+
+/* dark: warm near-black, crisp type, light-blue accent */
+[data-theme='dark'] {
+  color-scheme: dark;
+  --c-canvas: 15 14 12;
+  --c-mist: 23 22 19;
+  --c-plate: 198 193 181;
+  --c-charcoal: 9 9 8;
+  --c-snow: 245 243 235;
+  --c-paper: 242 240 231;
+  --c-muted: 165 158 146;
+  --c-green: 156 192 240;
+  --c-green-bright: 182 211 247;
+  --c-green-deep: 108 146 200;
+  --c-green-readable: 169 199 239;
+  --c-sky: 156 192 240;
+  --c-on-accent: 16 15 13;
+  --c-violet: 178 170 152;
+  --c-slate: 170 162 148;
+  --c-neon: 242 240 231;
+  --c-acid: 156 192 240;
+  --c-ink-950: 22 21 18;
+  --c-ink-900: 26 25 21;
+  --c-ink-800: 31 29 25;
+  --c-ink-700: 35 33 28;
+  --c-ink-600: 44 41 35;
+  --c-ink-500: 56 52 44;
+  --c-ink-400: 39 37 31;
+  --c-shadow: 0 0 0;
+  --c-hud: 245 243 235;
+  --c-overlay: 245 243 235;
+  --c-hoverline: 245 243 235;
+  --c-glow: 156 192 240;
+  --c-co-cd: 180 171 152;
+}
+
+/* sepia: warm paper, low blue light — classic reading comfort */
+[data-theme='sepia'] {
+  color-scheme: light;
+  --c-canvas: 238 228 207;
+  --c-mist: 230 219 194;
+  --c-plate: 246 240 228;
+  --c-charcoal: 40 33 22;
+  --c-snow: 246 238 221;
+  --c-paper: 45 38 24;
+  --c-muted: 112 100 80;
+  --c-green: 108 78 38;
+  --c-green-bright: 130 96 48;
+  --c-green-deep: 84 60 28;
+  --c-green-readable: 120 88 44;
+  --c-sky: 219 180 108;
+  --c-on-accent: 246 238 221;
+  --c-violet: 140 124 98;
+  --c-slate: 124 110 86;
+  --c-neon: 45 38 24;
+  --c-acid: 108 78 38;
+  --c-ink-950: 226 213 186;
+  --c-ink-900: 222 208 179;
+  --c-ink-800: 217 203 172;
+  --c-ink-700: 228 216 192;
+  --c-ink-600: 203 188 155;
+  --c-ink-500: 189 172 137;
+  --c-ink-400: 209 194 163;
+  --c-shadow: 40 33 22;
+  --c-hud: 45 38 24;
+  --c-overlay: 40 33 22;
+  --c-hoverline: 45 38 24;
+  --c-glow: 176 138 70;
+  --c-co-cd: 107 99 85;
+}
+
+/* night: dim warm, low-contrast, amber accent — for dark rooms */
+[data-theme='night'] {
+  color-scheme: dark;
+  --c-canvas: 27 25 22;
+  --c-mist: 34 31 27;
+  --c-plate: 178 172 160;
+  --c-charcoal: 18 17 15;
+  --c-snow: 214 208 195;
+  --c-paper: 199 192 178;
+  --c-muted: 157 149 134;
+  --c-green: 194 154 91;
+  --c-green-bright: 214 177 113;
+  --c-green-deep: 145 113 64;
+  --c-green-readable: 205 172 108;
+  --c-sky: 178 156 106;
+  --c-on-accent: 24 22 19;
+  --c-violet: 172 162 144;
+  --c-slate: 152 143 128;
+  --c-neon: 199 192 178;
+  --c-acid: 194 154 91;
+  --c-ink-950: 33 31 27;
+  --c-ink-900: 37 35 30;
+  --c-ink-800: 42 39 33;
+  --c-ink-700: 46 43 37;
+  --c-ink-600: 55 51 43;
+  --c-ink-500: 67 62 52;
+  --c-ink-400: 50 46 39;
+  --c-shadow: 0 0 0;
+  --c-hud: 214 208 195;
+  --c-overlay: 214 208 195;
+  --c-hoverline: 214 208 195;
+  --c-glow: 194 154 91;
+  --c-co-cd: 168 159 141;
 }
 
 html {
@@ -16,8 +158,8 @@ body {
 }
 
 ::selection {
-  background: #102A54;
-  color: #F7F5ED;
+  background: rgb(var(--c-green));
+  color: rgb(var(--c-snow));
 }
 
 @layer components {
@@ -30,7 +172,7 @@ body {
   }
 
   .eyebrow-green {
-    @apply inline-block bg-green px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-snow;
+    @apply inline-block bg-green px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-wideish text-onAccent;
   }
 
   /* same chip on dark sections, light blue fill, charcoal type */
@@ -62,7 +204,7 @@ body {
 
   /* filled navy primary CTA, flips to charcoal on hover (polarity) */
   .btn-green {
-    @apply inline-flex items-center gap-2 bg-green px-4 py-2 font-mono text-xs uppercase tracking-wideish text-snow transition-all duration-300 hover:bg-charcoal hover:text-skyBlue;
+    @apply inline-flex items-center gap-2 bg-green px-4 py-2 font-mono text-xs uppercase tracking-wideish text-onAccent transition-all duration-300 hover:bg-charcoal hover:text-skyBlue;
   }
 
   /* filled primary CTA on dark sections, light blue fill, charcoal type */
@@ -78,7 +220,7 @@ body {
     font-weight: 700;
   }
   .co-cleandirty {
-    color: #6B6355;
+    color: rgb(var(--c-co-cd));
     font-weight: 700;
   }
 }
@@ -157,13 +299,13 @@ body {
   bottom: -3px;
   height: 1px;
   width: 100%;
-  background: #102A54;
+  background: rgb(var(--c-green));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .glitch-link:hover {
-  color: #111111;
+  color: rgb(var(--c-paper));
 }
 .glitch-link:hover::after {
   transform: scaleX(1);
@@ -196,10 +338,10 @@ body {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 .card-lift:hover {
-  border-color: rgba(17, 17, 17, 0.35);
+  border-color: rgb(var(--c-hoverline) / 0.35);
   box-shadow:
-    0 18px 44px rgba(17, 17, 17, 0.10),
-    0 0 0 1px rgba(17, 17, 17, 0.06);
+    0 18px 44px rgb(var(--c-shadow) / 0.10),
+    0 0 0 1px rgb(var(--c-shadow) / 0.06);
 }
 
 /* ---- red disc badge that pops in on hover (title-card motif) ---- */
@@ -216,7 +358,7 @@ body {
   width: 9px;
   height: 9px;
   border-radius: 9999px;
-  background: #102A54;
+  background: rgb(var(--c-green));
   transform: scale(0);
   transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
   z-index: 2;
@@ -237,7 +379,7 @@ body {
   left: 0;
   right: 0;
   height: 120px;
-  background: linear-gradient(180deg, transparent, rgba(17, 17, 17, 0.03), transparent);
+  background: linear-gradient(180deg, transparent, rgb(var(--c-overlay) / 0.03), transparent);
   animation: scan 9s linear infinite;
   pointer-events: none;
 }
@@ -261,24 +403,24 @@ body {
   will-change: transform;
 }
 .limbo-halo {
-  filter: drop-shadow(0 22px 28px rgba(17, 17, 17, 0.18))
-    drop-shadow(0 4px 18px rgba(17, 17, 17, 0.06));
+  filter: drop-shadow(0 22px 28px rgb(var(--c-shadow) / 0.18))
+    drop-shadow(0 4px 18px rgb(var(--c-shadow) / 0.06));
 }
 
 /* ---- brand tiles take their own accent on hover ---- */
 .brand-tile {
-  --brand: #102A54;
+  --brand: rgb(var(--c-green));
 }
 .brand-tile:hover {
   border-color: var(--brand) !important;
   box-shadow:
     0 0 0 1px var(--brand),
-    0 16px 40px rgba(17, 17, 17, 0.15);
+    0 16px 40px rgb(var(--c-shadow) / 0.15);
 }
 
 /* ---- header: solid navy progress + strip ---- */
 .header-progress {
-  background: #102A54;
+  background: rgb(var(--c-green));
 }
 
 /* ---- marquee bands (texture strips from the title cards) ---- */
@@ -335,7 +477,7 @@ body {
   inset: 0;
   z-index: 59;
   pointer-events: none;
-  background: radial-gradient(130% 100% at 50% 30%, transparent 58%, rgba(17, 17, 17, 0.10) 100%);
+  background: radial-gradient(130% 100% at 50% 30%, transparent 58%, rgb(var(--c-shadow) / 0.10) 100%);
 }
 
 /* ---- HUD corner brackets ---- */
@@ -343,7 +485,7 @@ body {
   position: absolute;
   width: 20px;
   height: 20px;
-  border: 0 solid rgba(17, 17, 17, 0.25);
+  border: 0 solid rgb(var(--c-hud) / 0.25);
 }
 .corner-bl {
   left: 16px;
@@ -361,7 +503,7 @@ body {
 /* ---- accent disc element ---- */
 .disc {
   border-radius: 9999px;
-  background: #102A54;
+  background: rgb(var(--c-green));
 }
 
 /* ---- ghosted outline type (resolves against black) ---- */
@@ -400,11 +542,11 @@ body {
 /* glass hover: soft lift + slight red tint (visionOS panel feel) */
 .tilt-3d:hover,
 .car-item:hover {
-  border-color: rgba(17, 17, 17, 0.25) !important;
+  border-color: rgb(var(--c-hoverline) / 0.25) !important;
   box-shadow:
-    0 24px 60px rgba(17, 17, 17, 0.14),
-    0 0 0 1px rgba(17, 17, 17, 0.04),
-    0 0 30px rgba(16, 42, 84, 0.10);
+    0 24px 60px rgb(var(--c-shadow) / 0.14),
+    0 0 0 1px rgb(var(--c-shadow) / 0.04),
+    0 0 30px rgb(var(--c-glow) / 0.10);
 }
 
 /* moving light sheen that follows the pointer */
@@ -416,7 +558,7 @@ body {
   pointer-events: none;
   background: radial-gradient(
     360px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(17, 17, 17, 0.05),
+    rgb(var(--c-overlay) / 0.05),
     transparent 55%
   );
   opacity: 0;
@@ -491,7 +633,7 @@ body {
 /* Focus visibility */
 a:focus-visible,
 button:focus-visible {
-  outline: 2px solid #111111;
+  outline: 2px solid rgb(var(--c-paper));
   outline-offset: 2px;
 }
 

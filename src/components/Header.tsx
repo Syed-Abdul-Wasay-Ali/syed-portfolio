@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import LinkedInIcon from './LinkedInIcon'
 import GitHubIcon from './GitHubIcon'
+import ThemeSelect from './ThemeSelect'
 import { LINKEDIN_URL, GITHUB_URL, RESUME_URL } from '../data/social'
 import { useRuntime, useT } from '../data/runtime'
 
@@ -61,6 +62,8 @@ export default function Header() {
       {/* magenta strip */}
       <div aria-hidden="true" className="header-strip absolute inset-x-0 top-0 h-[3px] bg-green" />
       <div className="container-site flex h-14 items-center justify-between">
+        <div className="flex items-center gap-3">
+          <ThemeSelect />
         <a href="#/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
           <span aria-hidden="true" className="disc h-2 w-2" />
           <span className="flex flex-col leading-none">
@@ -71,7 +74,8 @@ export default function Header() {
               {t('header.tagline')}
             </span>
           </span>
-        </a>
+          </a>
+        </div>
 
         {/* desktop nav */}
         <nav className="hidden items-center gap-4 md:flex">
